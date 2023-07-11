@@ -7,19 +7,26 @@ import ApplicationProviders from "@/components/ApplicationProviders.tsx";
 import ReduxTest from "./ReduxTest.tsx";
 import { ReactQueryDevtools } from "react-query/devtools";
 import ReactQueryTest from "./ReactQueryTest.tsx";
+import Root from "./Root.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
-  },
-  {
-    path: "/redux-test",
-    element: <ReduxTest />,
-  },
-  {
-    path: "/react-query-test",
-    element: <ReactQueryTest />,
+    element: <Root />,
+    children: [
+      {
+        index: true,
+        element: <App />,
+      },
+      {
+        path: "/redux-test",
+        element: <ReduxTest />,
+      },
+      {
+        path: "/react-query-test",
+        element: <ReactQueryTest />,
+      },
+    ],
   },
 ]);
 
