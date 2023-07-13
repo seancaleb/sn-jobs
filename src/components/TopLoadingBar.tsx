@@ -14,7 +14,7 @@ const TopLoadingBar = () => {
     }
   }, [navigation.state]);
 
-  return <LoadingBar color="#2563eb" progress={progress} onLoaderFinished={() => setProgress(0)} />;
+  return <LoadingBar color="#0d9488" progress={progress} onLoaderFinished={() => setProgress(0)} />;
 };
 
 export default TopLoadingBar;

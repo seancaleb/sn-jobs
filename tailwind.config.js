@@ -17,6 +17,15 @@ module.exports = {
       },
     },
     extend: {
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: "1.25rem",
+        },
+        screens: {
+          "2xl": "1400px",
+        },
+      },
       fontFamily: {
         "helvetica-cyr": ["HelveticaNeue-Cyr", "sans-serif"],
       },
