@@ -1,10 +1,13 @@
-import { screen, render } from "@/lib/test-utils";
+import { screen, render, resizeScreenSize } from "@/lib/test-utils";
 import { describe, it, expect } from "vitest";
 import Header from "./Header";
 import user from "@testing-library/user-event";
 
-describe("Header", () => {
-  beforeEach(() => render(<Header />));
+describe("Header (Desktop)", () => {
+  beforeEach(() => {
+    resizeScreenSize(640);
+    render(<Header />);
+  });
 
   it("renders a header", () => {
     const headerEl = screen.getByRole("banner", { name: "navigation header" });
@@ -45,5 +48,17 @@ describe("Header", () => {
       await user.tab();
       expect(el).toHaveFocus();
     }
+  });
+});
+
+describe("Header (Mobile)", () => {
+  beforeEach(() => {
+    resizeScreenSize(639);
+    render(<Header />);
+  });
+
+  it("renders a navigation burger icon", () => {
+    const burgerIcon = screen.getByRole("graphics-document", { name: "navigation menu burger" });
+    expect(burgerIcon).toBeInTheDocument();
   });
 });
