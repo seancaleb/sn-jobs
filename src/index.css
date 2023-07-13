@@ -95,3 +95,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .text {
+    @apply text-slate-700;
+  }
+}
