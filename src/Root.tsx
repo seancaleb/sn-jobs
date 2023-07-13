@@ -5,12 +5,14 @@ import Footer from "@/components/Footer/Footer";
 
 const Root = () => {
   return (
-    <main className="font-helvetica-cyr">
-      <TopLoadingBar />
+    <>
       <Header />
-      <Outlet />
-      <Footer />
-    </main>
+      <main className="relative font-helvetica-cyr min-h-screen container">
+        <TopLoadingBar />
+        <Outlet />
+        <Footer />
+      </main>
+    </>
   );
 };
 

@@ -4,7 +4,10 @@ import { Separator } from "@/components/ui/separator";
 
 const Header = () => {
   return (
-    <header className="h-16 border-b border-slate-200 w-full" aria-label="navigation header">
+    <header
+      className="font-helvetica-cyr h-16 border-b border-slate-200 w-full"
+      aria-label="navigation header"
+    >
       <div className="container h-full flex items-center justify-between">
         <NavLink
           to="/"
