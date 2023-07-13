@@ -1,7 +1,19 @@
-import { useGetPosts } from "@/api/posts";
+import { QUERY_KEY, fetchPosts, useGetPosts } from "@/api/posts";
+import { QueryClient, useQuery } from "@tanstack/react-query";
+import { useLoaderData } from "react-router";
+
+/**
+ * Reusable Type
+ */
+type LoaderReturnType<T extends (...args: any) => any> = Awaited<ReturnType<ReturnType<T>>>;
+
+export const loader = (queryClient: QueryClient) => async () => {
+  return queryClient.ensureQueryData({ queryKey: QUERY_KEY, queryFn: fetchPosts });
+};
 
 const ReactQueryTest = () => {
-  const { data, isError, isLoading } = useGetPosts();
+  const initialData = useLoaderData() as LoaderReturnType<typeof loader>;
+  const { data, isError, isLoading } = useGetPosts({ initialData });
 
   return (
     <section className="py-32">

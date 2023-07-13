@@ -1,13 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ApplicationProviders from "@/components/ApplicationProviders.tsx";
-import ReduxTest from "./ReduxTest.tsx";
-import { ReactQueryDevtools } from "react-query/devtools";
-import ReactQueryTest from "./ReactQueryTest.tsx";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Root from "./Root.tsx";
+import { QueryClient } from "@tanstack/react-query";
+
+// Routes
+import Home from "@/routes/Home/Home.tsx";
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -16,15 +19,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <App />,
-      },
-      {
-        path: "/redux-test",
-        element: <ReduxTest />,
-      },
-      {
-        path: "/react-query-test",
-        element: <ReactQueryTest />,
+        element: <Home />,
       },
     ],
   },
