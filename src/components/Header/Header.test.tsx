@@ -1,11 +1,10 @@
-import { screen, render } from "@testing-library/react";
+import { screen, render } from "@/lib/test-utils";
 import { describe, it, expect } from "vitest";
 import Header from "./Header";
-import { BrowserRouter } from "react-router-dom";
 import user from "@testing-library/user-event";
 
 describe("Header", () => {
-  beforeEach(() => render(<Header />, { wrapper: BrowserRouter }));
+  beforeEach(() => render(<Header />));
 
   it("renders a header", () => {
     const headerEl = screen.getByRole("banner", { name: "navigation header" });
