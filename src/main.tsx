@@ -5,9 +5,14 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ApplicationProviders from "@/components/ApplicationProviders.tsx";
 import ReduxTest from "./ReduxTest.tsx";
-import { ReactQueryDevtools } from "react-query/devtools";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ReactQueryTest from "./ReactQueryTest.tsx";
 import Root from "./Root.tsx";
+
+import { loader as postsLoader } from "./ReactQueryTest.tsx";
+import { QueryClient } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -25,6 +30,7 @@ const router = createBrowserRouter([
       {
         path: "/react-query-test",
         element: <ReactQueryTest />,
+        loader: postsLoader(queryClient),
       },
     ],
   },

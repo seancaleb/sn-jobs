@@ -1,5 +1,5 @@
-import { useQuery } from "react-query";
-import apiClient from "@/services";
+import apiClient from "@/services/apiClient";
+import { useQuery } from "@tanstack/react-query";
 
 type Post = {
   userId: number;
@@ -8,7 +8,13 @@ type Post = {
   body: string;
 };
 
-const fetchPosts = async (): Promise<Post[]> => {
+/**
+ * Reusable Type
+ */
+export type UseQueryOptions<T> = Parameters<typeof useQuery<T, Error>>["2"];
+
+export const fetchPosts = async (): Promise<Post[]> => {
+  await new Promise((res) => setTimeout(res, 2000));
   return await apiClient({
     options: {
       url: "/posts",
@@ -17,10 +23,11 @@ const fetchPosts = async (): Promise<Post[]> => {
   });
 };
 
-const QUERY_KEY = ["posts"];
+export const QUERY_KEY = ["posts"];
 
-export const useGetPosts = () => {
+export const useGetPosts = (options: UseQueryOptions<Post[]>) => {
   return useQuery<Post[], Error>(QUERY_KEY, fetchPosts, {
+    ...options,
     select: (posts) => posts.slice(0, 3),
   });
 };
