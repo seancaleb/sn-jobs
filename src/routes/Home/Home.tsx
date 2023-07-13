@@ -11,15 +11,13 @@ const Home = () => {
             Philippines
           </Balancer>
         </h1>
-        <div className="text text-2xl text-center max-w-lg">
+        <div className="text text-xl text-center max-w-lg">
           <Balancer>
             Connecting talented professionals with remote opportunities in the Philippines and
             beyond.
           </Balancer>
         </div>
-        <Button size="lg" className="text-base">
-          Explore Job Listings
-        </Button>
+        <Button size="lg">Explore Job Listings</Button>
       </div>
     </section>
   );
