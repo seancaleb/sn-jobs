@@ -25,5 +25,4 @@ dist-ssr
 *.sw?
 
 # vitest test-specific files
-**/*.html
-**/*.html.meta.json.gz
+html/*
