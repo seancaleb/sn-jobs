@@ -6,6 +6,9 @@ import ApplicationProviders from "@/components/ApplicationProviders";
 import { BrowserRouter } from "react-router-dom";
 import mediaQuery from "css-mediaquery";
 
+/**
+ * @desc  Serves as a global provider for all test files
+ */
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
     <ApplicationProviders>
