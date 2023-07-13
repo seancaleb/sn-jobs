@@ -7,6 +7,11 @@ import user from "@testing-library/user-event";
 describe("Header", () => {
   beforeEach(() => render(<Header />, { wrapper: BrowserRouter }));
 
+  it("renders a header", () => {
+    const headerEl = screen.getByRole("banner", { name: "navigation header" });
+    expect(headerEl).toBeInTheDocument();
+  });
+
   it("renders logo", () => {
     const logoEl = screen.getByRole("link", { name: "SNJOBS" });
     expect(logoEl).toBeInTheDocument();
