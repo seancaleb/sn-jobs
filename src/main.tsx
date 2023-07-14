@@ -9,6 +9,7 @@ import { QueryClient } from "@tanstack/react-query";
 
 // Routes
 import Home from "@/routes/Home/Home.tsx";
+import Login from "@/routes/Login/Login.page.tsx";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "sign-in",
+        element: <Login />,
       },
     ],
   },
