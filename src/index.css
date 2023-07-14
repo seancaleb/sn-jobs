@@ -94,10 +94,18 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  p {
+    @apply text-slate-600;
+  }
 }
 
 @layer components {
-  .text {
-    @apply text-slate-700;
+  .text-light {
+    @apply text-slate-500;
+  }
+
+  .section-padding {
+    @apply py-24 sm:py-28;
   }
 }
