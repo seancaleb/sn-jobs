@@ -3,20 +3,20 @@ import Balancer from "react-wrap-balancer";
 
 const Home = () => {
   return (
-    <section role="region" className="py-24 sm:py-32">
+    <section role="region" className="section-padding">
       <div className="flex flex-col items-center space-y-6">
-        <h1 className="text-5xl sm:text-6xl text-center tracking-[-1px] font-bold">
+        <h1 className="text-4xl sm:text-5xl text-center tracking-[-1px] font-bold max-w-4xl">
           <Balancer>
             The Premier Virtual <span className="text-teal-600">Job Board</span> for Workers in the
             Philippines
           </Balancer>
         </h1>
-        <div className="text text-lg sm:text-xl text-center max-w-lg">
+        <p className="text-lg sm:text-xl text-center max-w-lg">
           <Balancer>
             Connecting talented professionals with remote opportunities in the Philippines and
             beyond.
           </Balancer>
-        </div>
+        </p>
         <Button size="lg">Explore Job Listings</Button>
       </div>
     </section>
