@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Menu } from "lucide-react";
@@ -31,7 +31,9 @@ const Header = () => {
               </li>
               <li>
                 <div className="flex space-x-2">
-                  <Button variant="ghost">Sign In</Button>
+                  <Button asChild variant="ghost">
+                    <Link to="sign-in">Sign In</Link>
+                  </Button>
                   <Button variant="ghost">Sign Up</Button>
                 </div>
               </li>
