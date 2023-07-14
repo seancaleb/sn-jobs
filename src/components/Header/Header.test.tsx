@@ -39,7 +39,7 @@ describe("Header (Desktop)", () => {
 
     const logoEl = screen.getByRole("link", { name: "SNJOBS" });
     const postJobBtn = screen.getByRole("button", { name: "Post a Job" });
-    const signInBtn = screen.getByRole("button", { name: "Sign In" });
+    const signInBtn = screen.getByRole("link", { name: "Sign In" });
     const signUpBtn = screen.getByRole("button", { name: "Sign Up" });
 
     const tabOrder = [logoEl, postJobBtn, signInBtn, signUpBtn];
