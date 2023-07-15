@@ -39,10 +39,11 @@ describe("Header (Desktop)", () => {
 
     const logoEl = screen.getByRole("link", { name: "SNJOBS" });
     const postJobBtn = screen.getByRole("button", { name: "Post a Job" });
+    const jobBoardBtn = screen.getByRole("button", { name: "Job Board" });
     const signInBtn = screen.getByRole("link", { name: "Sign In" });
     const signUpBtn = screen.getByRole("button", { name: "Sign Up" });
 
-    const tabOrder = [logoEl, postJobBtn, signInBtn, signUpBtn];
+    const tabOrder = [logoEl, postJobBtn, jobBoardBtn, signInBtn, signUpBtn];
 
     for (const el of tabOrder) {
       await user.tab();
