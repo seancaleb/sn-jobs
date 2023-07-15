@@ -7,7 +7,7 @@ const Root = () => {
   return (
     <>
       <Header />
-      <main className="relative font-helvetica-cyr min-h-screen container">
+      <main className="relative min-h-screen container">
         <TopLoadingBar />
         <Outlet />
         <Footer />
