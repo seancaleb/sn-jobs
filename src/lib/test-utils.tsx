@@ -3,7 +3,7 @@
 import { ReactElement, ReactNode } from "react";
 import { render, RenderOptions } from "@testing-library/react";
 import ApplicationProviders from "@/components/ApplicationProviders";
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import mediaQuery from "css-mediaquery";
 
 /**
@@ -12,7 +12,7 @@ import mediaQuery from "css-mediaquery";
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
     <ApplicationProviders>
-      <BrowserRouter>{children}</BrowserRouter>
+      <MemoryRouter>{children}</MemoryRouter>
     </ApplicationProviders>
   );
 };
