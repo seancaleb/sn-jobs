@@ -9,8 +9,13 @@ const useAuth = () => {
     dispatch(AuthActions.loginUser(user));
   };
 
+  const logoutUser = () => {
+    dispatch(AuthActions.logoutUser());
+  };
+
   return {
     loginUser,
+    logoutUser,
   };
 };
 
