@@ -5,6 +5,9 @@ import jwt_decode from "jwt-decode";
 import useAuth from "@/features/auth/useAuth";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * @desc  Login user
+ */
 export const loginUserRequest = async (data: LoginUser): Promise<Token> => {
   await new Promise((res) => setTimeout(res, 1000));
   return await apiClient({
@@ -27,10 +30,35 @@ export const useLoginUser = () => {
       const parsedUser = userSchema.parse(decodedToken);
 
       loginUser(parsedUser);
-      navigate("/");
+      navigate("/", { replace: true });
     },
     onError: (error) => {
       console.log(error);
+    },
+  });
+};
+
+/**
+ * @desc  Logout user
+ */
+export const logoutUserRequest = async () => {
+  return apiClient({
+    options: {
+      url: "/auth/logout",
+      method: "POST",
+    },
+  });
+};
+
+export const useLogoutUser = () => {
+  const { logoutUser } = useAuth();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: logoutUserRequest,
+    onSuccess: () => {
+      logoutUser();
+      navigate("/", { replace: true });
     },
   });
 };
