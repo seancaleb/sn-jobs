@@ -30,7 +30,7 @@ export const useLoginUser = () => {
       const parsedUser = userSchema.parse(decodedToken);
 
       loginUser(parsedUser);
-      navigate("/", { replace: true });
+      navigate("/profile", { replace: true });
     },
     onError: (error) => {
       console.log(error);
