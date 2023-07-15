@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -14,13 +13,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { DevTool } from "@hookform/devtools";
 import { Link } from "react-router-dom";
-
-const signInSchema = z.object({
-  email: z.string().nonempty("Email is required").email("Please enter a valid email"),
-  password: z.string().nonempty("Password is required"),
-});
-
-type SignInValues = z.infer<typeof signInSchema>;
+import { useLoginUser } from "@/api/auth/auth";
+import { SignInValues, signInSchema } from "./SignIn.schema";
+import LoaderSpinner from "@/components/LoaderSpinner";
 
 const SignIn = () => {
   const form = useForm<SignInValues>({
@@ -30,12 +25,14 @@ const SignIn = () => {
     },
     resolver: zodResolver(signInSchema),
   });
-
   const { control, handleSubmit, formState, trigger } = form;
   const { isDirty, isValid } = formState;
+  const { mutate, isLoading } = useLoginUser();
 
   const onSubmit = (values: SignInValues) => {
-    console.log(values);
+    if (isValid) {
+      mutate(values);
+    }
   };
 
   return (
@@ -47,6 +44,7 @@ const SignIn = () => {
 
       <Form {...form}>
         <form
+          id="login-form"
           role="form"
           noValidate
           onSubmit={handleSubmit(onSubmit)}
@@ -85,7 +83,8 @@ const SignIn = () => {
             )}
           />
 
-          <Button type="submit" disabled={!isDirty || !isValid}>
+          <Button type="submit" disabled={!isDirty || !isValid || isLoading}>
+            {isLoading && <LoaderSpinner />}
             Sign In
           </Button>
 
