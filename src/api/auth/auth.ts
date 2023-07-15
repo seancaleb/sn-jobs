@@ -1,8 +1,11 @@
 import apiClient from "@/services/apiClient";
 import { useMutation } from "@tanstack/react-query";
-import { LoginUser, Token } from "./auth.type";
+import { User, LoginUser, Token, userSchema } from "./auth.type";
+import jwt_decode from "jwt-decode";
+import useAuth from "@/features/auth/useAuth";
+import { useNavigate } from "react-router-dom";
 
-export const loginUser = async (data: LoginUser): Promise<Token> => {
+export const loginUserRequest = async (data: LoginUser): Promise<Token> => {
   await new Promise((res) => setTimeout(res, 1000));
   return await apiClient({
     options: {
@@ -14,10 +17,17 @@ export const loginUser = async (data: LoginUser): Promise<Token> => {
 };
 
 export const useLoginUser = () => {
+  const { loginUser } = useAuth();
+  const navigate = useNavigate();
+
   return useMutation({
-    mutationFn: loginUser,
+    mutationFn: loginUserRequest,
     onSuccess: (data) => {
-      console.log(data.accessToken);
+      const decodedToken = jwt_decode<User>(data.accessToken);
+      const parsedUser = userSchema.parse(decodedToken);
+
+      loginUser(parsedUser);
+      navigate("/");
     },
     onError: (error) => {
       console.log(error);
