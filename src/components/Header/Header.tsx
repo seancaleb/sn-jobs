@@ -5,16 +5,14 @@ import { Menu } from "lucide-react";
 import { useMediaQuery } from "@mantine/hooks";
 import { useAppSelector } from "@/app/hooks";
 import { selectUser } from "@/features/auth/authSlice";
+import HeaderAccountDropdown from "./HeaderAccountDropdown";
 
 const Header = () => {
   const isDesktop = useMediaQuery("(min-width: 40em)");
   const user = useAppSelector(selectUser);
 
   return (
-    <header
-      className="font-helvetica-cyr h-16 border-b border-slate-200 w-full"
-      aria-label="navigation header"
-    >
+    <header className="h-16 border-b border-slate-200 w-full" aria-label="navigation header">
       <div className="container h-full flex items-center justify-between">
         <NavLink
           to="/"
@@ -59,7 +57,7 @@ const Header = () => {
                 </li>
               )}
 
-              {user && <div>Hi, {user.firstName}!</div>}
+              {user && <HeaderAccountDropdown user={user} />}
             </ul>
           </nav>
         ) : (
