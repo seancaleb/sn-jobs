@@ -3,8 +3,9 @@
 import { ReactElement, ReactNode } from "react";
 import { render, RenderOptions } from "@testing-library/react";
 import ApplicationProviders from "@/components/ApplicationProviders";
-import { MemoryRouter } from "react-router-dom";
+import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import mediaQuery from "css-mediaquery";
+import { routesConfig } from "@/routes/config.routes";
 
 /**
  * @desc  Serves as a global provider for all test files
@@ -12,7 +13,7 @@ import mediaQuery from "css-mediaquery";
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
     <ApplicationProviders>
-      <MemoryRouter>{children}</MemoryRouter>
+      <RouterProvider router={createMemoryRouter(routesConfig)} />
     </ApplicationProviders>
   );
 };
