@@ -2,11 +2,16 @@ import { screen, render, resizeScreenSize } from "@/lib/test-utils";
 import { describe, it, expect } from "vitest";
 import Header from "./Header";
 import user from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 
 describe("Header (Desktop)", () => {
   beforeEach(() => {
     resizeScreenSize(640);
-    render(<Header />);
+    render(
+      <MemoryRouter>
+        <Header />
+      </MemoryRouter>
+    );
   });
 
   it("renders a header", () => {
@@ -55,7 +60,11 @@ describe("Header (Desktop)", () => {
 describe("Header (Mobile)", () => {
   beforeEach(() => {
     resizeScreenSize(639);
-    render(<Header />);
+    render(
+      <MemoryRouter>
+        <Header />
+      </MemoryRouter>
+    );
   });
 
   it("renders a navigation burger icon", () => {
