@@ -2,9 +2,16 @@ import { screen, render } from "@/lib/test-utils";
 import { describe, it, expect } from "vitest";
 import user from "@testing-library/user-event";
 import SignIn from "./SignIn";
+import { RouterProvider, createMemoryRouter } from "react-router-dom";
 
 describe("SignIn", () => {
-  beforeEach(() => render(<SignIn />));
+  const router = createMemoryRouter([{ path: "/", element: <SignIn /> }], {
+    initialEntries: ["/"],
+  });
+
+  beforeEach(() => {
+    render(<RouterProvider router={router} />);
+  });
 
   it("renders a login form", () => {
     const formEl = screen.getByRole("form");
@@ -49,9 +56,10 @@ describe("SignIn", () => {
 
     const emailField = screen.getByRole("textbox", { name: "Email" });
     const passwordField = screen.getByLabelText("Password");
+    const showPasswordCheckbox = screen.getByRole("checkbox");
     const signUpLink = screen.getByRole("link", { name: (field) => field.startsWith("Sign up") });
 
-    const tabOrderDefault = [emailField, passwordField, signUpLink];
+    const tabOrderDefault = [emailField, passwordField, showPasswordCheckbox, signUpLink];
 
     for (const el of tabOrderDefault) {
       await user.tab();
@@ -63,7 +71,7 @@ describe("SignIn", () => {
     await user.type(emailField, "test@gmail.com");
     await user.type(passwordField, "testpassword");
 
-    const tabOrderFilled = [signInBtn, signUpLink];
+    const tabOrderFilled = [showPasswordCheckbox, signInBtn, signUpLink];
 
     for (const el of tabOrderFilled) {
       await user.tab();
