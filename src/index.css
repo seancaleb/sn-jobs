@@ -92,7 +92,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-helvetica-cyr;
   }
 
   p {
@@ -107,5 +107,9 @@
 
   .section-padding {
     @apply py-24 sm:py-28;
+  }
+
+  .icon-text {
+    @apply flex space-x-2 items-center text-sm;
   }
 }
