@@ -1,11 +1,9 @@
 import apiClient from "@/services/apiClient";
 import { useMutation } from "@tanstack/react-query";
-import { User, LoginUser, Token, userSchema } from "./auth.type";
+import { User, LoginUser, Token, userSchema, RegisterUser, ResponseMessage } from "./auth.type";
 import jwt_decode from "jwt-decode";
 import useAuth from "@/features/auth/useAuth";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
-import { toastResponseFormatter } from "@/lib/utils";
 
 /**
  * @desc  Login user
@@ -24,9 +22,6 @@ export const loginUserRequest = async (data: LoginUser): Promise<Token> => {
 export const useLoginUser = () => {
   const { loginUser } = useAuth();
   const navigate = useNavigate();
-  const { toast } = useToast();
-
-  const toastError = (title?: string, description?: string) => toast({ title, description });
 
   return useMutation<Token, Error, LoginUser>({
     mutationFn: loginUserRequest,
@@ -34,15 +29,8 @@ export const useLoginUser = () => {
       const decodedToken = jwt_decode<User>(data.accessToken);
       const parsedUser = userSchema.parse(decodedToken);
 
-      toastError().dismiss;
-
       loginUser(parsedUser);
       navigate("/profile", { replace: true });
-    },
-    onError: (error) => {
-      const { title, description } = toastResponseFormatter(error.message);
-
-      toastError(title, description);
     },
   });
 };
@@ -69,5 +57,25 @@ export const useLogoutUser = () => {
       logoutUser();
       navigate("/", { replace: true });
     },
+  });
+};
+
+/**
+ * @desc  Register user
+ */
+export const registerUserRequest = async (data: RegisterUser): Promise<ResponseMessage> => {
+  await new Promise((res) => setTimeout(res, 1000));
+  return await apiClient({
+    options: {
+      url: "/auth/register",
+      method: "POST",
+      data,
+    },
+  });
+};
+
+export const useRegisterUser = () => {
+  return useMutation<ResponseMessage, Error, RegisterUser>({
+    mutationFn: registerUserRequest,
   });
 };
