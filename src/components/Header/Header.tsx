@@ -52,7 +52,9 @@ const Header = () => {
                     <Button asChild variant="ghost">
                       <Link to="sign-in">Sign In</Link>
                     </Button>
-                    <Button variant="ghost">Sign Up</Button>
+                    <Button asChild variant="ghost">
+                      <Link to="sign-up">Sign Up</Link>
+                    </Button>
                   </div>
                 </li>
               )}
