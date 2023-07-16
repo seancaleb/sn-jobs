@@ -2,20 +2,16 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { DevTool } from "@hookform/devtools";
 import { Link } from "react-router-dom";
 import { useLoginUser } from "@/api/auth/auth";
 import { SignInValues, signInSchema } from "./SignIn.schema";
 import LoaderSpinner from "@/components/LoaderSpinner";
+import FormInputField from "@/components/FormInputField/FormInputField";
+import PasswordVisibilityToggle from "@/components/PasswordVisibilityToggle/PasswordVisibilityToggle";
+import { useState } from "react";
+import { useNavigation } from "react-router-dom";
 
 const SignIn = () => {
   const form = useForm<SignInValues>({
@@ -27,21 +23,19 @@ const SignIn = () => {
   });
   const { control, handleSubmit, formState, trigger } = form;
   const { isDirty, isValid } = formState;
-  const { mutate, isLoading } = useLoginUser();
+  const loginUserMutation = useLoginUser();
+  const [isVisible, setIsVisible] = useState(false);
+  const navigation = useNavigation();
+  const isLoading = loginUserMutation.isLoading || navigation.state === "loading";
 
   const onSubmit = (values: SignInValues) => {
     if (isValid) {
-      mutate(values);
+      loginUserMutation.mutate(values);
     }
   };
 
   return (
     <div className="p-8 border border-slate-200 rounded-md max-w-md w-full">
-      <div className="mb-8 grid space-y-1.5">
-        <div className="text-2xl font-bold">Sign In</div>
-        <p>Sign in to access exclusive job features.</p>
-      </div>
-
       <Form {...form}>
         <form
           id="login-form"
@@ -50,38 +44,29 @@ const SignIn = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-8 flex flex-col"
         >
-          <FormField
+          <FormInputField
             control={control}
             name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    {...field}
-                    onBlur={() => trigger("email")}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Email"
+            type="email"
+            placeholder="Enter your email"
+            InputProps={{
+              onBlur: () => trigger("email"),
+            }}
           />
 
-          <FormField
+          <FormInputField
             control={control}
+            type={isVisible ? "text" : "password"}
             name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="Enter your password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            placeholder="Enter your password"
+            label="Password"
+          >
+            <PasswordVisibilityToggle
+              isVisible={isVisible}
+              onToggle={() => setIsVisible(!isVisible)}
+            />
+          </FormInputField>
 
           <Button type="submit" disabled={!isDirty || !isValid || isLoading}>
             {isLoading && <LoaderSpinner />}
