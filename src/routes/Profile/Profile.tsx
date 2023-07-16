@@ -2,6 +2,12 @@ import { User } from "@/api/auth/auth.type";
 import { useAppSelector } from "@/app/hooks";
 import { selectUser } from "@/features/auth/authSlice";
 
+export const loader = async () => {
+  await new Promise((res) => setTimeout(res, 2000));
+
+  return null;
+};
+
 const Profile = () => {
   const user = useAppSelector(selectUser) as User;
 
