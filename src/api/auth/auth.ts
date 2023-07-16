@@ -4,6 +4,9 @@ import { User, LoginUser, Token, userSchema } from "./auth.type";
 import jwt_decode from "jwt-decode";
 import useAuth from "@/features/auth/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import { AlertCircle } from "lucide-react";
+import { toastResponseFormatter } from "@/lib/utils";
 
 /**
  * @desc  Login user
@@ -22,8 +25,9 @@ export const loginUserRequest = async (data: LoginUser): Promise<Token> => {
 export const useLoginUser = () => {
   const { loginUser } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
-  return useMutation({
+  return useMutation<Token, Error, LoginUser>({
     mutationFn: loginUserRequest,
     onSuccess: (data) => {
       const decodedToken = jwt_decode<User>(data.accessToken);
@@ -33,7 +37,12 @@ export const useLoginUser = () => {
       navigate("/profile", { replace: true });
     },
     onError: (error) => {
-      console.log(error);
+      const { title, description } = toastResponseFormatter(error.message);
+
+      toast({
+        title,
+        description,
+      });
     },
   });
 };
