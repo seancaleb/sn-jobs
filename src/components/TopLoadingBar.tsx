@@ -14,7 +14,14 @@ const TopLoadingBar = () => {
     }
   }, [navigation.state]);
 
-  return <LoadingBar color="#0d9488" progress={progress} onLoaderFinished={() => setProgress(0)} />;
+  return (
+    <LoadingBar
+      height={3}
+      color="linear-gradient(90deg, #0d9488, #0891b2)"
+      progress={progress}
+      onLoaderFinished={() => setProgress(0)}
+    />
+  );
 };
 
 export default TopLoadingBar;
