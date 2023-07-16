@@ -22,7 +22,7 @@ export default async function <T>({ token, options }: ServiceRequestConfigs): Pr
   client.defaults.withCredentials = true;
 
   const onSuccess = (response: AxiosResponse<T>) => response.data;
-  const onError = (err?: ErrorMessage) => err?.message;
+  const onError = (err?: ErrorMessage) => err;
 
   try {
     return onSuccess(await client(options));
