@@ -25,7 +25,7 @@ describe("Header (Desktop)", () => {
   });
 
   it("renders a list of navigation items", () => {
-    const navList = screen.getByRole("list");
+    const navList = screen.getByRole("list", { name: "Navigation Menu List" });
     expect(navList).toBeInTheDocument();
   });
 
@@ -41,7 +41,7 @@ describe("Header (Desktop)", () => {
     const postJobBtn = screen.getByRole("button", { name: "Post a Job" });
     const jobBoardBtn = screen.getByRole("button", { name: "Job Board" });
     const signInBtn = screen.getByRole("link", { name: "Sign In" });
-    const signUpBtn = screen.getByRole("button", { name: "Sign Up" });
+    const signUpBtn = screen.getByRole("link", { name: "Sign Up" });
 
     const tabOrder = [logoEl, postJobBtn, jobBoardBtn, signInBtn, signUpBtn];
 

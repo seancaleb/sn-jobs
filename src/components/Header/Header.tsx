@@ -23,7 +23,7 @@ const Header = () => {
 
         {isDesktop ? (
           <nav>
-            <ul className="flex space-x-6 items-center">
+            <ul aria-label="Navigation Menu List" className="flex space-x-6 items-center">
               {!user && (
                 <li>
                   <div className="flex space-x-2">
