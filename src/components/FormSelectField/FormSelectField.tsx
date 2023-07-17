@@ -1,4 +1,11 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -6,23 +13,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ReactNode } from "react";
+import { nanoid } from "@reduxjs/toolkit";
 import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
 
 type FormSelectFieldProps<T extends FieldValues> = {
   control: UseFormReturn<T>["control"];
   name: Path<T>;
   label: string;
-  children?: ReactNode;
   placeholder: string;
+  description?: string;
+  options: { value: string; label: string }[];
 };
 
 const FormSelectField = <T extends FieldValues>({
   control,
   name,
   label,
-  children,
   placeholder,
+  description,
+  options,
 }: FormSelectFieldProps<T>) => {
   return (
     <FormField
@@ -41,11 +50,14 @@ const FormSelectField = <T extends FieldValues>({
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              <SelectItem value="user">Jobseeker</SelectItem>
-              <SelectItem value="employer">Employer</SelectItem>
+              {options.map(({ value, label }) => (
+                <SelectItem key={nanoid()} value={value}>
+                  {label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
-          {children}
+          <FormDescription>{description}</FormDescription>
           <FormMessage />
         </FormItem>
       )}
