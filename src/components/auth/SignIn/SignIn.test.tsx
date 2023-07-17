@@ -18,17 +18,17 @@ describe("SignIn", () => {
     expect(formEl).toBeInTheDocument();
   });
 
-  it("renders an email input field", () => {
+  it("renders an Email input field", () => {
     const emailField = screen.getByRole("textbox", { name: "Email" });
     expect(emailField).toBeInTheDocument();
   });
 
-  it("renders a password input field", () => {
+  it("renders a Password input field", () => {
     const passwordField = screen.getByLabelText("Password");
     expect(passwordField).toBeInTheDocument();
   });
 
-  it("renders both fields with empty string values", () => {
+  it("renders both Email and Password fields with empty string values", () => {
     const emailField = screen.getByRole("textbox", { name: "Email" });
     const passwordField = screen.getByLabelText("Password");
 
@@ -79,7 +79,7 @@ describe("SignIn", () => {
     }
   });
 
-  it("should mark the disabled attribute of Sign In button to false when both inputs are filled", async () => {
+  it("removes the disabled state of Sign In button when both Email and Password input fields are filled", async () => {
     user.setup();
 
     const emailField = screen.getByRole("textbox", { name: "Email" });
