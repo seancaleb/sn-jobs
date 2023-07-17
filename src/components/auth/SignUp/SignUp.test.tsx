@@ -20,12 +20,12 @@ describe("SignUp", () => {
       expect(selectField).toBeInTheDocument();
     });
 
-    it("renders a Continue button", () => {
+    it("renders a Continue button in disabled state", () => {
       const continueBtn = screen.getByRole("button", { name: "Continue" });
-      expect(continueBtn).toBeInTheDocument();
+      expect(continueBtn).toBeDisabled();
     });
 
-    it("enables the button Continue on selecting a field on the dropdown", async () => {
+    it("removes the disabled state of Continue button upon selecting a field on the dropdown", async () => {
       user.setup();
 
       const jobseekerValue = screen.getByRole("option", { name: "Jobseeker", hidden: true });
@@ -36,11 +36,6 @@ describe("SignUp", () => {
 
       const continueBtn = screen.getByRole("button", { name: "Continue" });
       expect(continueBtn).not.toBeDisabled();
-    });
-
-    it("marks the button Continue disabled when not selecting any fields", () => {
-      const continueBtn = screen.getByRole("button", { name: "Continue" });
-      expect(continueBtn).toBeDisabled();
     });
   });
 
@@ -77,7 +72,7 @@ describe("SignUp", () => {
       expect(lastNameErrorMsg).toBeInTheDocument();
     });
 
-    it("enables the button Continue on when both First name and Last name fields are filled", async () => {
+    it("removes the disabled state of Continue button when both First name and Last name fields are filled", async () => {
       const firstNameField = screen.getByRole("textbox", { name: "First name" });
       const lastNameField = screen.getByRole("textbox", { name: "Last name" });
 
@@ -128,7 +123,7 @@ describe("SignUp", () => {
       expect(emailErrorMsg).toBeInTheDocument();
     });
 
-    it("enables the button Continue on when both Email and Password fields are filled", async () => {
+    it("removes the disabled state of Sign Up button when both Email and Password fields are filled", async () => {
       const emailField = screen.getByRole("textbox", { name: "Email" });
       const passswordField = screen.getByLabelText("Password");
 
