@@ -150,7 +150,6 @@ describe("SignUp", () => {
 
       const firstNameField = screen.getByRole("textbox", { name: "First name" });
       expect(firstNameField).toBeInTheDocument();
-      screen.debug();
     });
   });
 });
