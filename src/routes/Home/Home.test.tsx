@@ -1,13 +1,14 @@
-import { screen, render } from "@/lib/test-utils";
+import { screen } from "@/lib/test-utils";
 import { describe, expect, it } from "vitest";
 import user from "@testing-library/user-event";
 import Home from "./Home";
+import { render as rtlRender } from "@testing-library/react";
 
-describe("Home", () => {
-  beforeEach(() => render(<Home />));
+describe("Home (Isolated)", () => {
+  beforeEach(() => rtlRender(<Home />));
 
   it("renders a section", () => {
-    const sectionEl = screen.getByRole("region");
+    const sectionEl = screen.getByRole("region", { name: "Home Section" });
     expect(sectionEl).toBeInTheDocument();
   });
 
@@ -26,6 +27,7 @@ describe("Home", () => {
 
     const jobListingsBtn = screen.getByRole("button", { name: "Explore Job Listings" });
     await user.tab();
+
     expect(jobListingsBtn).toHaveFocus();
   });
 });

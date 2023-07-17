@@ -2,26 +2,33 @@ import { screen, render } from "@/lib/test-utils";
 import { describe, it, expect } from "vitest";
 import user from "@testing-library/user-event";
 import SignIn from "./SignIn";
+import { RouterProvider, createMemoryRouter } from "react-router-dom";
 
 describe("SignIn", () => {
-  beforeEach(() => render(<SignIn />));
+  const router = createMemoryRouter([{ path: "/", element: <SignIn /> }], {
+    initialEntries: ["/"],
+  });
+
+  beforeEach(() => {
+    render(<RouterProvider router={router} />);
+  });
 
   it("renders a login form", () => {
     const formEl = screen.getByRole("form");
     expect(formEl).toBeInTheDocument();
   });
 
-  it("renders an email input field", () => {
+  it("renders an Email input field", () => {
     const emailField = screen.getByRole("textbox", { name: "Email" });
     expect(emailField).toBeInTheDocument();
   });
 
-  it("renders a password input field", () => {
+  it("renders a Password input field", () => {
     const passwordField = screen.getByLabelText("Password");
     expect(passwordField).toBeInTheDocument();
   });
 
-  it("renders both fields with empty string values", () => {
+  it("renders both Email and Password fields with empty string values", () => {
     const emailField = screen.getByRole("textbox", { name: "Email" });
     const passwordField = screen.getByLabelText("Password");
 
@@ -49,9 +56,10 @@ describe("SignIn", () => {
 
     const emailField = screen.getByRole("textbox", { name: "Email" });
     const passwordField = screen.getByLabelText("Password");
+    const showPasswordCheckbox = screen.getByRole("checkbox");
     const signUpLink = screen.getByRole("link", { name: (field) => field.startsWith("Sign up") });
 
-    const tabOrderDefault = [emailField, passwordField, signUpLink];
+    const tabOrderDefault = [emailField, passwordField, showPasswordCheckbox, signUpLink];
 
     for (const el of tabOrderDefault) {
       await user.tab();
@@ -63,7 +71,7 @@ describe("SignIn", () => {
     await user.type(emailField, "test@gmail.com");
     await user.type(passwordField, "testpassword");
 
-    const tabOrderFilled = [signInBtn, signUpLink];
+    const tabOrderFilled = [showPasswordCheckbox, signInBtn, signUpLink];
 
     for (const el of tabOrderFilled) {
       await user.tab();
@@ -71,7 +79,7 @@ describe("SignIn", () => {
     }
   });
 
-  it("should mark the disabled attribute of Sign In button to false when both inputs are filled", async () => {
+  it("removes the disabled state of Sign In button when both Email and Password input fields are filled", async () => {
     user.setup();
 
     const emailField = screen.getByRole("textbox", { name: "Email" });

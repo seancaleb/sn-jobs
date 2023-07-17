@@ -3,7 +3,7 @@ import Balancer from "react-wrap-balancer";
 
 const Home = () => {
   return (
-    <section role="region" className="section-padding">
+    <section aria-label="Home Section" role="region" className="section-padding">
       <div className="flex flex-col items-center space-y-6">
         <h1 className="text-4xl sm:text-5xl text-center tracking-[-1px] font-bold max-w-4xl">
           <Balancer>
