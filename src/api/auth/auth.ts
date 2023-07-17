@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { displayErrorNotification, displaySuccessNotification } from "@/lib/utils";
 import useNotification from "@/features/notification/useNotification";
+import { useAppSelector } from "@/app/hooks";
+import { selectNotification } from "@/features/notification/notificationSlice";
 
 /**
  * @desc  Login user
@@ -26,13 +28,16 @@ export const useLoginUser = () => {
   const { loginUser } = useAuth();
   const navigate = useNavigate();
   const { initNotificationId } = useNotification();
-  const { toast } = useToast();
+  const { toast, dismiss } = useToast();
+  const { id } = useAppSelector(selectNotification);
 
   return useMutation<Token, APIResponseError, LoginUser>({
     mutationFn: loginUserRequest,
     onSuccess: (data) => {
       const decodedToken = jwt_decode<User>(data.accessToken);
       const parsedUser = userSchema.parse(decodedToken);
+
+      if (id) dismiss(id);
 
       loginUser(parsedUser);
       navigate("/profile", { replace: true });
