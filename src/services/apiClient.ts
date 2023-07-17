@@ -6,7 +6,9 @@ interface ServiceRequestConfigs {
   options: AxiosRequestConfig;
 }
 
-type ErrorMessage = { message: string };
+export type APIResponseError = {
+  message: string;
+};
 
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_PROD_URL : import.meta.env.VITE_DEV_URL;
 
@@ -22,12 +24,12 @@ export default async function <T>({ token, options }: ServiceRequestConfigs): Pr
   client.defaults.withCredentials = true;
 
   const onSuccess = (response: AxiosResponse<T>) => response.data;
-  const onError = (err?: ErrorMessage) => err;
+  const onError = (err?: APIResponseError) => err;
 
   try {
     return onSuccess(await client(options));
   } catch (error) {
-    const e = error as AxiosError<ErrorMessage>;
+    const e = error as AxiosError<APIResponseError>;
     throw onError(e.response?.data);
   }
 }
