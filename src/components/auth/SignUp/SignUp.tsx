@@ -10,7 +10,7 @@ import { SignUpValues, signUpSchema } from "./SignUp.schema";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import { useCounter } from "@mantine/hooks";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PasswordVisibilityToggle from "@/components/PasswordVisibilityToggle/PasswordVisibilityToggle";
 import FormInputField from "@/components/FormInputField/FormInputField";
 import FormSelectField from "@/components/FormSelectField/FormSelectField";
@@ -26,7 +26,7 @@ const SignIn = () => {
     },
     resolver: zodResolver(signUpSchema),
   });
-  const { control, handleSubmit, formState, trigger } = form;
+  const { control, handleSubmit, formState, trigger, setFocus } = form;
   const { isDirty, isValid, dirtyFields, errors } = formState;
   const [count, handlers] = useCounter(0, { min: 0, max: 2 });
   const registerUserMutation = useRegisterUser();
@@ -43,6 +43,11 @@ const SignIn = () => {
       await loginUserMutation.mutateAsync({ email, password });
     }
   };
+
+  useEffect(() => {
+    if (count === 1) setFocus("firstName");
+    else if (count === 2) setFocus("email");
+  }, [count, setFocus]);
 
   return (
     <div className="p-8 border border-slate-200 rounded-md max-w-md w-full">
@@ -61,11 +66,17 @@ const SignIn = () => {
           className="space-y-8 flex flex-col"
         >
           {count === 0 && (
-            <FormSelectField control={control} label="Role" name="role" placeholder="Select a role">
-              <FormDescription>
-                Select your role to indicate whether you are a jobseeker or an employer.
-              </FormDescription>
-            </FormSelectField>
+            <FormSelectField
+              control={control}
+              label="Role"
+              name="role"
+              placeholder="Select a role"
+              description=" Select your role to indicate whether you are a jobseeker or an employer."
+              options={[
+                { value: "user", label: "Jobseeker" },
+                { value: "employer", label: "Employer" },
+              ]}
+            />
           )}
 
           {count === 1 && (
@@ -75,7 +86,7 @@ const SignIn = () => {
                 name="firstName"
                 placeholder="Enter your first name"
                 InputProps={{ onBlur: () => trigger("firstName") }}
-                label="First Name"
+                label="First name"
               />
 
               <FormInputField
@@ -83,7 +94,7 @@ const SignIn = () => {
                 name="lastName"
                 placeholder="Enter your last name"
                 InputProps={{ onBlur: () => trigger("lastName") }}
-                label="Last Name"
+                label="Last name"
               />
             </>
           )}
