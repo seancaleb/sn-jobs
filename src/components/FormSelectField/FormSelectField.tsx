@@ -14,6 +14,7 @@ type FormSelectFieldProps<T extends FieldValues> = {
   name: Path<T>;
   label: string;
   children?: ReactNode;
+  placeholder: string;
 };
 
 const FormSelectField = <T extends FieldValues>({
@@ -21,6 +22,7 @@ const FormSelectField = <T extends FieldValues>({
   name,
   label,
   children,
+  placeholder,
 }: FormSelectFieldProps<T>) => {
   return (
     <FormField
@@ -35,7 +37,7 @@ const FormSelectField = <T extends FieldValues>({
           >
             <FormControl>
               <SelectTrigger>
-                <SelectValue placeholder="Select a verified email to display" />
+                <SelectValue placeholder={placeholder} />
               </SelectTrigger>
             </FormControl>
             <SelectContent>
