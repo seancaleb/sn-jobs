@@ -13,10 +13,6 @@ export type Token = {
   accessToken: string;
 };
 
-export type ResponseMessage = {
-  message: string;
-};
-
 export type LoginUser = {
   email: string;
   password: string;
