@@ -21,7 +21,6 @@ const SignIn = () => {
     defaultValues: {
       firstName: "",
       lastName: "",
-      role: "user",
       email: "",
       password: "",
     },
@@ -55,14 +54,14 @@ const SignIn = () => {
 
       <Form {...form}>
         <form
-          id="login-form"
+          id="register-form"
           role="form"
           noValidate
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-8 flex flex-col"
         >
           {count === 0 && (
-            <FormSelectField control={control} label="Role" name="role">
+            <FormSelectField control={control} label="Role" name="role" placeholder="Select a role">
               <FormDescription>
                 Select your role to indicate whether you are a jobseeker or an employer.
               </FormDescription>
@@ -124,7 +123,7 @@ const SignIn = () => {
             )}
 
             {count === 0 && (
-              <Button type="button" onClick={handlers.increment}>
+              <Button type="button" onClick={handlers.increment} disabled={!dirtyFields.role}>
                 Continue
               </Button>
             )}
