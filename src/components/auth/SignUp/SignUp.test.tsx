@@ -83,6 +83,15 @@ describe("SignUp", () => {
 
       expect(continueBtn).not.toBeDisabled();
     });
+
+    it("goes back to Step 1 when Back button is clicked", async () => {
+      const backBtn = screen.getByRole("button", { name: "Back" });
+      await user.click(backBtn);
+
+      const jobseekerValue = screen.getByRole("option", { name: "Jobseeker", hidden: true });
+      const selectField = jobseekerValue.parentElement as HTMLElement;
+      expect(selectField).toBeInTheDocument();
+    });
   });
 
   describe("(Step 3/3)", () => {
@@ -133,6 +142,15 @@ describe("SignUp", () => {
       const continueBtn = screen.getByRole("button", { name: "Sign Up" });
 
       expect(continueBtn).not.toBeDisabled();
+    });
+
+    it("goes back to Step 2 when Back button is clicked", async () => {
+      const backBtn = screen.getByRole("button", { name: "Back" });
+      await user.click(backBtn);
+
+      const firstNameField = screen.getByRole("textbox", { name: "First name" });
+      expect(firstNameField).toBeInTheDocument();
+      screen.debug();
     });
   });
 });
