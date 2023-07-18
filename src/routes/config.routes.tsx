@@ -2,7 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { type RouteObject } from "react-router-dom";
 
 import Root from "../Root.tsx";
-import Home from "@/routes/Home/Home.tsx";
+import Home, { loader as homeLoader } from "@/routes/Home/Home.tsx";
 import Login from "@/routes/auth/Login/Login.page.tsx";
 import ErrorPage from "@/error-page.tsx";
 import Profile, { loader as profileLoader } from "@/routes//Profile/Profile.tsx";
@@ -19,6 +19,7 @@ export const routesConfig: RouteObject[] = [
     children: [
       {
         index: true,
+        loader: homeLoader(queryClient),
         element: <Home />,
       },
       {
@@ -30,7 +31,7 @@ export const routesConfig: RouteObject[] = [
         element: <Register />,
       },
       {
-        path: "profile",
+        path: "jobseekers/profile",
         loader: profileLoader,
         element: (
           <ProtectedRoute>
