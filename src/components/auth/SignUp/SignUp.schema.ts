@@ -19,7 +19,11 @@ export const signUpSchema = z.object({
     .nonempty("Email is required")
     .email("Please enter a valid email")
     .transform((str) => str.trim()),
-  password: z.string().nonempty("Password is required"),
+  password: z
+    .string()
+    .nonempty("Password is required")
+    .min(6, "Password is too short - minimum of 6 characters")
+    .max(50, "Password too long"),
 });
 
 export type SignUpValues = z.infer<typeof signUpSchema>;
