@@ -40,7 +40,7 @@ export const useLoginUser = () => {
       if (id) dismiss(id);
 
       loginUser(parsedUser);
-      navigate("/profile", { replace: true });
+      navigate("/jobseekers/profile", { replace: true });
     },
     onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
   });
@@ -59,13 +59,11 @@ export const logoutUserRequest = async () => {
 };
 
 export const useLogoutUser = () => {
-  const { logoutUser } = useAuth();
   const navigate = useNavigate();
 
   return useMutation({
     mutationFn: logoutUserRequest,
     onSuccess: () => {
-      logoutUser();
       navigate("/", { replace: true });
     },
   });
