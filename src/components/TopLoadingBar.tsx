@@ -7,9 +7,13 @@ const TopLoadingBar = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
+    const bodyEl = document.querySelector("body");
     if (navigation.state === "loading") {
+      bodyEl?.classList.add("disable-interactions");
       setProgress(15);
     } else if (navigation.state === "idle") {
+      bodyEl?.classList.contains("disable-interactions") &&
+        bodyEl?.classList.remove("disable-interactions");
       setProgress(100);
     }
   }, [navigation.state]);

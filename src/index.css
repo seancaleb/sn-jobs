@@ -112,4 +112,8 @@
   .icon-text {
     @apply flex space-x-2 items-center text-sm;
   }
+
+  .disable-interactions {
+    @apply pointer-events-none;
+  }
 }
