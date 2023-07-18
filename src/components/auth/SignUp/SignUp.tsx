@@ -114,6 +114,7 @@ const SignIn = () => {
                 type={isVisible ? "text" : "password"}
                 name="password"
                 placeholder="Enter your password"
+                InputProps={{ onBlur: () => trigger("password") }}
                 label="Password"
               >
                 <PasswordVisibilityToggle
