@@ -8,6 +8,7 @@ import ErrorPage from "@/error-page.tsx";
 import Profile, { loader as profileLoader } from "@/routes//Profile/Profile.tsx";
 import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute.tsx";
 import Register from "@/routes/auth/Register/Register.page.tsx";
+import Jobs, { loader as jobsLoader } from "@/routes/Jobs/Jobs.tsx";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,15 @@ export const routesConfig: RouteObject[] = [
         element: (
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "jobs",
+        // loader: jobsLoader(queryClient),
+        element: (
+          <ProtectedRoute>
+            <Jobs />
           </ProtectedRoute>
         ),
       },
