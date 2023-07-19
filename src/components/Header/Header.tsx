@@ -26,10 +26,7 @@ const Header = () => {
             <ul aria-label="Navigation Menu List" className="flex space-x-6 items-center">
               {!user && (
                 <li>
-                  <div className="flex space-x-2">
-                    <Button>Post a Job</Button>
-                    <Button>Job Board</Button>
-                  </div>
+                  <Button>Job Board</Button>
                 </li>
               )}
 
