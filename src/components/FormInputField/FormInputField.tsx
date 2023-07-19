@@ -6,7 +6,7 @@ import { ComponentProps, ReactNode } from "react";
 type FormInputFieldProps<T extends FieldValues> = {
   control: UseFormReturn<T>["control"];
   name: Path<T>;
-  label: string;
+  label?: string;
   type?: string;
   placeholder?: string;
   InputProps?: ComponentProps<typeof Input>;
@@ -26,8 +26,8 @@ const FormInputField = <T extends FieldValues>({
     control={control}
     name={name}
     render={({ field }) => (
-      <FormItem>
-        <FormLabel>{label}</FormLabel>
+      <FormItem className="flex-1">
+        {label && <FormLabel>{label}</FormLabel>}
         <FormControl>
           <Input type={type} placeholder={placeholder} {...field} {...InputProps} />
         </FormControl>
