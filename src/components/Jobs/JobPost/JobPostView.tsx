@@ -37,8 +37,8 @@ const JobPostView = ({ job }: JobPostViewProps) => {
             <Button>
               <Briefcase className="mr-2 h-4 w-4" /> Apply Now
             </Button>
-            <Button variant="outline">
-              <Heart className="mr-2 h-4 w-4" /> Bookmark Job
+            <Button variant="outline" size="icon">
+              <Heart className="h-4 w-4" />
             </Button>
           </div>
 
