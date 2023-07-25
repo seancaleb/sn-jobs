@@ -60,10 +60,12 @@ export const logoutUserRequest = async () => {
 
 export const useLogoutUser = () => {
   const navigate = useNavigate();
+  const { logoutUser } = useAuth();
 
   return useMutation({
     mutationFn: logoutUserRequest,
     onSuccess: () => {
+      logoutUser();
       navigate("/", { replace: true });
     },
   });
