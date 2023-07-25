@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toast } from "@/components/ui/use-toast";
 import { isThisWeek, isThisMonth } from "date-fns";
+import { SetURLSearchParams } from "react-router-dom";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -71,4 +72,33 @@ export const formatJobPostTime = (date: Date) => {
 
   const monthsAgo = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24 * 30));
   return `${monthsAgo + 1} month${monthsAgo === 0 ? "" : "s"} ago`;
+};
+
+// Function to update the query parameters without replacing the old query parameter list
+export const updateQueryParams = (
+  setSearchParams: SetURLSearchParams,
+  params: { key: string; value: string } | { key: string; value: string }[]
+) => {
+  // Enqueue navigation action that updates the queryString
+  setSearchParams((searchParams) => {
+    // Add the new query param value to the queryString
+    if (params instanceof Array) {
+      params.forEach(({ key, value }) => {
+        searchParams.set(key, value);
+      });
+    } else searchParams.set(params.key, params.value);
+
+    return searchParams;
+  });
+};
+
+// Function to capitalize every first letter of a word
+export const capitalize = (string: string) => {
+  let stringArr = string.split(" ");
+  stringArr = stringArr.map((string) => {
+    const formattedString = string.charAt(0).toUpperCase() + string.slice(1);
+    return formattedString;
+  });
+
+  return stringArr.join(" ");
 };
