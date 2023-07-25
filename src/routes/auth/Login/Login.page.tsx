@@ -1,7 +1,10 @@
 import AuthHeader from "@/components/Header/AuthHeader";
 import SignIn from "@/components/auth/SignIn/SignIn";
+import { useDocumentTitle } from "@mantine/hooks";
 
 const Login = () => {
+  useDocumentTitle("Sign In");
+
   return (
     <div className="py-12 sm:py-16 flex flex-col space-y-6 items-center justify-center">
       <AuthHeader
