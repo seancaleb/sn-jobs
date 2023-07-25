@@ -111,7 +111,7 @@ const JobsPage = () => {
               </div>
 
               {/* Filters  */}
-              <JobsFilter />
+              <JobsFilter fromAge={queryParams.fromAge} />
             </div>
           )}
 
