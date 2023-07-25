@@ -15,7 +15,7 @@ const Header = () => {
     <header className="h-16 border-b border-slate-200 w-full" aria-label="navigation header">
       <div className="container h-full flex items-center justify-between">
         <NavLink
-          to={user ? "/profile" : "/"}
+          to={user ? "/jobs" : "/"}
           className="text-xl font-bold tracking-[-.5px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md"
         >
           SNJOBS
@@ -26,10 +26,7 @@ const Header = () => {
             <ul aria-label="Navigation Menu List" className="flex space-x-6 items-center">
               {!user && (
                 <li>
-                  <div className="flex space-x-2">
-                    <Button>Post a Job</Button>
-                    <Button>Job Board</Button>
-                  </div>
+                  <Button>Job Board</Button>
                 </li>
               )}
 

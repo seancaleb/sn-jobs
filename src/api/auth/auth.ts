@@ -1,9 +1,14 @@
-import apiClient from "@/services/apiClient";
+import apiClient, { APIResponseDefault, APIResponseError } from "@/services/apiClient";
 import { useMutation } from "@tanstack/react-query";
-import { User, LoginUser, Token, userSchema, RegisterUser, ResponseMessage } from "./auth.type";
+import { User, LoginUser, Token, userSchema, RegisterUser } from "./auth.type";
 import jwt_decode from "jwt-decode";
 import useAuth from "@/features/auth/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import { displayErrorNotification, displaySuccessNotification } from "@/lib/utils";
+import useNotification from "@/features/notification/useNotification";
+import { useAppSelector } from "@/app/hooks";
+import { selectNotification } from "@/features/notification/notificationSlice";
 
 /**
  * @desc  Login user
@@ -22,16 +27,22 @@ export const loginUserRequest = async (data: LoginUser): Promise<Token> => {
 export const useLoginUser = () => {
   const { loginUser } = useAuth();
   const navigate = useNavigate();
+  const { initNotificationId } = useNotification();
+  const { toast, dismiss } = useToast();
+  const { id } = useAppSelector(selectNotification);
 
-  return useMutation<Token, Error, LoginUser>({
+  return useMutation<Token, APIResponseError, LoginUser>({
     mutationFn: loginUserRequest,
     onSuccess: (data) => {
       const decodedToken = jwt_decode<User>(data.accessToken);
       const parsedUser = userSchema.parse(decodedToken);
 
+      if (id) dismiss(id);
+
       loginUser(parsedUser);
-      navigate("/profile", { replace: true });
+      navigate("/jobseekers/profile", { replace: true });
     },
+    onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
   });
 };
 
@@ -48,8 +59,8 @@ export const logoutUserRequest = async () => {
 };
 
 export const useLogoutUser = () => {
-  const { logoutUser } = useAuth();
   const navigate = useNavigate();
+  const { logoutUser } = useAuth();
 
   return useMutation({
     mutationFn: logoutUserRequest,
@@ -63,7 +74,7 @@ export const useLogoutUser = () => {
 /**
  * @desc  Register user
  */
-export const registerUserRequest = async (data: RegisterUser): Promise<ResponseMessage> => {
+export const registerUserRequest = async (data: RegisterUser): Promise<APIResponseDefault> => {
   await new Promise((res) => setTimeout(res, 1000));
   return await apiClient({
     options: {
@@ -75,7 +86,12 @@ export const registerUserRequest = async (data: RegisterUser): Promise<ResponseM
 };
 
 export const useRegisterUser = () => {
-  return useMutation<ResponseMessage, Error, RegisterUser>({
+  const { toast } = useToast();
+  const { initNotificationId } = useNotification();
+
+  return useMutation<APIResponseDefault, APIResponseError, RegisterUser>({
     mutationFn: registerUserRequest,
+    onSuccess: ({ message }) => displaySuccessNotification(message, toast, initNotificationId),
+    onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
   });
 };

@@ -20,11 +20,8 @@ export const Toaster = () => {
         <Toast key={id} {...props} className="flex flex-col items-stretch space-x-0 space-y-2">
           {title && <ToastTitle>{title}</ToastTitle>}
           {description && <ToastDescription>{description}</ToastDescription>}
-          {action && (
-            <ToastAction altText="close">
-              <ToastClose />
-            </ToastAction>
-          )}
+          {action && <ToastAction altText="close" />}
+          <ToastClose />
         </Toast>
       ))}
       <ToastViewport />

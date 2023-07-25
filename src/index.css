@@ -98,6 +98,10 @@
   p {
     @apply text-slate-600;
   }
+
+  [data-radix-popper-content-wrapper] {
+    @apply right-0 sm:right-full px-5;
+  }
 }
 
 @layer components {
@@ -111,5 +115,9 @@
 
   .icon-text {
     @apply flex space-x-2 items-center text-sm;
+  }
+
+  .disable-interactions {
+    @apply pointer-events-none;
   }
 }

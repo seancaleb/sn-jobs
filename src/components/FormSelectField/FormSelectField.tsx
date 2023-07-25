@@ -19,7 +19,7 @@ import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
 type FormSelectFieldProps<T extends FieldValues> = {
   control: UseFormReturn<T>["control"];
   name: Path<T>;
-  label: string;
+  label?: string;
   placeholder: string;
   description?: string;
   options: { value: string; label: string }[];
@@ -39,7 +39,7 @@ const FormSelectField = <T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          {label && <FormLabel>{label}</FormLabel>}
           <Select
             onValueChange={(e) => field.onChange(e as PathValue<T, Path<T>>)}
             defaultValue={field.value}

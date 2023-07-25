@@ -5,9 +5,10 @@ import Root from "../Root.tsx";
 import Home from "@/routes/Home/Home.tsx";
 import Login from "@/routes/auth/Login/Login.page.tsx";
 import ErrorPage from "@/error-page.tsx";
-import Profile, { loader as profileLoader } from "@/routes//Profile/Profile.tsx";
+import Profile, { loader as profileLoader } from "@/routes/Profile/Profile.page.tsx";
 import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute.tsx";
 import Register from "@/routes/auth/Register/Register.page.tsx";
+import Jobs, { loader as jobsLoader } from "@/routes/Jobs/Jobs.page.tsx";
 
 const queryClient = new QueryClient();
 
@@ -30,11 +31,20 @@ export const routesConfig: RouteObject[] = [
         element: <Register />,
       },
       {
-        path: "profile",
+        path: "jobseekers/profile",
         loader: profileLoader,
         element: (
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "jobs",
+        loader: jobsLoader(queryClient),
+        element: (
+          <ProtectedRoute>
+            <Jobs />
           </ProtectedRoute>
         ),
       },
