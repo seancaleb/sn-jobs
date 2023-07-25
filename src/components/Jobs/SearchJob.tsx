@@ -58,15 +58,17 @@ const SearchJob = ({ keyword, location }: SearchJobProps) => {
     id && dismiss(id);
 
     const emptySearchOptions = !getValues("location") && !getValues("keyword");
+    const containsSearchParams =
+      urlLocation.search.includes("keyword") || urlLocation.search.includes("location");
 
-    if (emptySearchOptions && !urlLocation.search) {
+    if (emptySearchOptions && !containsSearchParams) {
       displayErrorNotification(
         "Start your job search!: Enter a job title or location to start a search",
         toast,
         initNotificationId
       );
 
-      urlLocation.search && navigate("/jobs");
+      containsSearchParams && navigate("/jobs");
     } else {
       const valuesEntries = Object.entries(values).filter((arr) => !!arr[1]);
       setSearchParams(valuesEntries);
