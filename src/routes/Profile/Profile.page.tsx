@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { User } from "@/api/auth/auth.type";
 import { useAppSelector } from "@/app/hooks";
 import { selectUser } from "@/features/auth/authSlice";
