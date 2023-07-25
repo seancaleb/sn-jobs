@@ -26,15 +26,15 @@ const Header = () => {
             <ul aria-label="Navigation Menu List" className="flex space-x-6 items-center">
               {!user && (
                 <li>
-                  <Button>Job Board</Button>
+                  <Button variant="ghost">Job Board</Button>
                 </li>
               )}
 
               {user && (
                 <li>
                   <div className="flex space-x-2">
-                    {user.role === "employer" && <Button>Post a Job</Button>}
-                    <Button>Job Board</Button>
+                    {user.role === "employer" && <Button variant="ghost">Post a Job</Button>}
+                    <Button variant="ghost">Job Board</Button>
                   </div>
                 </li>
               )}
