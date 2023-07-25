@@ -31,7 +31,7 @@ export const routesConfig: RouteObject[] = [
         element: <Register />,
       },
       {
-        path: "jobseekers/profile",
+        path: ":role/profile",
         loader: profileLoader,
         element: (
           <ProtectedRoute>
