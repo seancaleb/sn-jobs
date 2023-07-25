@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Outlet, useLocation } from "react-router";
 import Header from "@/components/Header/Header";
 import TopLoadingBar from "@/components/TopLoadingBar";
@@ -14,19 +15,24 @@ const Root = () => {
   const { id } = useAppSelector(selectNotification);
   const { dismiss } = useToast();
 
-  useEffect(() => {
-    if (id) dismiss(id);
-  }, [location.pathname]);
-
   const isSignInRoute = location.pathname === "/sign-in";
   const isSignUpRoute = location.pathname === "/sign-up";
 
   const isAuthRoute = isSignInRoute || isSignUpRoute;
 
+  useEffect(() => {
+    if (id) dismiss(id);
+  }, [location.pathname]);
+
   return (
     <>
       {!isAuthRoute && <Header />}
-      <main className={cn("relative min-h-screen container", !isAuthRoute && "pb-24 sm:pb-28")}>
+      <main
+        className={cn(
+          "relative min-h-screen container max-w-6xl",
+          !isAuthRoute && "pb-24 sm:pb-28"
+        )}
+      >
         <TopLoadingBar />
         <Toaster />
         <Outlet />
