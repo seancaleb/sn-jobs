@@ -10,6 +10,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useLogoutUser } from "@/api/auth/auth";
+import { Link } from "react-router-dom";
 
 type HeaderAccountDropdownProps = {
   user: User;
@@ -37,8 +38,8 @@ const HeaderAccountDropdown = ({ user }: HeaderAccountDropdownProps) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="text-slate-700 flex space-x-1 items-center text-sm">
-        <span>My Account</span> <ChevronDown size={16} />
+      <DropdownMenuTrigger className="flex space-x-1 items-center text-sm">
+        <span>My Account</span> <ChevronDown className="h-4 w-4" />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>
@@ -49,7 +50,9 @@ const HeaderAccountDropdown = ({ user }: HeaderAccountDropdownProps) => {
           <Badge variant="secondary">{role}</Badge>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <Link to={`${user.role === "user" ? "jobseekers" : user.role}/profile`}>
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+        </Link>
         {user.role === "user" && (
           <>
             <DropdownMenuItem>Applied Jobs</DropdownMenuItem>

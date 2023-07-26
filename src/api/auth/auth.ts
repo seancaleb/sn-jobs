@@ -36,11 +36,12 @@ export const useLoginUser = () => {
     onSuccess: (data) => {
       const decodedToken = jwt_decode<User>(data.accessToken);
       const parsedUser = userSchema.parse(decodedToken);
+      const { role } = parsedUser;
 
       if (id) dismiss(id);
 
       loginUser(parsedUser);
-      navigate("/jobseekers/profile", { replace: true });
+      navigate(`/${role === "user" ? "jobseekers" : role}/profile`, { replace: true });
     },
     onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
   });

@@ -23,6 +23,7 @@ type FormSelectFieldProps<T extends FieldValues> = {
   placeholder: string;
   description?: string;
   options: { value: string; label: string }[];
+  onChangeCallback?: (key: string, value: string) => void;
 };
 
 const FormSelectField = <T extends FieldValues>({
@@ -32,6 +33,7 @@ const FormSelectField = <T extends FieldValues>({
   placeholder,
   description,
   options,
+  onChangeCallback,
 }: FormSelectFieldProps<T>) => {
   return (
     <FormField
@@ -41,12 +43,19 @@ const FormSelectField = <T extends FieldValues>({
         <FormItem>
           {label && <FormLabel>{label}</FormLabel>}
           <Select
-            onValueChange={(e) => field.onChange(e as PathValue<T, Path<T>>)}
-            defaultValue={field.value}
+            onValueChange={(e: PathValue<T, Path<T>>) => {
+              field.onChange(e);
+              onChangeCallback && onChangeCallback(name, e);
+            }}
+            value={field.value}
           >
             <FormControl>
               <SelectTrigger>
-                <SelectValue placeholder={placeholder} />
+                <SelectValue>
+                  {field.value
+                    ? options.find((option) => option.value === field.value)?.label
+                    : placeholder}
+                </SelectValue>
               </SelectTrigger>
             </FormControl>
             <SelectContent>

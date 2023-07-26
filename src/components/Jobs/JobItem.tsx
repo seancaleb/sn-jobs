@@ -27,6 +27,11 @@ const JobItem = (job: JobDetails) => {
       className={`cursor-pointer ${jobId === job.jobId ? "border-teal-500" : ""}`}
     >
       <CardHeader>
+        {formattedJobDate === "Just now" ? (
+          <div>
+            <p className="text-green-700 font-medium text-xs">New</p>
+          </div>
+        ) : null}
         <CardTitle className="text-xl leading-[1.2]">{job.title}</CardTitle>
         <CardDescription>
           {job.employerName} &middot; {job.location}

@@ -4,15 +4,15 @@ import { QUERY_KEY, fetchJobs, useGetJobs } from "@/api/jobs/jobs";
 import JobList from "@/components/Jobs/JobList";
 import { QueryClient } from "@tanstack/react-query";
 import { ActionFunctionArgs, useLoaderData } from "react-router-dom";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDocumentTitle, useMediaQuery } from "@mantine/hooks";
 import JobPost from "@/components/Jobs/JobPost/JobPost";
 import SearchJob from "@/components/Jobs/SearchJob";
 import { capitalize } from "@/lib/utils";
 import { format } from "date-fns";
-import { Helmet } from "react-helmet";
 import { Jobs } from "@/api/jobs/jobs.type";
-import JobsFilter from "./JobsFilter";
+import JobsFilter from "@/components/Jobs/JobsFilter";
 import { LoaderReturnType } from "@/types";
+import Pagination from "@/components/Pagination";
 
 export const loader =
   (queryClient: QueryClient) =>
@@ -23,12 +23,18 @@ export const loader =
 
     delete queryParams["jobId"];
 
-    const paramsValues = Object.values(queryParams);
+    const page = url.searchParams.has("page");
+
+    if (!page) {
+      Object.assign(queryParams, { page: "1" });
+    }
+
+    const QUERY_KEY_PARAMS = Object.entries(queryParams).map(([key, value]) => `${key}=${value}`);
 
     const keyword = url.searchParams.get("keyword");
     const location = url.searchParams.get("location");
 
-    const queryKey = [...QUERY_KEY, ...paramsValues];
+    const queryKey = [...QUERY_KEY, ...QUERY_KEY_PARAMS];
 
     const initialData = await queryClient.ensureQueryData({
       queryKey,
@@ -85,11 +91,10 @@ const JobsPage = () => {
     }
   };
 
+  useDocumentTitle(title());
+
   return (
     <>
-      <Helmet>
-        <title>{title()}</title>
-      </Helmet>
       <div className="flex flex-col items-center space-y-6 py-12 border-b border-slate-200">
         <div className="text-3xl tracking-tight font-bold text-center">
           Explore Job Opportunities
@@ -102,7 +107,7 @@ const JobsPage = () => {
       {jobs.jobs.length > 0 ? (
         <div className="py-6 space-y-6">
           {(search.keyword || search.location) && (
-            <div className="flex justify-between gap-4">
+            <div className="flex flex-col sm:flex-row justify-between gap-4">
               <div>
                 <p className="text-teal-600">
                   {jobs.total} job{jobs.total > 1 ? "s" : ""}
@@ -117,8 +122,11 @@ const JobsPage = () => {
 
           <div className="relative flex gap-x-6 items-start">
             {/* Job List  */}
-            <div className="max-w-md w-full">
+            <div className="max-w-md w-full space-y-6">
               <JobList jobs={jobs.jobs} />
+              {jobs.totalPages !== 1 ? (
+                <Pagination total={jobs.totalPages} pageNumber={jobs.pageNumber} />
+              ) : null}
             </div>
 
             {/* Job Posting  */}
