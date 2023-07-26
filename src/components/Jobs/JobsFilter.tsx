@@ -16,41 +16,58 @@ const fromAgeOptions = [
   { value: "14", label: "Last 14 days" },
 ];
 
+const sortByOptions = [
+  { value: "createdAt", label: "Date" },
+  { value: "updatedAt", label: "Relevance" },
+];
+
 const filterSchema = z.object({
   fromAge: z.union([z.enum(["1", "3", "7", "14"]), z.literal("")]),
+  sortBy: z.union([z.enum(["createdAt", "updatedAt"]), z.literal("")]),
 });
 
 type FilterValues = z.infer<typeof filterSchema>;
 
-type JobsFilterProps = {
-  fromAge: string;
-};
-
-const JobsFilter = ({ fromAge }: JobsFilterProps) => {
+const JobsFilter = () => {
   const form = useForm<FilterValues>({
     defaultValues: {
       fromAge: "",
+      sortBy: "",
     },
     resolver: zodResolver(filterSchema),
   });
   const { control, reset } = form;
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const onChangeCallback = (value: string) => {
+  const onChangeCallback = (key: string, value: string) => {
     updateQueryParams(setSearchParams, [
-      { key: "fromAge", value },
+      { key, value },
       { key: "page", value: "1" },
     ]);
   };
 
   useEffect(() => {
-    reset({ fromAge: fromAge ? (fromAge as FilterValues["fromAge"]) : "" });
-  }, [fromAge, reset]);
+    const fromAge = searchParams.get("fromAge");
+    const sortBy = searchParams.get("sortBy");
+
+    reset({
+      fromAge: fromAge ? (fromAge as FilterValues["fromAge"]) : "",
+      sortBy: sortBy ? (sortBy as FilterValues["sortBy"]) : "",
+    });
+  }, [reset, searchParams]);
 
   return (
     <>
       <Form {...form}>
-        <form id="filter-form" role="form" noValidate className="flex flex-col sm:flex-row gap-4">
+        <form id="filter-form" role="form" noValidate className="flex gap-2">
+          <FormSelectField
+            control={control}
+            name="sortBy"
+            placeholder="Sort By"
+            options={sortByOptions}
+            onChangeCallback={onChangeCallback}
+          />
+
           <FormSelectField
             control={control}
             name="fromAge"
