@@ -16,6 +16,7 @@ export const jobsSchema = z.object({
   jobs: jobSchema.array(),
   limit: z.number(),
   pageNumber: z.number(),
+  totalPages: z.number(),
 });
 
 export type Jobs = z.infer<typeof jobsSchema>;
