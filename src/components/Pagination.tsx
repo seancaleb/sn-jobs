@@ -28,24 +28,25 @@ const Pagination = ({ total, pageNumber }: PaginationProps) => {
         </Button>
       )}
 
-      {pagination.range.map((value, index) => {
-        console.log({ value, index });
-        return (
-          <>
-            {value === "dots" ? (
-              <div className="flex items-center px-3 py-2">...</div>
-            ) : (
-              <Button
-                key={nanoid()}
-                variant={pagination.active === value ? "default" : "outline"}
-                onClick={() => pagination.setPage(value)}
-                className={pagination.active === value ? "hover:bg-primary" : ""}
-              >
-                {value}
-              </Button>
-            )}
-          </>
-        );
+      {pagination.range.map((value) => {
+        if (value === "dots")
+          return (
+            <div key={nanoid()} className="flex items-center px-3 py-2">
+              ...
+            </div>
+          );
+        else {
+          return (
+            <Button
+              key={nanoid()}
+              variant={pagination.active === value ? "default" : "outline"}
+              onClick={() => pagination.setPage(value)}
+              className={pagination.active === value ? "hover:bg-primary" : ""}
+            >
+              {value}
+            </Button>
+          );
+        }
       })}
 
       {pagination.active !== total && (
