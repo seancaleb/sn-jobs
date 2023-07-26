@@ -4,12 +4,11 @@ import { QUERY_KEY, fetchJobs, useGetJobs } from "@/api/jobs/jobs";
 import JobList from "@/components/Jobs/JobList";
 import { QueryClient } from "@tanstack/react-query";
 import { ActionFunctionArgs, useLoaderData } from "react-router-dom";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDocumentTitle, useMediaQuery } from "@mantine/hooks";
 import JobPost from "@/components/Jobs/JobPost/JobPost";
 import SearchJob from "@/components/Jobs/SearchJob";
 import { capitalize } from "@/lib/utils";
 import { format } from "date-fns";
-import { Helmet } from "react-helmet";
 import { Jobs } from "@/api/jobs/jobs.type";
 import JobsFilter from "@/components/Jobs/JobsFilter";
 import { LoaderReturnType } from "@/types";
@@ -92,11 +91,10 @@ const JobsPage = () => {
     }
   };
 
+  useDocumentTitle(title());
+
   return (
     <>
-      <Helmet>
-        <title>{title()}</title>
-      </Helmet>
       <div className="flex flex-col items-center space-y-6 py-12 border-b border-slate-200">
         <div className="text-3xl tracking-tight font-bold text-center">
           Explore Job Opportunities
