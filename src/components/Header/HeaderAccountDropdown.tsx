@@ -38,7 +38,7 @@ const HeaderAccountDropdown = ({ user }: HeaderAccountDropdownProps) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="text-slate-700 flex space-x-1 items-center text-sm">
+      <DropdownMenuTrigger className="flex space-x-1 items-center text-sm">
         <span>My Account</span> <ChevronDown className="h-4 w-4" />
       </DropdownMenuTrigger>
 
