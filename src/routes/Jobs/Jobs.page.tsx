@@ -24,12 +24,18 @@ export const loader =
 
     delete queryParams["jobId"];
 
-    const paramsValues = Object.values(queryParams);
+    const page = url.searchParams.has("page");
+
+    if (!page) {
+      Object.assign(queryParams, { page: "1" });
+    }
+
+    const QUERY_KEY_PARAMS = Object.entries(queryParams).map(([key, value]) => `${key}=${value}`);
 
     const keyword = url.searchParams.get("keyword");
     const location = url.searchParams.get("location");
 
-    const queryKey = [...QUERY_KEY, ...paramsValues];
+    const queryKey = [...QUERY_KEY, ...QUERY_KEY_PARAMS];
 
     const initialData = await queryClient.ensureQueryData({
       queryKey,

@@ -17,9 +17,9 @@ export const fetchJobs = async (params: Record<string, string>): Promise<Jobs> =
 export const QUERY_KEY = ["jobs"];
 
 export const useGetJobs = (params: Record<string, string>, options: UseQueryOptions<Jobs>) => {
-  const paramsValues = Object.values(params);
+  const QUERY_KEY_PARAMS = Object.entries(params).map(([key, value]) => `${key}=${value}`);
 
-  return useQuery<Jobs, Error>([...QUERY_KEY, ...paramsValues], () => fetchJobs(params), {
+  return useQuery<Jobs, Error>([...QUERY_KEY, ...QUERY_KEY_PARAMS], () => fetchJobs(params), {
     ...options,
     select: (data) => jobsSchema.parse(data),
   });
