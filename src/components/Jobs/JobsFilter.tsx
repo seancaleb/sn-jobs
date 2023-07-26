@@ -37,7 +37,10 @@ const JobsFilter = ({ fromAge }: JobsFilterProps) => {
   const [, setSearchParams] = useSearchParams();
 
   const onChangeCallback = (value: string) => {
-    updateQueryParams(setSearchParams, { key: "fromAge", value });
+    updateQueryParams(setSearchParams, [
+      { key: "fromAge", value },
+      { key: "page", value: "1" },
+    ]);
   };
 
   useEffect(() => {
