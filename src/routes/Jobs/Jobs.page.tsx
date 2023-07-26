@@ -11,8 +11,9 @@ import { capitalize } from "@/lib/utils";
 import { format } from "date-fns";
 import { Helmet } from "react-helmet";
 import { Jobs } from "@/api/jobs/jobs.type";
-import JobsFilter from "./JobsFilter";
+import JobsFilter from "@/components/Jobs/JobsFilter";
 import { LoaderReturnType } from "@/types";
+import Pagination from "@/components/Pagination";
 
 export const loader =
   (queryClient: QueryClient) =>
@@ -117,8 +118,11 @@ const JobsPage = () => {
 
           <div className="relative flex gap-x-6 items-start">
             {/* Job List  */}
-            <div className="max-w-md w-full">
+            <div className="max-w-md w-full space-y-6">
               <JobList jobs={jobs.jobs} />
+              {jobs.totalPages !== 1 ? (
+                <Pagination total={jobs.totalPages} pageNumber={jobs.pageNumber} />
+              ) : null}
             </div>
 
             {/* Job Posting  */}
