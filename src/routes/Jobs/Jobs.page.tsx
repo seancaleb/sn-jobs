@@ -107,7 +107,7 @@ const JobsPage = () => {
       {jobs.jobs.length > 0 ? (
         <div className="py-6 space-y-6">
           {(search.keyword || search.location) && (
-            <div className="flex justify-between gap-4">
+            <div className="flex flex-col sm:flex-row justify-between gap-4">
               <div>
                 <p className="text-teal-600">
                   {jobs.total} job{jobs.total > 1 ? "s" : ""}
@@ -116,7 +116,7 @@ const JobsPage = () => {
               </div>
 
               {/* Filters  */}
-              <JobsFilter fromAge={queryParams.fromAge} />
+              <JobsFilter />
             </div>
           )}
 
