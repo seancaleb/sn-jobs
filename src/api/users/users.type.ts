@@ -9,7 +9,7 @@ export const userSchema = z.object({
   updatedAt: z.string(),
 });
 
-export const getProfileSchema = z.object({
+export const getProfileSchemaResponse = z.object({
   user: userSchema.pick({
     firstName: true,
     lastName: true,
@@ -18,4 +18,18 @@ export const getProfileSchema = z.object({
   }),
 });
 
-export type UserProfile = z.infer<typeof getProfileSchema>;
+export type UserProfileResponse = z.infer<typeof getProfileSchemaResponse>;
+
+export const updateProfileSchema = userSchema.pick({
+  firstName: true,
+  lastName: true,
+  email: true,
+});
+
+export type UpdateProfile = z.infer<typeof updateProfileSchema>;
+
+export const updateProfileSchemaResponse = z.object({
+  user: userSchema,
+});
+
+export type UpdateProfileResponse = z.infer<typeof updateProfileSchemaResponse>;
