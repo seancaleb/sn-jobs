@@ -4,7 +4,7 @@ import { UseQueryOptions } from "@/types";
 import {
   UpdateProfile,
   UpdateProfileResponse,
-  UserProfileResponse,
+  GetUserProfileResponse,
   getProfileSchemaResponse,
   updateProfileSchemaResponse,
 } from "./users.type";
@@ -17,7 +17,7 @@ import { useAppSelector } from "@/app/hooks";
 /**
  * @desc  Get user profile
  */
-export const fetchUserProfile = async (): Promise<UserProfileResponse> => {
+export const fetchUserProfile = async (): Promise<GetUserProfileResponse> => {
   await new Promise((res) => setTimeout(res, 1000));
 
   const data = await apiClient({
@@ -32,9 +32,9 @@ export const fetchUserProfile = async (): Promise<UserProfileResponse> => {
 
 export const useGetProfile = (
   queryKey: string[],
-  options: UseQueryOptions<UserProfileResponse>
+  options: UseQueryOptions<GetUserProfileResponse>
 ) => {
-  return useQuery<UserProfileResponse, Error>(queryKey, fetchUserProfile, {
+  return useQuery<GetUserProfileResponse, Error>(queryKey, fetchUserProfile, {
     ...options,
   });
 };

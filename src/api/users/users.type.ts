@@ -18,7 +18,7 @@ export const getProfileSchemaResponse = z.object({
   }),
 });
 
-export type UserProfileResponse = z.infer<typeof getProfileSchemaResponse>;
+export type GetUserProfileResponse = z.infer<typeof getProfileSchemaResponse>;
 
 export const updateProfileSchema = userSchema.pick({
   firstName: true,
