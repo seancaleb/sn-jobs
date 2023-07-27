@@ -19,11 +19,11 @@ export const toastResponseFormatter = (responseMessage: string) => {
 
 //  Toast notification to display success responses from the backend API
 export const displaySuccessNotification = (
-  error: string,
+  successMessage: string,
   toastFn: typeof toast,
   initNotificationId: (id: string) => void
 ) => {
-  const { title, description } = toastResponseFormatter(error);
+  const { title, description } = toastResponseFormatter(successMessage);
   const toastId = toastFn({ title, description }).id;
 
   initNotificationId(toastId);
@@ -31,11 +31,11 @@ export const displaySuccessNotification = (
 
 //  Toast notification to display error responses from the backend API
 export const displayErrorNotification = (
-  error: string,
+  errorMessage: string,
   toastFn: typeof toast,
   initNotificationId: (id: string) => void
 ) => {
-  const { title, description } = toastResponseFormatter(error);
+  const { title, description } = toastResponseFormatter(errorMessage);
   const toastId = toastFn({ title, description, variant: "destructive" }).id;
 
   initNotificationId(toastId);
