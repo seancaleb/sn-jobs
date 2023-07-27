@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import FormInputField from "@/components/FormInputField/FormInputField";
 import { Form } from "@/components/ui/form";
 import { useEffect, useState } from "react";
-import { UserProfileResponse } from "@/api/users/users.type";
+import { GetUserProfileResponse } from "@/api/users/users.type";
 import { useUpdateProfile } from "@/api/users/users";
 import LoaderSpinner from "../../LoaderSpinner";
 import apiClient from "@/services/apiClient";
@@ -49,7 +49,7 @@ const fetchDefaultValues = async () => {
     },
   });
 
-  const { firstName, lastName, email } = (data as UserProfileResponse).user;
+  const { firstName, lastName, email } = (data as GetUserProfileResponse).user;
 
   return { firstName, lastName, email };
 };

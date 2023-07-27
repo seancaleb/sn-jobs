@@ -2,12 +2,12 @@
 import { useDocumentTitle } from "@mantine/hooks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Mail } from "lucide-react";
-import EditProfile from "@/components/Profile/EditProfile";
+import EditProfile from "@/components/Profile/EditProfile/EditProfile";
 import { QueryClient } from "@tanstack/react-query";
 import { fetchUserProfile, useGetProfile } from "@/api/users/users";
 import { useLoaderData } from "react-router-dom";
 import { LoaderReturnType } from "@/types";
-import { UserProfile } from "@/api/users/users.type";
+import { GetUserProfileResponse } from "@/api/users/users.type";
 import store from "@/app/store";
 
 export const loader = (queryClient: QueryClient) => async () => {
@@ -33,7 +33,7 @@ const Profile = () => {
   const { data } = useGetProfile(queryKey, { initialData });
   useDocumentTitle("Profile");
 
-  const user = data?.user as UserProfile["user"];
+  const user = data?.user as GetUserProfileResponse["user"];
 
   return (
     <section className="py-12 max-w-4xl w-full mx-auto">
