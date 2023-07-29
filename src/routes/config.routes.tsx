@@ -9,6 +9,7 @@ import Profile, { loader as profileLoader } from "@/routes/Profile/Profile.page.
 import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute.tsx";
 import Register from "@/routes/auth/Register/Register.page.tsx";
 import Jobs, { loader as jobsLoader } from "@/routes/Jobs/Jobs.page.tsx";
+import UserAccountRoute from "@/components/UserAccountRoute.tsx";
 
 const queryClient = new QueryClient();
 
@@ -34,13 +35,40 @@ const RootRouter = () => {
               element: <Register />,
             },
             {
-              path: ":role/profile",
-              loader: profileLoader(queryClient),
+              path: ":role",
               element: (
                 <ProtectedRoute>
-                  <Profile />
+                  <UserAccountRoute />
                 </ProtectedRoute>
               ),
+              children: [
+                {
+                  errorElement: <ErrorPage />,
+                  children: [
+                    {
+                      path: "profile",
+                      loader: profileLoader(queryClient),
+                      element: <Profile />,
+                    },
+                    {
+                      path: "applied-jobs",
+                      element: <div>Applied Jobs</div>,
+                    },
+                    {
+                      path: "bookmarked-jobs",
+                      element: <div>Bookmarked Jobs</div>,
+                    },
+                    {
+                      path: "job-listings",
+                      element: <div>Job Listings</div>,
+                    },
+                    {
+                      path: "privacy-and-security",
+                      element: <div>Privacy and Security</div>,
+                    },
+                  ],
+                },
+              ],
             },
             {
               path: "jobs",
