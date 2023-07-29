@@ -96,7 +96,7 @@
   }
 
   p {
-    @apply text-slate-600;
+    @apply text-slate-500;
   }
 
   [data-radix-popper-content-wrapper] {
