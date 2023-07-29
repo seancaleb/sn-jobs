@@ -91,6 +91,7 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
       const { firstName, lastName, email } = user;
       reset({ firstName, lastName, email }, { keepDirty: false });
       setIsOpen(false);
+      setIsOpenUnsavedChanges(false);
     }
   }, [updateProfileMutation.isSuccess, setIsOpen, reset, updateProfileMutation.data]);
 
