@@ -36,6 +36,10 @@ const HeaderAccountDropdown = ({ user }: HeaderAccountDropdownProps) => {
     mutate();
   };
 
+  const pathRoute = (path: string) => {
+    return `${user.role === "user" ? "jobseekers" : user.role}/${path}`;
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex space-x-1 items-center text-sm">
@@ -50,17 +54,27 @@ const HeaderAccountDropdown = ({ user }: HeaderAccountDropdownProps) => {
           <Badge variant="secondary">{role}</Badge>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <Link to={`${user.role === "user" ? "jobseekers" : user.role}/profile`}>
+        <Link to={pathRoute("profile")}>
           <DropdownMenuItem>Profile</DropdownMenuItem>
         </Link>
         {user.role === "user" && (
           <>
-            <DropdownMenuItem>Applied Jobs</DropdownMenuItem>
-            <DropdownMenuItem>Bookmarked Jobs</DropdownMenuItem>
+            <Link to={pathRoute("applied-jobs")}>
+              <DropdownMenuItem>Applied Jobs</DropdownMenuItem>
+            </Link>
+            <Link to={pathRoute("bookmarked-jobs")}>
+              <DropdownMenuItem>Bookmarked Jobs</DropdownMenuItem>
+            </Link>
           </>
         )}
-        {user.role === "employer" && <DropdownMenuItem>My Job Listings</DropdownMenuItem>}
-        <DropdownMenuItem>Settings</DropdownMenuItem>
+        {user.role === "employer" && (
+          <Link to={pathRoute("job-listings")}>
+            <DropdownMenuItem>My Job Listings</DropdownMenuItem>
+          </Link>
+        )}
+        <Link to={pathRoute("privacy-and-security")}>
+          <DropdownMenuItem>Privacy & Security</DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogoutUser}>Sign Out</DropdownMenuItem>
       </DropdownMenuContent>
