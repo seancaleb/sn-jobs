@@ -1,12 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useDocumentTitle } from "@mantine/hooks";
 import { Trash2, KeyRound } from "lucide-react";
 
 const Security = () => {
+  useDocumentTitle("Account Security");
+
   return (
-    <section className="space-y-6">
+    <div className="space-y-6">
       <div className="space-y-1">
-        <div className="text-xl tracking-tight font-bold">Privacy & Security</div>
+        <div className="text-lg tracking-tight font-bold">Privacy & Security</div>
         <p className="text-[0.9375rem] text-light">Secure your personal data and ensure privacy.</p>
       </div>
 
@@ -40,7 +43,7 @@ const Security = () => {
           Delete Account
         </Button>
       </div>
-    </section>
+    </div>
   );
 };
 
