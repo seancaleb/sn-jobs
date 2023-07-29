@@ -9,6 +9,7 @@ import { useLoaderData } from "react-router-dom";
 import { LoaderReturnType } from "@/types";
 import { GetUserProfileResponse } from "@/api/users/users.type";
 import store from "@/app/store";
+import { Separator } from "@/components/ui/separator";
 
 export const loader = (queryClient: QueryClient) => async () => {
   const email = store.getState().auth.user?.email;
@@ -36,9 +37,16 @@ const Profile = () => {
   const user = data?.user as GetUserProfileResponse["user"];
 
   return (
-    <section className="py-12 max-w-4xl w-full mx-auto">
+    <section className="space-y-6">
+      <div className="space-y-1">
+        <div className="text-xl tracking-tight font-bold">My Profile</div>
+        <p className="text-[0.9375rem] text-light">Centralize your profile and settings.</p>
+      </div>
+
+      <Separator orientation="horizontal" />
+
       <div className="flex flex-col items-stretch justify-between sm:flex-row sm:items-center gap-8">
-        <div className="flex gap-6 items-center">
+        <div className="flex gap-6 items-start">
           <Avatar className="h-20 w-20">
             <AvatarImage />
             <AvatarFallback className="bg-primary text-white text-3xl font-bold">
@@ -47,8 +55,8 @@ const Profile = () => {
             </AvatarFallback>
           </Avatar>
 
-          <div className="flex flex-col gap-1.5">
-            <div className="text-3xl sm:text-4xl font-bold">
+          <div className="flex flex-col gap-1">
+            <div className="text-3xl tracking-tight font-bold">
               {user.firstName} {user.lastName}
             </div>
 
