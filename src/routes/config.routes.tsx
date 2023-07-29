@@ -5,11 +5,12 @@ import Root from "../Root.tsx";
 import Home from "@/routes/Home/Home.tsx";
 import Login from "@/routes/auth/Login/Login.page.tsx";
 import ErrorPage from "@/error-page.tsx";
-import Profile, { loader as profileLoader } from "@/routes/Profile/Profile.page.tsx";
+import Profile from "@/routes/Users/Profile/Profile.page.tsx";
 import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute.tsx";
 import Register from "@/routes/auth/Register/Register.page.tsx";
 import Jobs, { loader as jobsLoader } from "@/routes/Jobs/Jobs.page.tsx";
 import UserAccountRoute from "@/components/UserAccountRoute.tsx";
+import Security from "@/routes/Users/Security/Security.page.tsx";
 
 const queryClient = new QueryClient();
 
@@ -47,7 +48,6 @@ const RootRouter = () => {
                   children: [
                     {
                       path: "profile",
-                      loader: profileLoader(queryClient),
                       element: <Profile />,
                     },
                     {
@@ -64,7 +64,7 @@ const RootRouter = () => {
                     },
                     {
                       path: "privacy-and-security",
-                      element: <div>Privacy and Security</div>,
+                      element: <Security />,
                     },
                   ],
                 },
