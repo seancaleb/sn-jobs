@@ -1,4 +1,4 @@
-import apiClient, { APIResponseError } from "@/services/apiClient";
+import apiClient, { APIResponseError, APIResponseSuccess } from "@/services/apiClient";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UseQueryOptions } from "@/types";
 import {
@@ -7,6 +7,7 @@ import {
   GetUserProfileResponse,
   getProfileSchemaResponse,
   updateProfileSchemaResponse,
+  UpdatePassword,
 } from "./users.type";
 import { displayErrorNotification, displaySuccessNotification } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
@@ -69,6 +70,37 @@ export const useUpdateProfile = () => {
 
       const message = "Profile Updated: Your profile has been successfully updated.";
 
+      if (id) dismiss(id);
+
+      displaySuccessNotification(message, toast, initNotificationId);
+    },
+    onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
+  });
+};
+
+/**
+ * @desc  Update password
+ */
+export const updatePassword = async (data: UpdatePassword): Promise<APIResponseSuccess> => {
+  await new Promise((res) => setTimeout(res, 1000));
+
+  return await apiClient({
+    options: {
+      url: "/users/update-password",
+      method: "PATCH",
+      data,
+    },
+  });
+};
+
+export const useUpdatePassword = () => {
+  const { toast, dismiss } = useToast();
+  const { id } = useAppSelector(selectNotification);
+  const { initNotificationId } = useNotification();
+
+  return useMutation<APIResponseSuccess, APIResponseError, UpdatePassword>({
+    mutationFn: updatePassword,
+    onSuccess: ({ message }) => {
       if (id) dismiss(id);
 
       displaySuccessNotification(message, toast, initNotificationId);
