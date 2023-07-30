@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useDocumentTitle } from "@mantine/hooks";
-import { Trash2, KeyRound } from "lucide-react";
+import { Trash2 } from "lucide-react";
+import UpdatePassword from "./UpdatePassword/UpdatePassword";
 
 const Security = () => {
   useDocumentTitle("Account Security");
@@ -22,10 +23,8 @@ const Security = () => {
             Enter a new password to update your account's security.
           </p>
         </div>
-        <Button>
-          <KeyRound className="mr-2 h-4 w-4" />
-          Change password
-        </Button>
+
+        <UpdatePassword />
       </div>
 
       <Separator orientation="horizontal" />

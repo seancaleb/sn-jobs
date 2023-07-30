@@ -10,6 +10,10 @@ export type APIResponseError = {
   message: string;
 };
 
+export type APIResponseSuccess = {
+  message: string;
+};
+
 export type APIResponseDefault = {
   message: string;
 };

@@ -33,3 +33,10 @@ export const updateProfileSchemaResponse = z.object({
 });
 
 export type UpdateProfileResponse = z.infer<typeof updateProfileSchemaResponse>;
+
+export const updatePasswordSchema = z.object({
+  password: z.string(),
+  newPassword: z.string(),
+});
+
+export type UpdatePassword = z.infer<typeof updatePasswordSchema>;
