@@ -1,6 +1,5 @@
-import { User } from "@/api/auth/auth.type";
 import { useAppSelector } from "@/app/hooks";
-import { selectUser } from "@/features/auth/authSlice";
+import { selectAuthStatus } from "@/features/auth/authSlice";
 import { nanoid } from "@reduxjs/toolkit";
 import { Lock, User as ProfileUser } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
@@ -21,7 +20,7 @@ const links = [
 ];
 
 const UserAccountRoute = () => {
-  const user = useAppSelector(selectUser) as User;
+  const auth = useAppSelector(selectAuthStatus);
 
   return (
     <div className="py-12 space-y-6">
@@ -46,7 +45,7 @@ const UserAccountRoute = () => {
                     {label}
                   </NavLink>
                 </li>
-              ) : role === user.role ? (
+              ) : role === auth.role ? (
                 <li key={nanoid()}>
                   <NavLink
                     to={path}
