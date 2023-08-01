@@ -14,11 +14,14 @@ import FormInputField from "@/components/FormInputField/FormInputField";
 import { Form } from "@/components/ui/form";
 import { useEffect, useState } from "react";
 import { GetUserProfileResponse } from "@/api/users/users.type";
-import { useUpdateProfile } from "@/api/users/users";
+import { useUpdateProfile, userKeys } from "@/api/users/users";
 import LoaderSpinner from "../../LoaderSpinner";
 import apiClient from "@/services/apiClient";
 import { EditProfileValues, editProfileSchema } from "./EditProfile.schema";
 import UnsavedChangesDialog from "@/components/UnsavedChangesDialog";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAppSelector } from "@/app/hooks";
+import { selectAuthStatus } from "@/features/auth/authSlice";
 
 const EditProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,6 +67,8 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
   const { isValid, isDirty } = formState;
   const updateProfileMutation = useUpdateProfile();
   const [isOpenUnsavedChanges, setIsOpenUnsavedChanges] = useState(false);
+  const queryClient = useQueryClient();
+  const auth = useAppSelector(selectAuthStatus);
 
   const onSubmit = (values: EditProfileValues) => {
     isDirty ? updateProfileMutation.mutate(values) : setIsOpen(false);
@@ -85,15 +90,23 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
     setIsOpen(false);
   };
 
-  useEffect(() => {
+  const handleSuccessMutation = async () => {
     if (updateProfileMutation.isSuccess) {
       const { user } = updateProfileMutation.data;
       const { firstName, lastName, email } = user;
+
       reset({ firstName, lastName, email }, { keepDirty: false });
       setIsOpen(false);
       setIsOpenUnsavedChanges(false);
+
+      await queryClient.invalidateQueries(userKeys.profile(auth.userId));
     }
-  }, [updateProfileMutation.isSuccess, setIsOpen, reset, updateProfileMutation.data]);
+  };
+
+  useEffect(() => {
+    if (updateProfileMutation.isSuccess) void handleSuccessMutation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateProfileMutation.isSuccess]);
 
   return (
     <>
