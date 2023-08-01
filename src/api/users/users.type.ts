@@ -8,6 +8,7 @@ export const userSchema = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
   userId: z.string(),
+  exp: z.number(),
 });
 
 export const getProfileSchemaResponse = z.object({
