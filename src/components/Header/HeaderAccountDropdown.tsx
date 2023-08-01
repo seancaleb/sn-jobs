@@ -54,9 +54,7 @@ const HeaderAccountDropdown = ({ user }: HeaderAccountDropdownProps) => {
           <Badge variant="secondary">{role}</Badge>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <Link to={pathRoute("profile")}>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-        </Link>
+
         {user.role === "user" && (
           <>
             <Link to={pathRoute("applied-jobs")}>
@@ -72,9 +70,11 @@ const HeaderAccountDropdown = ({ user }: HeaderAccountDropdownProps) => {
             <DropdownMenuItem>My Job Listings</DropdownMenuItem>
           </Link>
         )}
-        <Link to={pathRoute("privacy-and-security")}>
-          <DropdownMenuItem>Privacy & Security</DropdownMenuItem>
+
+        <Link to={pathRoute("account/profile")}>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
         </Link>
+
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogoutUser}>Sign Out</DropdownMenuItem>
       </DropdownMenuContent>

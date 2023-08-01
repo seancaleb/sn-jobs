@@ -41,7 +41,7 @@ export const useLoginUser = () => {
       if (id) dismiss(id);
 
       loginUser(parsedUser);
-      navigate(`/${role === "user" ? "jobseekers" : role}/profile`, { replace: true });
+      navigate(`/${role === "user" ? "jobseekers" : role}/account/profile`, { replace: true });
     },
     onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
   });
