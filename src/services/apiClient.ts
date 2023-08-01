@@ -14,10 +14,6 @@ export type APIResponseSuccess = {
   message: string;
 };
 
-export type APIResponseDefault = {
-  message: string;
-};
-
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_PROD_URL : import.meta.env.VITE_DEV_URL;
 
 const client = axios.create({
