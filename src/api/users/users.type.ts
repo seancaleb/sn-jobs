@@ -28,7 +28,9 @@ export const updateProfileSchema = userSchema.pick({
 });
 
 export const updateProfileSchemaResponse = z.object({
-  user: userSchema,
+  user: userSchema.omit({
+    exp: true,
+  }),
 });
 
 export const updatePasswordSchema = z.object({
