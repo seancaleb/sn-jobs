@@ -1,12 +1,12 @@
-import { User } from "@/api/auth/auth.type";
+import { User } from "@/types/user";
 import { AuthActions } from "./authSlice";
 import { useAppDispatch } from "@/app/hooks";
 
 const useAuth = () => {
   const dispatch = useAppDispatch();
 
-  const loginUser = (user: User) => {
-    dispatch(AuthActions.loginUser(user));
+  const loginUser = ({ exp, role, userId }: Pick<User, "role" | "exp" | "userId">) => {
+    dispatch(AuthActions.loginUser({ tokenExpiration: exp, role, userId }));
   };
 
   const logoutUser = () => {
