@@ -1,13 +1,13 @@
 import { useAppSelector } from "@/app/hooks";
 import { Button } from "@/components/ui/button";
-import { selectUser } from "@/features/auth/authSlice";
+import { selectAuthStatus } from "@/features/auth/authSlice";
 import { Navigate } from "react-router-dom";
 import Balancer from "react-wrap-balancer";
 
 const Home = () => {
-  const user = useAppSelector(selectUser);
+  const { isAuthenticated } = useAppSelector(selectAuthStatus);
 
-  if (user) {
+  if (isAuthenticated) {
     return <Navigate to="/jobs" />;
   }
 
