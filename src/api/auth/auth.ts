@@ -1,6 +1,6 @@
 import apiClient, { APIResponseSuccess, APIResponseError } from "@/services/apiClient";
 import { useMutation } from "@tanstack/react-query";
-import { LoginCredentials, Token, RegisterCredentials } from "./auth.type";
+import { LoginCredentials, Token, RegisterCredentials, parsedTokenSchema } from "./auth.type";
 import jwt_decode from "jwt-decode";
 import useAuth from "@/features/auth/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,6 @@ import useNotification from "@/features/notification/useNotification";
 import { useAppSelector } from "@/app/hooks";
 import { selectNotification } from "@/features/notification/notificationSlice";
 import { User } from "@/types/user";
-import { userSchema } from "../users/users.type";
 
 /**
  * @desc  Login user
@@ -37,12 +36,12 @@ export const useLoginUser = () => {
     mutationFn: loginUserRequest,
     onSuccess: (data) => {
       const decodedToken = jwt_decode<User>(data.accessToken);
-      const parsedUser = userSchema.parse(decodedToken);
+      const parsedUser = parsedTokenSchema.parse(decodedToken);
       const { role, exp, userId } = parsedUser;
 
       if (id) dismiss(id);
 
-      loginUser({ exp, role, userId });
+      loginUser({ role, exp, userId });
       navigate(`/${role === "user" ? "jobseekers" : role}/account/profile`, { replace: true });
     },
     onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),

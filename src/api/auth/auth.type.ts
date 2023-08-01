@@ -1,4 +1,17 @@
+import { z } from "zod";
 import { Role } from "@/types/user";
+import { userSchema } from "../users/users.type";
+
+export const parsedTokenSchema = z.object({
+  ...userSchema.pick({
+    firstName: true,
+    lastName: true,
+    email: true,
+    role: true,
+    userId: true,
+    exp: true,
+  }).shape,
+});
 
 export type Token = {
   accessToken: string;
