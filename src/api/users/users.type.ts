@@ -7,6 +7,7 @@ export const userSchema = z.object({
   role: z.enum(["user", "employer", "admin"]),
   createdAt: z.string(),
   updatedAt: z.string(),
+  userId: z.string(),
 });
 
 export const getProfileSchemaResponse = z.object({
@@ -15,10 +16,9 @@ export const getProfileSchemaResponse = z.object({
     lastName: true,
     email: true,
     role: true,
+    userId: true,
   }),
 });
-
-export type GetUserProfileResponse = z.infer<typeof getProfileSchemaResponse>;
 
 export const updateProfileSchema = userSchema.pick({
   firstName: true,
@@ -26,17 +26,16 @@ export const updateProfileSchema = userSchema.pick({
   email: true,
 });
 
-export type UpdateProfile = z.infer<typeof updateProfileSchema>;
-
 export const updateProfileSchemaResponse = z.object({
   user: userSchema,
 });
-
-export type UpdateProfileResponse = z.infer<typeof updateProfileSchemaResponse>;
 
 export const updatePasswordSchema = z.object({
   password: z.string(),
   newPassword: z.string(),
 });
 
+export type GetUserProfileResponse = z.infer<typeof getProfileSchemaResponse>;
+export type UpdateProfile = z.infer<typeof updateProfileSchema>;
+export type UpdateProfileResponse = z.infer<typeof updateProfileSchemaResponse>;
 export type UpdatePassword = z.infer<typeof updatePasswordSchema>;
