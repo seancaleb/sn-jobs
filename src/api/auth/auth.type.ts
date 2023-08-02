@@ -1,29 +1,29 @@
 import { z } from "zod";
+import { Role } from "@/types/user";
+import { userSchema } from "../users/users.type";
 
-export const userSchema = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string().email(),
-  age: z.number().nullable(),
-  role: z.enum(["admin", "user", "employer"]),
-  exp: z.number(),
+export const parsedTokenSchema = z.object({
+  ...userSchema.pick({
+    firstName: true,
+    lastName: true,
+    email: true,
+    role: true,
+    userId: true,
+    exp: true,
+  }).shape,
 });
 
 export type Token = {
   accessToken: string;
 };
 
-export type LoginUser = {
+export interface LoginCredentials {
   email: string;
   password: string;
-};
+}
 
-export type RegisterUser = {
+export interface RegisterCredentials extends LoginCredentials {
   firstName: string;
   lastName: string;
-  role: "user" | "employer";
-  email: string;
-  password: string;
-};
-
-export type User = z.infer<typeof userSchema>;
+  role: Exclude<Role, "admin">;
+}

@@ -1,4 +1,3 @@
-import { User } from "@/api/auth/auth.type";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,33 +10,24 @@ import { ChevronDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useLogoutUser } from "@/api/auth/auth";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "@/app/hooks";
+import { selectAuthStatus } from "@/features/auth/authSlice";
+import { useGetProfile, userKeys } from "@/api/users/users";
+import { Skeleton } from "@/components/ui/skeleton";
+import { capitalize } from "@/lib/utils";
 
-type HeaderAccountDropdownProps = {
-  user: User;
-};
-
-const HeaderAccountDropdown = ({ user }: HeaderAccountDropdownProps) => {
-  let role: string;
+const HeaderAccountDropdown = () => {
   const { mutate } = useLogoutUser();
-
-  switch (user.role) {
-    case "user":
-      role = "Jobseeker";
-      break;
-    case "employer":
-      role = "Employer";
-      break;
-    default:
-      role = "Administrator";
-      break;
-  }
+  const auth = useAppSelector(selectAuthStatus);
+  const { data: user, isSuccess } = useGetProfile({ queryKey: userKeys.profile(auth.userId) });
 
   const handleLogoutUser = () => {
     mutate();
   };
 
   const pathRoute = (path: string) => {
-    return `${user.role === "user" ? "jobseekers" : user.role}/${path}`;
+    const rolePath = auth.role === "user" ? "jobseekers" : auth.role;
+    return `${rolePath as string}/${path}`;
   };
 
   return (
@@ -48,16 +38,26 @@ const HeaderAccountDropdown = ({ user }: HeaderAccountDropdownProps) => {
 
       <DropdownMenuContent>
         <DropdownMenuLabel>
-          <div className="mb-2">
-            {user.firstName} {user.lastName}
-          </div>
-          <Badge variant="secondary">{role}</Badge>
+          {!isSuccess ? (
+            <>
+              <Skeleton className="h-4 w-32 mb-2" />
+              <Skeleton className="h-4 w-14" />
+            </>
+          ) : (
+            <>
+              <div className="mb-2">
+                {user.firstName} {user.lastName}
+              </div>
+
+              <Badge variant="secondary">
+                {capitalize(user.role === "user" ? "jobseeker" : user.role)}
+              </Badge>
+            </>
+          )}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <Link to={pathRoute("profile")}>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-        </Link>
-        {user.role === "user" && (
+
+        {auth.role === "user" && (
           <>
             <Link to={pathRoute("applied-jobs")}>
               <DropdownMenuItem>Applied Jobs</DropdownMenuItem>
@@ -67,14 +67,16 @@ const HeaderAccountDropdown = ({ user }: HeaderAccountDropdownProps) => {
             </Link>
           </>
         )}
-        {user.role === "employer" && (
+        {auth.role === "employer" && (
           <Link to={pathRoute("job-listings")}>
             <DropdownMenuItem>My Job Listings</DropdownMenuItem>
           </Link>
         )}
-        <Link to={pathRoute("privacy-and-security")}>
-          <DropdownMenuItem>Privacy & Security</DropdownMenuItem>
+
+        <Link to={pathRoute("account/profile")}>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
         </Link>
+
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogoutUser}>Sign Out</DropdownMenuItem>
       </DropdownMenuContent>

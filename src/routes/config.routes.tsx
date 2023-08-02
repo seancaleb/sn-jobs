@@ -47,23 +47,12 @@ const RootRouter = () => {
                   errorElement: <ErrorPage />,
                   children: [
                     {
-                      path: "profile",
+                      path: "account/profile",
                       element: <Profile />,
                     },
+
                     {
-                      path: "applied-jobs",
-                      element: <div>Applied Jobs</div>,
-                    },
-                    {
-                      path: "bookmarked-jobs",
-                      element: <div>Bookmarked Jobs</div>,
-                    },
-                    {
-                      path: "job-listings",
-                      element: <div>Job Listings</div>,
-                    },
-                    {
-                      path: "privacy-and-security",
+                      path: "account/privacy-and-security",
                       element: <Security />,
                     },
                   ],

@@ -1,6 +1,5 @@
 import apiClient, { APIResponseError, APIResponseSuccess } from "@/services/apiClient";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { UseQueryOptions } from "@/types";
+import { UseQueryOptions, useMutation, useQuery } from "@tanstack/react-query";
 import {
   UpdateProfile,
   UpdateProfileResponse,
@@ -14,6 +13,14 @@ import { useToast } from "@/components/ui/use-toast";
 import useNotification from "@/features/notification/useNotification";
 import { selectNotification } from "@/features/notification/notificationSlice";
 import { useAppSelector } from "@/app/hooks";
+
+/**
+ * @desc Keys related to users
+ */
+export const userKeys = {
+  all: ["user"] as const,
+  profile: (userId: string | null) => [...userKeys.all, userId] as const,
+};
 
 /**
  * @desc  Get user profile
@@ -32,11 +39,16 @@ export const fetchUserProfile = async (): Promise<GetUserProfileResponse> => {
 };
 
 export const useGetProfile = (
-  queryKey: string[],
-  options: UseQueryOptions<GetUserProfileResponse>
+  options?: UseQueryOptions<
+    GetUserProfileResponse,
+    APIResponseError,
+    GetUserProfileResponse["user"]
+  >
 ) => {
-  return useQuery<GetUserProfileResponse, Error>(queryKey, fetchUserProfile, {
+  return useQuery<GetUserProfileResponse, APIResponseError, GetUserProfileResponse["user"]>({
     ...options,
+    queryFn: fetchUserProfile,
+    select: ({ user }) => user,
   });
 };
 
@@ -61,13 +73,10 @@ export const useUpdateProfile = () => {
   const { toast, dismiss } = useToast();
   const { id } = useAppSelector(selectNotification);
   const { initNotificationId } = useNotification();
-  const queryClient = useQueryClient();
 
   return useMutation<UpdateProfileResponse, APIResponseError, UpdateProfile>({
     mutationFn: updateUserProfile,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries();
-
+    onSuccess: () => {
       const message = "Profile Updated: Your profile has been successfully updated.";
 
       if (id) dismiss(id);
