@@ -13,7 +13,7 @@ import { KeyRound } from "lucide-react";
 import { FieldErrors, useForm } from "react-hook-form";
 import FormInputField from "@/components/FormInputField/FormInputField";
 import { Form } from "@/components/ui/form";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { UpdatePasswordValues, updatePasswordSchema } from "./UpdatePassword.schema";
 import UnsavedChangesDialog from "@/components/UnsavedChangesDialog";
 import { useUpdatePassword } from "@/api/users/users";
@@ -26,7 +26,7 @@ const UpdatePassword = () => {
     <>
       <Button onClick={() => setIsOpen(true)}>
         <KeyRound className="mr-2 h-4 w-4" />
-        Change password
+        Change Password
       </Button>
 
       <UpdatePasswordDialog isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -78,16 +78,14 @@ const UpdatePasswordDialog = ({ isOpen, setIsOpen }: UpdatePasswordProps) => {
     if (isDirty) {
       setIsOpenUnsavedChanges(true);
     } else {
-      clearErrors();
       setIsOpen(false);
     }
   };
 
-  const handleUnsavedOnClose = useCallback(() => {
+  const handleUnsavedOnClose = () => {
     setIsOpenUnsavedChanges(false);
     setIsOpen(false);
-    reset();
-  }, [setIsOpen, reset]);
+  };
 
   useEffect(() => {
     if (mismatchPasswords) setError("confirmPassword", mismatchPasswords);
@@ -95,17 +93,24 @@ const UpdatePasswordDialog = ({ isOpen, setIsOpen }: UpdatePasswordProps) => {
 
   useEffect(() => {
     if (updatePasswordMutation.isSuccess) {
-      reset();
-      handleUnsavedOnClose();
+      void handleUnsavedOnClose();
     }
-  }, [updatePasswordMutation.isSuccess, handleUnsavedOnClose, reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updatePasswordMutation.isSuccess, reset]);
+
+  useEffect(() => {
+    if (isOpen) {
+      clearErrors();
+      reset();
+    }
+  }, [isOpen, clearErrors, reset]);
 
   return (
     <>
       <Dialog open={isOpen} onOpenChange={handleEditOnClose}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Change Password</DialogTitle>
+            <DialogTitle>Change password</DialogTitle>
             <DialogDescription>
               Enter your new password and confirm it to complete the change. Click save when you're
               done.
