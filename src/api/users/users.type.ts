@@ -9,16 +9,18 @@ export const userSchema = z.object({
   updatedAt: z.string(),
   userId: z.string(),
   exp: z.number(),
+  bookmark: z.string().array().optional(),
 });
 
 export const getProfileSchemaResponse = z.object({
-  user: userSchema.pick({
+  ...userSchema.pick({
     firstName: true,
     lastName: true,
     email: true,
     role: true,
     userId: true,
-  }),
+    bookmark: true,
+  }).shape,
 });
 
 export const updateProfileSchema = userSchema.pick({
@@ -28,9 +30,9 @@ export const updateProfileSchema = userSchema.pick({
 });
 
 export const updateProfileSchemaResponse = z.object({
-  user: userSchema.omit({
+  ...userSchema.omit({
     exp: true,
-  }),
+  }).shape,
 });
 
 export const updatePasswordSchema = z.object({
