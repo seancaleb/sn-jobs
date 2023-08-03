@@ -50,7 +50,7 @@ const ConfirmDeletionDialog = ({ isOpen, setIsOpen }: ConfirmDeletionDialogProps
     },
     resolver: zodResolver(deleteProfileSchema),
   });
-  const { control, handleSubmit, clearErrors, formState } = form;
+  const { control, handleSubmit, clearErrors, formState, reset } = form;
   const { isValid } = formState;
   const deleteProfileMutation = useDeleteProfile();
 
@@ -63,8 +63,11 @@ const ConfirmDeletionDialog = ({ isOpen, setIsOpen }: ConfirmDeletionDialogProps
   };
 
   useEffect(() => {
-    isOpen && clearErrors();
-  }, [isOpen, clearErrors]);
+    if (isOpen) {
+      clearErrors();
+      reset();
+    }
+  }, [isOpen, clearErrors, reset]);
 
   return (
     <Dialog open={isOpen} onOpenChange={handleDeleteOnClose}>
