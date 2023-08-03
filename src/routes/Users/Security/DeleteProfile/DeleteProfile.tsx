@@ -70,7 +70,7 @@ const ConfirmDeletionDialog = ({ isOpen, setIsOpen }: ConfirmDeletionDialogProps
     <Dialog open={isOpen} onOpenChange={handleDeleteOnClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Delete Account</DialogTitle>
+          <DialogTitle>Delete account</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete your account? This action cannot be undone.
           </DialogDescription>
