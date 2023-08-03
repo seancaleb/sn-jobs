@@ -39,16 +39,11 @@ export const fetchUserProfile = async (): Promise<GetUserProfileResponse> => {
 };
 
 export const useGetProfile = (
-  options?: UseQueryOptions<
-    GetUserProfileResponse,
-    APIResponseError,
-    GetUserProfileResponse["user"]
-  >
+  options?: UseQueryOptions<GetUserProfileResponse, APIResponseError>
 ) => {
-  return useQuery<GetUserProfileResponse, APIResponseError, GetUserProfileResponse["user"]>({
+  return useQuery<GetUserProfileResponse, APIResponseError>({
     ...options,
     queryFn: fetchUserProfile,
-    select: ({ user }) => user,
   });
 };
 
