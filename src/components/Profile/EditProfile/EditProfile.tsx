@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import FormInputField from "@/components/FormInputField/FormInputField";
 import { Form } from "@/components/ui/form";
 import { useEffect, useState } from "react";
-import { GetUserProfileResponse } from "@/api/users/users.type";
+import { getProfileSchemaResponse } from "@/api/users/users.type";
 import { useUpdateProfile, userKeys } from "@/api/users/users";
 import LoaderSpinner from "../../LoaderSpinner";
 import apiClient from "@/services/apiClient";
@@ -26,13 +26,17 @@ import { selectAuthStatus } from "@/features/auth/authSlice";
 const EditProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleSetIsOpen = (open: boolean) => {
+    setIsOpen(open);
+  };
+
   return (
     <>
       <Button onClick={() => setIsOpen(true)}>
         <Pencil className="mr-2 h-4 w-4" /> Edit Profile
       </Button>
 
-      <EditDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+      <EditDialog isOpen={isOpen} setIsOpen={handleSetIsOpen} />
     </>
   );
 };
@@ -41,7 +45,7 @@ export default EditProfile;
 
 type EditDialogProps = {
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: (open: boolean) => void;
 };
 
 const fetchDefaultValues = async () => {
@@ -52,7 +56,7 @@ const fetchDefaultValues = async () => {
     },
   });
 
-  const { firstName, lastName, email } = (data as GetUserProfileResponse).user;
+  const { firstName, lastName, email } = getProfileSchemaResponse.parse(data);
 
   return { firstName, lastName, email };
 };
@@ -92,8 +96,7 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
 
   const handleSuccessMutation = async () => {
     if (updateProfileMutation.isSuccess) {
-      const { user } = updateProfileMutation.data;
-      const { firstName, lastName, email } = user;
+      const { firstName, lastName, email } = updateProfileMutation.data;
 
       reset({ firstName, lastName, email }, { keepDirty: false });
       setIsOpen(false);
@@ -101,6 +104,10 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
 
       await queryClient.invalidateQueries(userKeys.profile(auth.userId));
     }
+  };
+
+  const handleSetIsOpen = (open: boolean) => {
+    setIsOpenUnsavedChanges(open);
   };
 
   useEffect(() => {
@@ -164,7 +171,7 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
 
       <UnsavedChangesDialog
         isOpen={isOpenUnsavedChanges}
-        setIsOpen={setIsOpenUnsavedChanges}
+        setIsOpen={handleSetIsOpen}
         onClose={handleUnsavedOnClose}
       />
     </>
