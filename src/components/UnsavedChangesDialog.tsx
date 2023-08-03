@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 type UnsavedChangesDialogProps = {
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: (open: boolean) => void;
   onClose: () => void;
 };
 
