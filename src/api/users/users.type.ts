@@ -40,7 +40,12 @@ export const updatePasswordSchema = z.object({
   newPassword: z.string(),
 });
 
+export const deleteProfileSchema = z.object({
+  password: z.string(),
+});
+
 export type GetUserProfileResponse = z.infer<typeof getProfileSchemaResponse>;
 export type UpdateProfile = z.infer<typeof updateProfileSchema>;
 export type UpdateProfileResponse = z.infer<typeof updateProfileSchemaResponse>;
 export type UpdatePassword = z.infer<typeof updatePasswordSchema>;
+export type DeleteProfile = z.infer<typeof deleteProfileSchema>;
