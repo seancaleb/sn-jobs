@@ -1,5 +1,5 @@
 import apiClient, { APIResponseError, APIResponseSuccess } from "@/services/apiClient";
-import { UseQueryOptions, useMutation, useQuery } from "@tanstack/react-query";
+import { QueryKey, UseQueryOptions, useMutation, useQuery } from "@tanstack/react-query";
 import {
   UpdateProfile,
   UpdateProfileResponse,
@@ -7,12 +7,17 @@ import {
   getProfileSchemaResponse,
   updateProfileSchemaResponse,
   UpdatePassword,
+  DeleteProfile,
+  BookmarkedJobs,
+  bookmarkedJobsSchema,
 } from "./users.type";
 import { displayErrorNotification, displaySuccessNotification } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import useNotification from "@/features/notification/useNotification";
 import { selectNotification } from "@/features/notification/notificationSlice";
 import { useAppSelector } from "@/app/hooks";
+import { useNavigate } from "react-router-dom";
+import useAuth from "@/features/auth/useAuth";
 
 /**
  * @desc Keys related to users
@@ -20,6 +25,7 @@ import { useAppSelector } from "@/app/hooks";
 export const userKeys = {
   all: ["user"] as const,
   profile: (userId: string | null) => [...userKeys.all, userId] as const,
+  bookmark: (userId: string | null) => [...userKeys.profile(userId), "bookmark"] as const,
 };
 
 /**
@@ -39,16 +45,11 @@ export const fetchUserProfile = async (): Promise<GetUserProfileResponse> => {
 };
 
 export const useGetProfile = (
-  options?: UseQueryOptions<
-    GetUserProfileResponse,
-    APIResponseError,
-    GetUserProfileResponse["user"]
-  >
+  options?: UseQueryOptions<GetUserProfileResponse, APIResponseError>
 ) => {
-  return useQuery<GetUserProfileResponse, APIResponseError, GetUserProfileResponse["user"]>({
+  return useQuery<GetUserProfileResponse, APIResponseError>({
     ...options,
     queryFn: fetchUserProfile,
-    select: ({ user }) => user,
   });
 };
 
@@ -115,5 +116,70 @@ export const useUpdatePassword = () => {
       displaySuccessNotification(message, toast, initNotificationId);
     },
     onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
+  });
+};
+
+/**
+ * @desc  Delete user profile
+ */
+export const deleteUserProfile = async (data: DeleteProfile): Promise<unknown> => {
+  await new Promise((res) => setTimeout(res, 1000));
+
+  return await apiClient({
+    options: {
+      url: "/users/profile",
+      method: "DELETE",
+      data,
+    },
+  });
+};
+
+export const useDeleteProfile = () => {
+  const { toast, dismiss } = useToast();
+  const { id } = useAppSelector(selectNotification);
+  const { initNotificationId } = useNotification();
+  const { logoutUser } = useAuth();
+  const navigate = useNavigate();
+
+  return useMutation<unknown, APIResponseError, DeleteProfile>({
+    mutationFn: deleteUserProfile,
+    onSuccess: () => {
+      if (id) dismiss(id);
+
+      logoutUser();
+      navigate("/", { replace: true });
+    },
+
+    onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
+  });
+};
+
+/**
+ * @desc  Get Bookmarked job post
+ */
+export const fetchBookmarkedJobs = async (): Promise<BookmarkedJobs> => {
+  await new Promise((res) => setTimeout(res, 1000));
+
+  const data = await apiClient({
+    options: {
+      url: "/users/bookmarked-jobs",
+      method: "GET",
+    },
+  });
+
+  return bookmarkedJobsSchema.parse(data);
+};
+
+export const useGetBookmarkedJobs = ({
+  queryKey,
+  initialData,
+}: {
+  queryKey: QueryKey;
+  initialData: BookmarkedJobs;
+}) => {
+  return useQuery<BookmarkedJobs, APIResponseError>({
+    queryKey,
+    initialData,
+    queryFn: fetchBookmarkedJobs,
   });
 };

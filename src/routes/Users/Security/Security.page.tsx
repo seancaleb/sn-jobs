@@ -1,8 +1,7 @@
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useDocumentTitle } from "@mantine/hooks";
-import { Trash2 } from "lucide-react";
 import UpdatePassword from "./UpdatePassword/UpdatePassword";
+import DeleteProfile from "./DeleteProfile/DeleteProfile";
 
 const Security = () => {
   useDocumentTitle("Account Security");
@@ -37,10 +36,8 @@ const Security = () => {
             so please proceed with caution.
           </p>
         </div>
-        <Button variant="destructive">
-          <Trash2 className="mr-2 h-4 w-4" />
-          Delete Account
-        </Button>
+
+        <DeleteProfile />
       </div>
     </div>
   );
