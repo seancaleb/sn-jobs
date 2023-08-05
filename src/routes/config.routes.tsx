@@ -1,5 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import Root from "../Root.tsx";
 import Home from "@/routes/Home/Home.tsx";
@@ -11,6 +11,11 @@ import Register from "@/routes/auth/Register/Register.page.tsx";
 import Jobs, { loader as jobsLoader } from "@/routes/Jobs/Jobs.page.tsx";
 import UserAccountRoute from "@/components/UserAccountRoute.tsx";
 import Security from "@/routes/Users/Security/Security.page.tsx";
+import BookmarkedJobs, {
+  loader as bookmarkedJobsLoader,
+} from "@/routes/Users/Jobseekers/BookmarkedJobs.page.tsx";
+import AppliedJobs from "./Users/Jobseekers/AppliedJobs.page.tsx";
+import RoleBasedRoute from "@/components/RoleBasedRoute.tsx";
 
 const queryClient = new QueryClient();
 
@@ -39,7 +44,7 @@ const RootRouter = () => {
               path: ":role",
               element: (
                 <ProtectedRoute>
-                  <UserAccountRoute />
+                  <Outlet />
                 </ProtectedRoute>
               ),
               children: [
@@ -47,13 +52,33 @@ const RootRouter = () => {
                   errorElement: <ErrorPage />,
                   children: [
                     {
-                      path: "account/profile",
-                      element: <Profile />,
+                      element: <RoleBasedRoute />,
+                      children: [
+                        {
+                          path: "bookmarked-jobs",
+                          element: <BookmarkedJobs />,
+                          loader: bookmarkedJobsLoader(queryClient),
+                        },
+                        {
+                          path: "applied-jobs",
+                          element: <AppliedJobs />,
+                        },
+                      ],
                     },
-
                     {
-                      path: "account/privacy-and-security",
-                      element: <Security />,
+                      path: "account",
+                      element: <UserAccountRoute />,
+                      children: [
+                        {
+                          path: "profile",
+                          element: <Profile />,
+                        },
+
+                        {
+                          path: "privacy-and-security",
+                          element: <Security />,
+                        },
+                      ],
                     },
                   ],
                 },
