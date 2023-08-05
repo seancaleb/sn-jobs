@@ -27,7 +27,7 @@ const JobPostView = ({ job }: JobPostViewProps) => {
   const [bookmarkedJobsSet, setBookmarkedJobsSet] = useState<Set<string> | null>();
 
   const handleBookmarkJobPost = () => {
-    bookmarkJobMutation.mutate(job.jobId);
+    bookmarkJobMutation.mutate(job);
   };
 
   useEffect(() => {
