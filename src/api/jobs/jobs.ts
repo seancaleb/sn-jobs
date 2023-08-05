@@ -8,7 +8,7 @@ import { selectNotification } from "@/features/notification/notificationSlice";
 import { displayErrorNotification, displaySuccessNotification } from "@/lib/utils";
 import { selectAuthStatus } from "@/features/auth/authSlice";
 import { userKeys } from "../users/users";
-import { GetUserProfileResponse } from "../users/users.type";
+import { BookmarkedJobs, GetUserProfileResponse } from "../users/users.type";
 
 /**
  * @desc  Get all jobs
@@ -61,10 +61,10 @@ export const useGetJobById = (jobId: string | null) => {
 /**
  * @desc  Bookmark job post
  */
-export const bookmarkJobPost = async (jobId: string): Promise<APIResponseSuccess> => {
+export const bookmarkJobPost = async (job: JobDetails): Promise<APIResponseSuccess> => {
   return await apiClient({
     options: {
-      url: `/users/jobs/${jobId}/bookmark`,
+      url: `/users/jobs/${job.jobId}/bookmark`,
       method: "POST",
     },
   });
@@ -77,14 +77,19 @@ export const useBookmarkJobPost = () => {
   const queryClient = useQueryClient();
   const auth = useAppSelector(selectAuthStatus);
 
-  return useMutation<APIResponseSuccess, APIResponseError, string, GetUserProfileResponse>({
+  return useMutation<
+    APIResponseSuccess,
+    APIResponseError,
+    JobDetails,
+    { profile?: GetUserProfileResponse; bookmarked?: BookmarkedJobs }
+  >({
     mutationFn: bookmarkJobPost,
     onSuccess: ({ message }) => {
       if (notificationId) dismiss(notificationId);
 
       displaySuccessNotification(message, toast, initNotificationId);
     },
-    onMutate: async (jobId) => {
+    onMutate: async (job: JobDetails) => {
       await queryClient.cancelQueries({ queryKey: userKeys.profile(auth.userId) });
 
       const previousUserProfileData = queryClient.getQueryData<GetUserProfileResponse>(
@@ -92,27 +97,46 @@ export const useBookmarkJobPost = () => {
       );
 
       if (previousUserProfileData) {
-        const jobIdExists = previousUserProfileData.bookmark?.find((id) => id === jobId);
+        const jobIdExists = previousUserProfileData.bookmark?.find((id) => id === job.jobId);
 
         queryClient.setQueryData(userKeys.profile(auth.userId), {
           ...previousUserProfileData,
           bookmark: jobIdExists
-            ? previousUserProfileData.bookmark?.filter((id) => id !== jobId)
+            ? previousUserProfileData.bookmark?.filter((id) => id !== job.jobId)
             : [
                 ...((previousUserProfileData.bookmark && previousUserProfileData.bookmark) || []),
-                jobId,
+                job.jobId,
               ],
         });
-
-        return previousUserProfileData;
       }
+
+      const previousBookmarkedJobs = queryClient.getQueryData<BookmarkedJobs>(
+        userKeys.bookmark(auth.userId)
+      );
+
+      if (previousBookmarkedJobs) {
+        const jobIdExists = previousBookmarkedJobs.bookmarkedJobs?.find(
+          ({ jobId }) => jobId === job.jobId
+        );
+
+        queryClient.setQueryData(userKeys.bookmark(auth.userId), {
+          ...previousBookmarkedJobs,
+          total: jobIdExists ? previousBookmarkedJobs.total - 1 : previousBookmarkedJobs.total + 1,
+          bookmarkedJobs: jobIdExists
+            ? previousBookmarkedJobs.bookmarkedJobs.filter(({ jobId }) => jobId !== job.jobId)
+            : [...(previousBookmarkedJobs.bookmarkedJobs || []), job],
+        });
+      }
+
+      return { profile: previousUserProfileData, bookmarked: previousBookmarkedJobs };
     },
     onError: ({ message }, _jobId, context) => {
-      queryClient.setQueryData(userKeys.profile(auth.userId), context);
+      queryClient.setQueryData(userKeys.profile(auth.userId), context?.profile);
+      queryClient.setQueryData(userKeys.bookmark(auth.userId), context?.bookmarked);
       displayErrorNotification(message, toast, initNotificationId);
     },
     onSettled: async () => {
-      await queryClient.invalidateQueries(userKeys.profile(auth.userId));
+      await queryClient.invalidateQueries(userKeys.bookmark(auth.userId));
     },
   });
 };
