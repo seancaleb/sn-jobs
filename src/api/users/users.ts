@@ -1,5 +1,5 @@
 import apiClient, { APIResponseError, APIResponseSuccess } from "@/services/apiClient";
-import { UseQueryOptions, useMutation, useQuery } from "@tanstack/react-query";
+import { QueryKey, UseQueryOptions, useMutation, useQuery } from "@tanstack/react-query";
 import {
   UpdateProfile,
   UpdateProfileResponse,
@@ -8,6 +8,8 @@ import {
   updateProfileSchemaResponse,
   UpdatePassword,
   DeleteProfile,
+  BookmarkedJobs,
+  bookmarkedJobsSchema,
 } from "./users.type";
 import { displayErrorNotification, displaySuccessNotification } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
@@ -23,6 +25,7 @@ import useAuth from "@/features/auth/useAuth";
 export const userKeys = {
   all: ["user"] as const,
   profile: (userId: string | null) => [...userKeys.all, userId] as const,
+  bookmark: (userId: string | null) => [...userKeys.profile(userId), "bookmark"] as const,
 };
 
 /**
@@ -148,5 +151,35 @@ export const useDeleteProfile = () => {
     },
 
     onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
+  });
+};
+
+/**
+ * @desc  Get Bookmarked job post
+ */
+export const fetchBookmarkedJobs = async (): Promise<BookmarkedJobs> => {
+  await new Promise((res) => setTimeout(res, 1000));
+
+  const data = await apiClient({
+    options: {
+      url: "/users/bookmarked-jobs",
+      method: "GET",
+    },
+  });
+
+  return bookmarkedJobsSchema.parse(data);
+};
+
+export const useGetBookmarkedJobs = ({
+  queryKey,
+  initialData,
+}: {
+  queryKey: QueryKey;
+  initialData: BookmarkedJobs;
+}) => {
+  return useQuery<BookmarkedJobs, APIResponseError>({
+    queryKey,
+    initialData,
+    queryFn: fetchBookmarkedJobs,
   });
 };
