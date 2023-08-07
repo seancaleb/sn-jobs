@@ -34,7 +34,9 @@ const Header = () => {
                 <li>
                   <div className="flex space-x-2">
                     {role === "employer" && <Button variant="ghost">Post a Job</Button>}
-                    <Button variant="ghost">Job Board</Button>
+                    <Button asChild variant="ghost">
+                      <Link to="jobs">Job Board</Link>
+                    </Button>
                   </div>
                 </li>
               )}

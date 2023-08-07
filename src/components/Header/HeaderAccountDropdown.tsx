@@ -12,14 +12,14 @@ import { useLogoutUser } from "@/api/auth/auth";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "@/app/hooks";
 import { selectAuthStatus } from "@/features/auth/authSlice";
-import { useGetProfile, userKeys } from "@/api/users/users";
+import { useGetProfile } from "@/api/users/users";
 import { Skeleton } from "@/components/ui/skeleton";
 import { capitalize } from "@/lib/utils";
 
 const HeaderAccountDropdown = () => {
   const { mutate } = useLogoutUser();
   const auth = useAppSelector(selectAuthStatus);
-  const { data: user, isSuccess } = useGetProfile({ queryKey: userKeys.profile(auth.userId) });
+  const { data: user, isSuccess } = useGetProfile();
 
   const handleLogoutUser = () => {
     mutate();
