@@ -5,7 +5,7 @@ import Root from "../Root.tsx";
 import Home from "@/routes/Home/Home.tsx";
 import Login from "@/routes/auth/Login/Login.page.tsx";
 import ErrorPage from "@/error-page.tsx";
-import Profile from "@/routes/Users/Profile/Profile.page.tsx";
+import Profile, { loader as profileLoader } from "@/routes/Users/Profile/Profile.page.tsx";
 import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute.tsx";
 import Register from "@/routes/auth/Register/Register.page.tsx";
 import Jobs, { loader as jobsLoader } from "@/routes/Jobs/Jobs.page.tsx";
@@ -14,8 +14,14 @@ import Security from "@/routes/Users/Security/Security.page.tsx";
 import BookmarkedJobs, {
   loader as bookmarkedJobsLoader,
 } from "@/routes/Users/Jobseekers/BookmarkedJobs.page.tsx";
-import AppliedJobs from "./Users/Jobseekers/AppliedJobs.page.tsx";
+import AppliedJobs, {
+  loader as appliedJobsLoader,
+} from "@/routes/Users/Jobseekers/AppliedJobs.page.tsx";
 import RoleBasedRoute from "@/components/RoleBasedRoute.tsx";
+import JobApplication, {
+  loader as jobApplicationLoader,
+} from "./Jobs/JobApplication/JobApplication.page.tsx";
+import Job, { loader as jobLoader } from "./Jobs/Job/Job.page.tsx";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +68,7 @@ const RootRouter = () => {
                         {
                           path: "applied-jobs",
                           element: <AppliedJobs />,
+                          loader: appliedJobsLoader(queryClient),
                         },
                       ],
                     },
@@ -72,6 +79,7 @@ const RootRouter = () => {
                         {
                           path: "profile",
                           element: <Profile />,
+                          loader: profileLoader(queryClient),
                         },
 
                         {
@@ -86,12 +94,31 @@ const RootRouter = () => {
             },
             {
               path: "jobs",
-              loader: jobsLoader(queryClient),
               element: (
                 <ProtectedRoute>
-                  <Jobs />
+                  <Outlet />
                 </ProtectedRoute>
               ),
+              children: [
+                {
+                  errorElement: <ErrorPage />,
+                  children: [
+                    { index: true, element: <Jobs />, loader: jobsLoader(queryClient) },
+                    {
+                      path: ":jobId",
+                      element: <Job />,
+                      loader: jobLoader(queryClient),
+                      children: [
+                        {
+                          path: "apply",
+                          element: <JobApplication />,
+                          loader: jobApplicationLoader(queryClient),
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
