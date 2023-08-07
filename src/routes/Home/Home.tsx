@@ -1,11 +1,14 @@
 import { useAppSelector } from "@/app/hooks";
 import { Button } from "@/components/ui/button";
 import { selectAuthStatus } from "@/features/auth/authSlice";
+import { useDocumentTitle } from "@mantine/hooks";
 import { Navigate } from "react-router-dom";
 import Balancer from "react-wrap-balancer";
 
 const Home = () => {
   const { isAuthenticated } = useAppSelector(selectAuthStatus);
+
+  useDocumentTitle("SNJOBS - Virtual Job Board in the Philippines");
 
   if (isAuthenticated) {
     return <Navigate to="/jobs" />;
