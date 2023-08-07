@@ -18,6 +18,7 @@ import { UpdatePasswordValues, updatePasswordSchema } from "./UpdatePassword.sch
 import UnsavedChangesDialog from "@/components/UnsavedChangesDialog";
 import { useUpdatePassword } from "@/api/users/users";
 import LoaderSpinner from "@/components/LoaderSpinner";
+import PasswordVisibilityToggle from "@/components/PasswordVisibilityToggle/PasswordVisibilityToggle";
 
 const UpdatePassword = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,6 +55,7 @@ const UpdatePasswordDialog = ({ isOpen, setIsOpen }: UpdatePasswordProps) => {
   const { isDirty, errors } = formState;
   const [isOpenUnsavedChanges, setIsOpenUnsavedChanges] = useState(false);
   const updatePasswordMutation = useUpdatePassword();
+  const [isVisible, setIsVisible] = useState(false);
 
   const mismatchPasswords = (
     errors as FieldErrors<UpdatePasswordValues & { mismatchPasswords: string }>
@@ -127,10 +129,15 @@ const UpdatePasswordDialog = ({ isOpen, setIsOpen }: UpdatePasswordProps) => {
               <FormInputField
                 control={control}
                 name="password"
-                type="password"
+                type={isVisible ? "text" : "password"}
                 label="Old password"
                 placeholder="Enter your old password"
-              />
+              >
+                <PasswordVisibilityToggle
+                  isVisible={isVisible}
+                  onToggle={() => setIsVisible(!isVisible)}
+                />
+              </FormInputField>
 
               <FormInputField
                 control={control}
