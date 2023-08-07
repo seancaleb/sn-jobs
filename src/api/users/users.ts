@@ -1,5 +1,11 @@
 import apiClient, { APIResponseError, APIResponseSuccess } from "@/services/apiClient";
-import { QueryKey, UseQueryOptions, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  MutationFunction,
+  QueryFunctionContext,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   UpdateProfile,
   UpdateProfileResponse,
@@ -18,6 +24,7 @@ import { selectNotification } from "@/features/notification/notificationSlice";
 import { useAppSelector } from "@/app/hooks";
 import { useNavigate } from "react-router-dom";
 import useAuth from "@/features/auth/useAuth";
+import { selectAuthStatus } from "@/features/auth/authSlice";
 
 /**
  * @desc Keys related to users
@@ -25,13 +32,20 @@ import useAuth from "@/features/auth/useAuth";
 export const userKeys = {
   all: ["user"] as const,
   profile: (userId: string | null) => [...userKeys.all, userId] as const,
-  bookmark: (userId: string | null) => [...userKeys.profile(userId), "bookmark"] as const,
+  bookmarks: (userId: string | null) => [...userKeys.profile(userId), "bookmarks"] as const,
+  applications: (userId: string | null) => [...userKeys.profile(userId), "applications"] as const,
 };
 
 /**
  * @desc  Get user profile
  */
-export const fetchUserProfile = async (): Promise<GetUserProfileResponse> => {
+export const fetchUserProfile = async ({
+  queryKey,
+}: QueryFunctionContext<ReturnType<(typeof userKeys)["profile"]>>) => {
+  const [, userId] = queryKey;
+
+  if (userId === null) return Promise.reject("User ID needs to be provided.");
+
   await new Promise((res) => setTimeout(res, 1000));
 
   const data = await apiClient({
@@ -44,19 +58,27 @@ export const fetchUserProfile = async (): Promise<GetUserProfileResponse> => {
   return getProfileSchemaResponse.parse(data);
 };
 
-export const useGetProfile = (
-  options?: UseQueryOptions<GetUserProfileResponse, APIResponseError>
-) => {
-  return useQuery<GetUserProfileResponse, APIResponseError>({
-    ...options,
+export const useGetProfile = ({ initialData }: { initialData?: GetUserProfileResponse } = {}) => {
+  const auth = useAppSelector(selectAuthStatus);
+
+  return useQuery<
+    GetUserProfileResponse,
+    APIResponseError,
+    GetUserProfileResponse,
+    ReturnType<(typeof userKeys)["profile"]>
+  >({
+    queryKey: userKeys.profile(auth.userId),
     queryFn: fetchUserProfile,
+    initialData,
   });
 };
 
 /**
  * @desc  Update user profile
  */
-export const updateUserProfile = async (data: UpdateProfile): Promise<UpdateProfileResponse> => {
+export const updateUserProfile: MutationFunction<UpdateProfileResponse, UpdateProfile> = async (
+  data
+) => {
   await new Promise((res) => setTimeout(res, 1000));
 
   const responseData = await apiClient({
@@ -91,7 +113,9 @@ export const useUpdateProfile = () => {
 /**
  * @desc  Update password
  */
-export const updatePassword = async (data: UpdatePassword): Promise<APIResponseSuccess> => {
+export const updatePassword: MutationFunction<APIResponseSuccess, UpdatePassword> = async (
+  data
+) => {
   await new Promise((res) => setTimeout(res, 1000));
 
   return await apiClient({
@@ -122,7 +146,9 @@ export const useUpdatePassword = () => {
 /**
  * @desc  Delete user profile
  */
-export const deleteUserProfile = async (data: DeleteProfile): Promise<unknown> => {
+export const deleteUserProfile: MutationFunction<unknown, DeleteProfile> = async (
+  data
+): Promise<unknown> => {
   await new Promise((res) => setTimeout(res, 1000));
 
   return await apiClient({
@@ -140,11 +166,14 @@ export const useDeleteProfile = () => {
   const { initNotificationId } = useNotification();
   const { logoutUser } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   return useMutation<unknown, APIResponseError, DeleteProfile>({
     mutationFn: deleteUserProfile,
     onSuccess: () => {
       if (id) dismiss(id);
+
+      queryClient.removeQueries();
 
       logoutUser();
       navigate("/", { replace: true });
@@ -157,7 +186,13 @@ export const useDeleteProfile = () => {
 /**
  * @desc  Get Bookmarked job post
  */
-export const fetchBookmarkedJobs = async (): Promise<BookmarkedJobs> => {
+export const fetchBookmarkedJobs = async ({
+  queryKey,
+}: QueryFunctionContext<ReturnType<(typeof userKeys)["bookmarks"]>>) => {
+  const [, userId] = queryKey;
+
+  if (userId === null) return Promise.reject("User ID needs to be provided.");
+
   await new Promise((res) => setTimeout(res, 1000));
 
   const data = await apiClient({
@@ -170,16 +205,17 @@ export const fetchBookmarkedJobs = async (): Promise<BookmarkedJobs> => {
   return bookmarkedJobsSchema.parse(data);
 };
 
-export const useGetBookmarkedJobs = ({
-  queryKey,
-  initialData,
-}: {
-  queryKey: QueryKey;
-  initialData: BookmarkedJobs;
-}) => {
-  return useQuery<BookmarkedJobs, APIResponseError>({
-    queryKey,
-    initialData,
+export const useGetBookmarkedJobs = ({ initialData }: { initialData: BookmarkedJobs }) => {
+  const auth = useAppSelector(selectAuthStatus);
+
+  return useQuery<
+    BookmarkedJobs,
+    APIResponseError,
+    BookmarkedJobs,
+    ReturnType<(typeof userKeys)["bookmarks"]>
+  >({
+    queryKey: userKeys.bookmarks(auth.userId),
     queryFn: fetchBookmarkedJobs,
+    initialData,
   });
 };
