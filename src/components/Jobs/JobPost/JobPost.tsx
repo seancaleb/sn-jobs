@@ -2,18 +2,21 @@ import { useGetJobById } from "@/api/jobs/jobs";
 import JobPostSkeleton from "./JobPostSkeleton";
 import JobPostView from "./JobPostView";
 import { useSearchParams } from "react-router-dom";
+import { useGetProfile } from "@/api/users/users";
 
 const JobPost = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("jobId");
-  const { data: job, isLoading } = useGetJobById(id);
+  const job = useGetJobById({ jobId: id });
+  const user = useGetProfile();
 
-  return (
-    <>
-      {isLoading && <JobPostSkeleton />}
-      {job && <JobPostView job={job} />}
-    </>
-  );
+  const isLoading = !job.isSuccess || !user.isSuccess;
+
+  if (isLoading) {
+    return <JobPostSkeleton />;
+  }
+
+  return <JobPostView job={job.data} user={user.data} />;
 };
 
 export default JobPost;

@@ -1,45 +1,59 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Button } from "@/components/ui/button";
-import { Bookmark, Briefcase, MoveRight, X } from "lucide-react";
+import { Bookmark, Briefcase, MoveRight, Send, X } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useBookmarkJobPost } from "@/api/jobs/jobs";
 import { formatJobPostTime } from "@/lib/utils";
-import { fetchBookmarkedJobs, useGetBookmarkedJobs, userKeys } from "@/api/users/users";
-import { useAppSelector } from "@/app/hooks";
-import { selectAuthStatus } from "@/features/auth/authSlice";
+import {
+  fetchBookmarkedJobs,
+  fetchUserProfile,
+  useGetBookmarkedJobs,
+  useGetProfile,
+  userKeys,
+} from "@/api/users/users";
 import { Fragment, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Undo2 } from "lucide-react";
-import { type BookmarkedJobs } from "@/api/users/users.type";
+import { GetUserProfileResponse, type BookmarkedJobs } from "@/api/users/users.type";
 import { QueryClient } from "@tanstack/react-query";
 import store from "@/app/store";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { LoaderReturnType } from "@/types";
 import { JobDetails } from "@/api/jobs/jobs.type";
+import { useDocumentTitle } from "@mantine/hooks";
 
 export const loader = (queryClient: QueryClient) => async () => {
   const auth = store.getState().auth;
 
-  const initialData = await queryClient.ensureQueryData({
-    queryKey: userKeys.bookmark(auth.userId),
+  const bookmarkedJobsData = queryClient.ensureQueryData({
+    queryKey: userKeys.bookmarks(auth.userId),
     queryFn: fetchBookmarkedJobs,
   });
 
+  const userData = queryClient.ensureQueryData({
+    queryKey: userKeys.profile(auth.userId),
+    queryFn: fetchUserProfile,
+  });
+
+  const [initialData, initialUserData] = await Promise.all([bookmarkedJobsData, userData]);
+
   return {
     initialData,
+    initialUserData,
   };
 };
 
 const BookmarkedJobs = () => {
-  const { initialData } = useLoaderData() as LoaderReturnType<typeof loader>;
-  const auth = useAppSelector(selectAuthStatus);
+  const { initialData, initialUserData } = useLoaderData() as LoaderReturnType<typeof loader>;
   const { data: bookmarkedJobs } = useGetBookmarkedJobs({
-    queryKey: userKeys.bookmark(auth.userId),
     initialData,
   });
   const bookmarkJobMutation = useBookmarkJobPost();
   const [unbookmarkedJobs, setUnbookmarkedJobs] = useState<Set<string>>(new Set());
   const navigate = useNavigate();
+  const { data } = useGetProfile({ initialData: initialUserData });
+
+  const user = data as GetUserProfileResponse;
 
   const handleUnbookmarkJob = (jobId: string) => {
     setUnbookmarkedJobs((prev) => {
@@ -67,6 +81,8 @@ const BookmarkedJobs = () => {
     });
   };
 
+  useDocumentTitle("Bookmarked Jobs");
+
   return (
     <div className="space-y-2">
       {bookmarkedJobs.total === 0 && (
@@ -90,9 +106,11 @@ const BookmarkedJobs = () => {
           <Fragment key={job.jobId}>
             {!unbookmarkedJobs.has(job.jobId) && (
               <Card className="w-full">
-                <CardHeader className="flex flex-row justify-between gap-6 space-y-0">
-                  <div className="space-y-1.5">
-                    <CardTitle className="text-lg leading-[1.2]">{job.title}</CardTitle>
+                <CardHeader className="flex flex-row gap-6 space-y-0">
+                  <Link to={`/jobs/${job.jobId}`} className="space-y-1.5 flex-1 group">
+                    <CardTitle className="text-lg leading-[1.2] group-hover:underline">
+                      {job.title}
+                    </CardTitle>
 
                     <div className="space-y-1 text-sm">
                       <p className="text-primary text-base">
@@ -100,18 +118,21 @@ const BookmarkedJobs = () => {
                       </p>
                       <p>Posted {formattedJobDate}</p>
                     </div>
-                  </div>
+                  </Link>
 
                   <div className="flex gap-x-3">
-                    <Button>
-                      <Briefcase className="mr-2 h-4 w-4" /> Apply Now
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => handleUnbookmarkJob(job.jobId)}
-                    >
-                      <Bookmark className="h-4 w-4 fill-teal-500 text-teal-500" />
+                    {user.applications?.find((id) => id === job.jobId) ? (
+                      <Button disabled>
+                        <Send className="mr-2 h-4 w-4" /> Application Submitted
+                      </Button>
+                    ) : (
+                      <Button onClick={() => navigate(`/jobs/${job.jobId}/apply`)}>
+                        <Briefcase className="mr-2 h-4 w-4" /> Apply Now
+                      </Button>
+                    )}
+                    <Button variant="outline" onClick={() => handleUnbookmarkJob(job.jobId)}>
+                      <Bookmark className="h-4 w-4 fill-teal-500 text-teal-500 mr-2" />
+                      Saved
                     </Button>
                   </div>
                 </CardHeader>

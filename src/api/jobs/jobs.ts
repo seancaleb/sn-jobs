@@ -1,73 +1,144 @@
 import apiClient, { APIResponseError, APIResponseSuccess } from "@/services/apiClient";
-import { UseQueryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Jobs, JobDetails, jobSchema, jobsSchema } from "./jobs.type";
+import {
+  MutationFunction,
+  QueryFunctionContext,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
+  Jobs,
+  JobDetails,
+  jobSchema,
+  jobsSchema,
+  jobApplicationsSchema,
+  JobApplications,
+} from "./jobs.type";
 import useNotification from "@/features/notification/useNotification";
 import { useAppSelector } from "@/app/hooks";
 import { useToast } from "@/components/ui/use-toast";
 import { selectNotification } from "@/features/notification/notificationSlice";
-import { displayErrorNotification, displaySuccessNotification } from "@/lib/utils";
+import {
+  disableInteractions,
+  displayErrorNotification,
+  displaySuccessNotification,
+  removeDisableInteractions,
+} from "@/lib/utils";
 import { selectAuthStatus } from "@/features/auth/authSlice";
 import { userKeys } from "../users/users";
 import { BookmarkedJobs, GetUserProfileResponse } from "../users/users.type";
+import { JobApplicationValues as JobApplicationData } from "@/routes/Jobs/JobApplication/JobApplicationForm.schema";
+import { useNavigate } from "react-router-dom";
+
+/**
+ * @desc Keys related to users
+ */
+export const jobKeys = {
+  all: ["jobs"] as const,
+  detail: (jobId: string | null | undefined) => [...jobKeys.all, jobId] as const,
+  filters: (filters: Record<string, string>) => [...jobKeys.all, filters] as const,
+};
 
 /**
  * @desc  Get all jobs
  */
-export const fetchJobs = async (params: Record<string, string>): Promise<Jobs> => {
+export const fetchJobs = async ({
+  queryKey,
+}: QueryFunctionContext<ReturnType<(typeof jobKeys)["filters"]>>) => {
+  const [, filters] = queryKey;
+
   await new Promise((res) => setTimeout(res, 1000));
-  return await apiClient({
+
+  const data = await apiClient({
     options: {
       url: "/jobs",
       method: "GET",
-      params,
+      params: filters,
     },
   });
+
+  return jobsSchema.parse(data);
 };
 
-export const QUERY_KEY = ["jobs"];
-
-export const useGetJobs = (params: Record<string, string>, options: UseQueryOptions<Jobs>) => {
-  const QUERY_KEY_PARAMS = Object.entries(params).map(([key, value]) => `${key}=${value}`);
-
-  return useQuery<Jobs>([...QUERY_KEY, ...QUERY_KEY_PARAMS], () => fetchJobs(params), {
-    ...options,
-    select: (data) => jobsSchema.parse(data),
+export const useGetJobs = ({
+  queryParams,
+  initialData,
+}: {
+  queryParams: Record<string, string>;
+  initialData: Jobs;
+}) => {
+  return useQuery({
+    queryKey: jobKeys.filters(queryParams),
+    queryFn: fetchJobs,
+    initialData,
   });
 };
 
 /**
  * @desc  Get job by id
  */
-export const fetchJobById = async (jobId: string | null): Promise<JobDetails> => {
-  if (jobId === null) return Promise.reject(new Error("Invalid id"));
+export const fetchJobById = async ({
+  queryKey,
+}: QueryFunctionContext<ReturnType<(typeof jobKeys)["detail"]>>) => {
+  const [, jobId] = queryKey;
+
+  if (!jobId) return Promise.reject("Job ID needs to be provided.");
 
   await new Promise((res) => setTimeout(res, 1000));
 
-  return await apiClient({
+  const data = await apiClient({
     options: {
       url: `/job/${jobId}`,
       method: "GET",
     },
   });
+
+  return jobSchema.parse(data);
 };
 
-export const useGetJobById = (jobId: string | null) => {
-  return useQuery<JobDetails>(["job", jobId], () => fetchJobById(jobId), {
-    enabled: !!jobId,
-    select: (data) => jobSchema.parse(data),
-  });
+export const useGetJobById = ({
+  jobId,
+  initialData,
+}: {
+  jobId: string | null | undefined;
+  initialData?: JobDetails;
+}) => {
+  const { toast, dismiss } = useToast();
+  const { id: notificationId } = useAppSelector(selectNotification);
+  const { initNotificationId } = useNotification();
+
+  return useQuery<JobDetails, APIResponseError, JobDetails, ReturnType<(typeof jobKeys)["detail"]>>(
+    {
+      queryKey: jobKeys.detail(jobId),
+      queryFn: fetchJobById,
+      initialData,
+      enabled: !!jobId,
+      onError: ({ message }) => {
+        if (notificationId) dismiss(notificationId);
+
+        displayErrorNotification(message, toast, initNotificationId);
+      },
+    }
+  );
 };
 
 /**
  * @desc  Bookmark job post
  */
-export const bookmarkJobPost = async (job: JobDetails): Promise<APIResponseSuccess> => {
+export const bookmarkJobPost: MutationFunction<APIResponseSuccess, JobDetails> = async ({
+  jobId,
+}): Promise<APIResponseSuccess> => {
   return await apiClient({
     options: {
-      url: `/users/jobs/${job.jobId}/bookmark`,
+      url: `/users/jobs/${jobId}/bookmark`,
       method: "POST",
     },
   });
+};
+
+type BookmarkJobPostContext = {
+  profile?: GetUserProfileResponse;
+  bookmarked?: BookmarkedJobs;
 };
 
 export const useBookmarkJobPost = () => {
@@ -77,12 +148,7 @@ export const useBookmarkJobPost = () => {
   const queryClient = useQueryClient();
   const auth = useAppSelector(selectAuthStatus);
 
-  return useMutation<
-    APIResponseSuccess,
-    APIResponseError,
-    JobDetails,
-    { profile?: GetUserProfileResponse; bookmarked?: BookmarkedJobs }
-  >({
+  return useMutation<APIResponseSuccess, APIResponseError, JobDetails, BookmarkJobPostContext>({
     mutationFn: bookmarkJobPost,
     onSuccess: ({ message }) => {
       if (notificationId) dismiss(notificationId);
@@ -111,7 +177,7 @@ export const useBookmarkJobPost = () => {
       }
 
       const previousBookmarkedJobs = queryClient.getQueryData<BookmarkedJobs>(
-        userKeys.bookmark(auth.userId)
+        userKeys.bookmarks(auth.userId)
       );
 
       if (previousBookmarkedJobs) {
@@ -119,24 +185,132 @@ export const useBookmarkJobPost = () => {
           ({ jobId }) => jobId === job.jobId
         );
 
-        queryClient.setQueryData(userKeys.bookmark(auth.userId), {
+        queryClient.setQueryData(userKeys.bookmarks(auth.userId), {
           ...previousBookmarkedJobs,
           total: jobIdExists ? previousBookmarkedJobs.total - 1 : previousBookmarkedJobs.total + 1,
           bookmarkedJobs: jobIdExists
             ? previousBookmarkedJobs.bookmarkedJobs.filter(({ jobId }) => jobId !== job.jobId)
-            : [...(previousBookmarkedJobs.bookmarkedJobs || []), job],
+            : [job, ...(previousBookmarkedJobs.bookmarkedJobs || [])],
         });
       }
 
       return { profile: previousUserProfileData, bookmarked: previousBookmarkedJobs };
     },
-    onError: ({ message }, _jobId, context) => {
+    onError: ({ message }, _job, context) => {
       queryClient.setQueryData(userKeys.profile(auth.userId), context?.profile);
-      queryClient.setQueryData(userKeys.bookmark(auth.userId), context?.bookmarked);
+      queryClient.setQueryData(userKeys.bookmarks(auth.userId), context?.bookmarked);
       displayErrorNotification(message, toast, initNotificationId);
     },
-    onSettled: async () => {
-      await queryClient.invalidateQueries(userKeys.bookmark(auth.userId));
+    onSettled: async (_data, _error, job) => {
+      await Promise.all([
+        queryClient.invalidateQueries(userKeys.bookmarks(auth.userId)),
+        queryClient.invalidateQueries(jobKeys.detail(job.jobId)),
+      ]);
+    },
+  });
+};
+
+/**
+ * @desc  Apply to a job
+ */
+export const applyJob: MutationFunction<APIResponseSuccess, ApplyJobVariables> = async ({
+  data,
+  jobId,
+}): Promise<APIResponseSuccess> => {
+  await new Promise((res) => setTimeout(res, 2000));
+
+  return await apiClient({
+    options: {
+      url: `/users/jobs/${jobId}/apply`,
+      method: "POST",
+      data,
+    },
+  });
+};
+
+type ApplyJobVariables = {
+  data: JobApplicationData;
+  jobId: string;
+};
+
+export const useApplyJob = () => {
+  const { toast, dismiss } = useToast();
+  const { id: notificationId } = useAppSelector(selectNotification);
+  const { initNotificationId } = useNotification();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const auth = useAppSelector(selectAuthStatus);
+
+  return useMutation<APIResponseSuccess, APIResponseError, ApplyJobVariables>({
+    mutationFn: applyJob,
+    onSuccess: async ({ message }, { jobId }) => {
+      if (notificationId) dismiss(notificationId);
+
+      await Promise.all([
+        queryClient.invalidateQueries(jobKeys.detail(jobId)),
+        queryClient.invalidateQueries(userKeys.all),
+        queryClient.prefetchQuery({
+          queryKey: userKeys.applications(auth.userId),
+          queryFn: fetchJobApplications,
+        }),
+      ]);
+
+      navigate(`/jobs/${jobId}`);
+      displaySuccessNotification(message, toast, initNotificationId);
+    },
+    onMutate: () => {
+      disableInteractions();
+    },
+    onError: ({ message }) => {
+      displayErrorNotification(message, toast, initNotificationId);
+    },
+    onSettled: () => {
+      removeDisableInteractions();
+    },
+  });
+};
+
+/**
+ * @desc  Get all job applications
+ */
+export const fetchJobApplications = async ({
+  queryKey,
+}: QueryFunctionContext<ReturnType<(typeof userKeys)["applications"]>>) => {
+  const [, userId] = queryKey;
+
+  if (userId === null) return Promise.reject("User ID needs to be provided.");
+
+  await new Promise((res) => setTimeout(res, 1000));
+
+  const data = await apiClient({
+    options: {
+      url: "/users/applications",
+      method: "GET",
+    },
+  });
+
+  return jobApplicationsSchema.parse(data);
+};
+
+export const useGetJobApplications = ({ initialData }: { initialData: JobApplications }) => {
+  const { toast, dismiss } = useToast();
+  const { id: notificationId } = useAppSelector(selectNotification);
+  const { initNotificationId } = useNotification();
+  const auth = useAppSelector(selectAuthStatus);
+
+  return useQuery<
+    JobApplications,
+    APIResponseError,
+    JobApplications,
+    ReturnType<(typeof userKeys)["applications"]>
+  >({
+    queryKey: userKeys.applications(auth.userId),
+    queryFn: fetchJobApplications,
+    initialData,
+    onError: ({ message }) => {
+      if (notificationId) dismiss(notificationId);
+
+      displayErrorNotification(message, toast, initNotificationId);
     },
   });
 };

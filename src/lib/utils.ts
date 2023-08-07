@@ -1,8 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toast } from "@/components/ui/use-toast";
-import { isThisWeek, isThisMonth } from "date-fns";
 import { SetURLSearchParams } from "react-router-dom";
+import { APIResponseError } from "@/services/apiClient";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -45,33 +45,38 @@ export const displayErrorNotification = (
 export const formatJobPostTime = (date: Date) => {
   const now = new Date();
 
-  if (isThisWeek(date)) {
-    const hoursAgo = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    const daysAgo = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+  const hoursAgo = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+  const daysAgo = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
 
-    if (hoursAgo <= 2) {
-      return "Just now";
-    } else if (daysAgo === 0) {
+  if (hoursAgo <= 1) {
+    return "Just now";
+  }
+
+  if (daysAgo < 8) {
+    if (daysAgo === 0) {
       return "Today";
     } else if (daysAgo === 1) {
       return "Yesterday";
-    } else {
+    } else if (daysAgo < 8) {
       return `${daysAgo} days ago`;
     }
   }
 
-  if (isThisMonth(date)) {
-    const daysAgo = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-    if (daysAgo < 7) {
-      return `${daysAgo} days ago`;
-    } else {
-      const weeksAgo = Math.floor(daysAgo / 7);
-      return `${weeksAgo} week${weeksAgo === 1 ? "" : "s"} ago`;
-    }
+  const weeksAgo = Math.floor(daysAgo / 7);
+
+  if (weeksAgo < 5) {
+    return `${weeksAgo} week${weeksAgo === 1 ? "" : "s"} ago`;
   }
 
   const monthsAgo = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24 * 30));
-  return `${monthsAgo + 1} month${monthsAgo === 0 ? "" : "s"} ago`;
+
+  if (monthsAgo < 13) {
+    return `${monthsAgo} month${monthsAgo === 1 ? "" : "s"} ago`;
+  }
+
+  const yearsAgo = Math.floor(now.getFullYear() - date.getFullYear());
+
+  return `${yearsAgo} year${yearsAgo === 1 ? "" : "s"} ago`;
 };
 
 // Function to update the query parameters without replacing the old query parameter list
@@ -101,4 +106,22 @@ export const capitalize = (string: string) => {
   });
 
   return stringArr.join(" ");
+};
+
+// Function to disable interactions on a page
+export const disableInteractions = () => {
+  const body = document.querySelector("body");
+  body?.classList.add("disable-interactions");
+};
+
+// Function to remove disable interactions on a page
+export const removeDisableInteractions = () => {
+  const body = document.querySelector("body");
+  body?.classList.contains("disable-interactions") &&
+    body?.classList.remove("disable-interactions");
+};
+
+// Function to check if error is an instance of APIResponseError interface
+export const isAPIResponseError = (value: unknown): value is APIResponseError => {
+  return typeof value === "object" && "message" in value! && typeof value.message === "string";
 };

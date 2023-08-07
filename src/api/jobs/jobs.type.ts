@@ -19,5 +19,28 @@ export const jobsSchema = z.object({
   totalPages: z.number(),
 });
 
+export const jobApplicationSchema = z.object({
+  jobId: z.string(),
+  applicantId: z.string(),
+  resume: z.string(),
+  coverLetter: z.string(),
+  status: z.enum(["submitted", "accepted", "rejected", "under review"]),
+  applicationId: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
+export const jobApplicationsSchema = z.object({
+  total: z.number(),
+  jobApplications: z
+    .object({
+      ...jobApplicationSchema.shape,
+      job: z.object({ ...jobSchema.shape }),
+    })
+    .array(),
+});
+
 export type Jobs = z.infer<typeof jobsSchema>;
 export type JobDetails = z.infer<typeof jobSchema>;
+export type JobApplication = z.infer<typeof jobApplicationSchema>;
+export type JobApplications = z.infer<typeof jobApplicationsSchema>;

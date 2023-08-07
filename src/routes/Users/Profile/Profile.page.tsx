@@ -2,6 +2,20 @@
 import { useDocumentTitle } from "@mantine/hooks";
 import EditProfile from "@/components/Profile/EditProfile/EditProfile";
 import { Separator } from "@/components/ui/separator";
+import { QueryClient } from "@tanstack/react-query";
+import store from "@/app/store";
+import { fetchUserProfile, userKeys } from "@/api/users/users";
+
+export const loader = (queryClient: QueryClient) => async () => {
+  const auth = store.getState().auth;
+
+  await queryClient.ensureQueryData({
+    queryKey: userKeys.profile(auth.userId),
+    queryFn: fetchUserProfile,
+  });
+
+  return null;
+};
 
 const Profile = () => {
   useDocumentTitle("Your Profile");

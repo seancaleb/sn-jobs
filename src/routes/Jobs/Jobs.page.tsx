@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { QUERY_KEY, fetchJobs, useGetJobs } from "@/api/jobs/jobs";
+import { fetchJobs, jobKeys, useGetJobs } from "@/api/jobs/jobs";
 import JobList from "@/components/Jobs/JobList";
 import { QueryClient } from "@tanstack/react-query";
 import { ActionFunctionArgs, useLoaderData } from "react-router-dom";
@@ -9,10 +9,10 @@ import JobPost from "@/components/Jobs/JobPost/JobPost";
 import SearchJob from "@/components/Jobs/SearchJob";
 import { capitalize } from "@/lib/utils";
 import { format } from "date-fns";
-import { Jobs } from "@/api/jobs/jobs.type";
 import JobsFilter from "@/components/Jobs/JobsFilter";
 import { LoaderReturnType } from "@/types";
 import Pagination from "@/components/Pagination";
+import { useEffect } from "react";
 
 export const loader =
   (queryClient: QueryClient) =>
@@ -29,16 +29,12 @@ export const loader =
       Object.assign(queryParams, { page: "1" });
     }
 
-    const QUERY_KEY_PARAMS = Object.entries(queryParams).map(([key, value]) => `${key}=${value}`);
-
     const keyword = url.searchParams.get("keyword");
     const location = url.searchParams.get("location");
 
-    const queryKey = [...QUERY_KEY, ...QUERY_KEY_PARAMS];
-
     const initialData = await queryClient.ensureQueryData({
-      queryKey,
-      queryFn: () => fetchJobs(queryParams),
+      queryKey: jobKeys.filters(queryParams),
+      queryFn: fetchJobs,
     });
 
     return {
@@ -53,10 +49,8 @@ export const loader =
 
 const JobsPage = () => {
   const { initialData, queryParams, search } = useLoaderData() as LoaderReturnType<typeof loader>;
-  const { data } = useGetJobs(queryParams, { initialData });
+  const { data: jobs } = useGetJobs({ queryParams, initialData });
   const isDesktop = useMediaQuery("(min-width: 40em)");
-
-  const jobs = data as Jobs;
 
   const searchResultsMsg = () => {
     const { keyword, location } = search;
@@ -92,6 +86,10 @@ const JobsPage = () => {
   };
 
   useDocumentTitle(title());
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [jobs]);
 
   return (
     <>

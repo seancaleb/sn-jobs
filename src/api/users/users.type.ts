@@ -11,6 +11,7 @@ export const userSchema = z.object({
   userId: z.string(),
   exp: z.number(),
   bookmark: z.string().array().optional(),
+  applications: z.string().array().optional(),
 });
 
 export const getProfileSchemaResponse = z.object({
@@ -21,6 +22,7 @@ export const getProfileSchemaResponse = z.object({
     role: true,
     userId: true,
     bookmark: true,
+    applications: true,
   }).shape,
 });
 

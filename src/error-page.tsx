@@ -1,4 +1,5 @@
 import { useRouteError, isRouteErrorResponse } from "react-router-dom";
+import { isAPIResponseError } from "@/lib/utils";
 
 const ErrorPage = () => {
   const error = useRouteError();
@@ -11,16 +12,17 @@ const ErrorPage = () => {
     errorMessage = error.message;
   } else if (typeof error === "string") {
     errorMessage = error;
+  } else if (isAPIResponseError(error)) {
+    errorMessage = error.message;
   } else {
     console.error(error);
-
     errorMessage = "Unknown error";
   }
 
   return (
-    <div id="error-page">
-      <h1>Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
+    <div id="error-page" className="section-padding text-center space-y-1">
+      <h1 className="text-4xl font-bold tracking-[-.5px]">Oops!</h1>
+      <p className="text-lg text-primary">Sorry, an unexpected error has occurred.</p>
       <p>
         <i>{errorMessage}</i>
       </p>
