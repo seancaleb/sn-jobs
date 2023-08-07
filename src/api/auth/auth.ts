@@ -1,5 +1,5 @@
 import apiClient, { APIResponseSuccess, APIResponseError } from "@/services/apiClient";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LoginCredentials, Token, RegisterCredentials, parsedTokenSchema } from "./auth.type";
 import jwt_decode from "jwt-decode";
 import useAuth from "@/features/auth/useAuth";
@@ -63,10 +63,12 @@ export const logoutUserRequest = async () => {
 export const useLogoutUser = () => {
   const navigate = useNavigate();
   const { logoutUser } = useAuth();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: logoutUserRequest,
     onSuccess: () => {
+      queryClient.removeQueries();
       logoutUser();
       navigate("/", { replace: true });
     },
