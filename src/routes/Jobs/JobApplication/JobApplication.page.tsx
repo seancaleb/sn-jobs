@@ -37,7 +37,7 @@ export const loader =
     };
   };
 
-const JobApplicationPage = () => {
+const JobApplication = () => {
   const params = useParams<{ jobId: string }>();
   const data = useLoaderData() as LoaderReturnType<typeof loader>;
   const initialJobData = (data as { initialJobData: JobDetails }).initialJobData;
@@ -51,4 +51,4 @@ const JobApplicationPage = () => {
   );
 };
 
-export default JobApplicationPage;
+export default JobApplication;

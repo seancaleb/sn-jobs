@@ -2,7 +2,7 @@
 import { fetchJobApplications, useGetJobApplications } from "@/api/jobs/jobs";
 import store from "@/app/store";
 import { Button } from "@/components/ui/button";
-import { capitalize, formatJobPostTime } from "@/lib/utils";
+import { formatJobPostTime } from "@/lib/utils";
 import { LoaderReturnType } from "@/types";
 import { QueryClient } from "@tanstack/react-query";
 import { MoveRight } from "lucide-react";
@@ -38,8 +38,8 @@ const AppliedJobs = () => {
       {data.total === 0 && (
         <div className="py-12 text-center space-y-4">
           <div className="space-y-1">
-            <p className="font-medium text-primary">No applied jobs yet</p>
-            <p className="text-sm">Keep track of applied jobs here.</p>
+            <p className="text-lg tracking-tight font-bold text-primary">No applied jobs yet</p>
+            <p className="text-[0.9375rem]">Keep track of applied jobs here.</p>
           </div>
           <Button onClick={() => navigate("/jobs")}>
             Find Jobs
@@ -50,8 +50,6 @@ const AppliedJobs = () => {
 
       {data.jobApplications.map((application) => {
         const jobDatePosted = new Date(application.job.createdAt);
-
-        console.log(application);
         const formattedJobDate = formatJobPostTime(jobDatePosted);
 
         return (
@@ -74,7 +72,7 @@ const AppliedJobs = () => {
                 </div>
 
                 <div>
-                  <Badge>{capitalize(application.status)}</Badge>
+                  <Badge>{application.status}</Badge>
                 </div>
               </CardHeader>
             </Card>

@@ -13,14 +13,15 @@ const JobList = ({ jobs }: JobListProps) => {
   const keyword = searchParams.get("keyword");
   const location = searchParams.get("location");
 
-  if (!searchParams.get("jobId")) {
-    updateQueryParams(setSearchParams, { key: "jobId", value: jobs[0].jobId });
-  }
+  // if (!searchParams.get("jobId")) {
+  //   updateQueryParams(setSearchParams, { key: "jobId", value: jobs[0].jobId });
+  // }
 
   useEffect(() => {
     if (jobs[0]) {
       updateQueryParams(setSearchParams, { key: "jobId", value: jobs[0].jobId });
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobs, keyword, location]);
 
