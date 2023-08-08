@@ -1,7 +1,7 @@
 import { useRouteError, isRouteErrorResponse } from "react-router-dom";
 import { isAPIResponseError } from "@/lib/utils";
 
-const ErrorPage = () => {
+const ErrorRoute = () => {
   const error = useRouteError();
   let errorMessage: string;
 
@@ -30,4 +30,4 @@ const ErrorPage = () => {
   );
 };
 
-export default ErrorPage;
+export default ErrorRoute;

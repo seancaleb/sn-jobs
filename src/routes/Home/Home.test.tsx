@@ -1,7 +1,7 @@
 import { screen } from "@/lib/test-utils";
 import { describe, expect, it } from "vitest";
 import user from "@testing-library/user-event";
-import Home from "./Home";
+import Home from "./Home.page";
 import { render as rtlRender } from "@testing-library/react";
 
 describe("Home (Isolated)", () => {

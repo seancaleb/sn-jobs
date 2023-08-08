@@ -47,7 +47,7 @@ export const loader =
     };
   };
 
-const JobsPage = () => {
+const Jobs = () => {
   const { initialData, queryParams, search } = useLoaderData() as LoaderReturnType<typeof loader>;
   const { data: jobs } = useGetJobs({ queryParams, initialData });
   const isDesktop = useMediaQuery("(min-width: 40em)");
@@ -93,7 +93,7 @@ const JobsPage = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center space-y-6 py-12 border-b border-slate-200">
+      <div className="flex flex-col items-center space-y-6 py-8 border-b border-slate-200">
         <div className="text-3xl tracking-tight font-bold text-center">
           Explore Job Opportunities
         </div>
@@ -154,4 +154,4 @@ const JobsPage = () => {
   );
 };
 
-export default JobsPage;
+export default Jobs;

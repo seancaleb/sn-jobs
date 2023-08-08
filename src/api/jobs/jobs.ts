@@ -28,7 +28,7 @@ import { selectAuthStatus } from "@/features/auth/authSlice";
 import { userKeys } from "../users/users";
 import { BookmarkedJobs, GetUserProfileResponse } from "../users/users.type";
 import { JobApplicationValues as JobApplicationData } from "@/routes/Jobs/JobApplication/JobApplicationForm.schema";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 /**
  * @desc Keys related to users
@@ -106,12 +106,14 @@ export const useGetJobById = ({
   const { toast, dismiss } = useToast();
   const { id: notificationId } = useAppSelector(selectNotification);
   const { initNotificationId } = useNotification();
+  const [searchParams] = useSearchParams();
 
   return useQuery<JobDetails, APIResponseError, JobDetails, ReturnType<(typeof jobKeys)["detail"]>>(
     {
       queryKey: jobKeys.detail(jobId),
       queryFn: fetchJobById,
       initialData,
+      keepPreviousData: !searchParams.get("jobId"),
       enabled: !!jobId,
       onError: ({ message }) => {
         if (notificationId) dismiss(notificationId);

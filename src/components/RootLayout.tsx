@@ -5,21 +5,19 @@ import TopLoadingBar from "@/components/TopLoadingBar";
 import Footer from "@/components/Footer/Footer";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
-import { useAppSelector } from "./app/hooks";
+import { useAppSelector } from "../app/hooks";
 import { selectNotification } from "@/features/notification/notificationSlice";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect } from "react";
 import ScrollToTop from "@/components/ScrollToTop";
 
-const Root = () => {
+const RootLayout = () => {
   const location = useLocation();
   const { id } = useAppSelector(selectNotification);
   const { dismiss } = useToast();
   const matchers = useMatch("/jobs/:jobId");
-
   const isSignInRoute = location.pathname === "/sign-in";
   const isSignUpRoute = location.pathname === "/sign-up";
-
   const isAuthRoute = isSignInRoute || isSignUpRoute;
 
   useEffect(() => {
@@ -48,4 +46,4 @@ const Root = () => {
   );
 };
 
-export default Root;
+export default RootLayout;

@@ -14,7 +14,7 @@ import {
 import { Fragment, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Undo2 } from "lucide-react";
-import { GetUserProfileResponse, type BookmarkedJobs } from "@/api/users/users.type";
+import { GetUserProfileResponse } from "@/api/users/users.type";
 import { QueryClient } from "@tanstack/react-query";
 import store from "@/app/store";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
@@ -88,8 +88,8 @@ const BookmarkedJobs = () => {
       {bookmarkedJobs.total === 0 && (
         <div className="py-12 text-center space-y-4">
           <div className="space-y-1">
-            <p className="font-medium text-primary">No bookmarks yet</p>
-            <p className="text-sm">Keep track of bookmarked jobs here.</p>
+            <p className="text-lg tracking-tight font-bold text-primary">No bookmarks yet</p>
+            <p className="text-[0.9375rem]">Keep track of bookmarked jobs here.</p>
           </div>
           <Button onClick={() => navigate("/jobs")}>
             Find Jobs
