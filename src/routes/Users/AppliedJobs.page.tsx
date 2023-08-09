@@ -2,32 +2,37 @@
 import { fetchJobApplications, useGetJobApplications } from "@/api/jobs/jobs";
 import store from "@/app/store";
 import { Button } from "@/components/ui/button";
-import { capitalize, formatJobPostTime } from "@/lib/utils";
+import { formatJobPostTime } from "@/lib/utils";
 import { LoaderReturnType } from "@/types";
 import { QueryClient } from "@tanstack/react-query";
 import { MoveRight } from "lucide-react";
 import { Fragment } from "react";
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { Link, redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { userKeys } from "@/api/users/users";
 import { useDocumentTitle } from "@mantine/hooks";
+import { JobApplications } from "@/api/jobs/jobs.type";
 
 export const loader = (queryClient: QueryClient) => async () => {
   const auth = store.getState().auth;
 
-  const initialData = await queryClient.ensureQueryData({
+  if (!auth.isAuthenticated) return redirect("/");
+
+  const initialJobApplicationsData = await queryClient.ensureQueryData({
     queryKey: userKeys.applications(auth.userId),
     queryFn: fetchJobApplications,
   });
 
   return {
-    initialData,
+    initialJobApplicationsData,
   };
 };
 
 const AppliedJobs = () => {
-  const { initialData } = useLoaderData() as LoaderReturnType<typeof loader>;
+  const loaderData = useLoaderData() as LoaderReturnType<typeof loader>;
+  const initialData = (loaderData as { initialJobApplicationsData: JobApplications })
+    .initialJobApplicationsData;
   const { data } = useGetJobApplications({ initialData });
   const navigate = useNavigate();
 
@@ -38,8 +43,8 @@ const AppliedJobs = () => {
       {data.total === 0 && (
         <div className="py-12 text-center space-y-4">
           <div className="space-y-1">
-            <p className="font-medium text-primary">No applied jobs yet</p>
-            <p className="text-sm">Keep track of applied jobs here.</p>
+            <p className="text-lg tracking-tight font-bold text-primary">No applied jobs yet</p>
+            <p className="text-[0.9375rem]">Keep track of applied jobs here.</p>
           </div>
           <Button onClick={() => navigate("/jobs")}>
             Find Jobs
@@ -50,8 +55,6 @@ const AppliedJobs = () => {
 
       {data.jobApplications.map((application) => {
         const jobDatePosted = new Date(application.job.createdAt);
-
-        console.log(application);
         const formattedJobDate = formatJobPostTime(jobDatePosted);
 
         return (
@@ -74,7 +77,7 @@ const AppliedJobs = () => {
                 </div>
 
                 <div>
-                  <Badge>{capitalize(application.status)}</Badge>
+                  <Badge>{application.status}</Badge>
                 </div>
               </CardHeader>
             </Card>

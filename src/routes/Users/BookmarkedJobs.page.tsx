@@ -14,16 +14,21 @@ import {
 import { Fragment, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Undo2 } from "lucide-react";
-import { GetUserProfileResponse, type BookmarkedJobs } from "@/api/users/users.type";
+import {
+  BookmarkedJobs as BookmarkedJobsType,
+  GetUserProfileResponse,
+} from "@/api/users/users.type";
 import { QueryClient } from "@tanstack/react-query";
 import store from "@/app/store";
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { Link, redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { LoaderReturnType } from "@/types";
 import { JobDetails } from "@/api/jobs/jobs.type";
 import { useDocumentTitle } from "@mantine/hooks";
 
 export const loader = (queryClient: QueryClient) => async () => {
   const auth = store.getState().auth;
+
+  if (!auth.isAuthenticated) return redirect("/");
 
   const bookmarkedJobsData = queryClient.ensureQueryData({
     queryKey: userKeys.bookmarks(auth.userId),
@@ -35,25 +40,34 @@ export const loader = (queryClient: QueryClient) => async () => {
     queryFn: fetchUserProfile,
   });
 
-  const [initialData, initialUserData] = await Promise.all([bookmarkedJobsData, userData]);
+  const [initialBookmarkedJobsData, initialUserData] = await Promise.all([
+    bookmarkedJobsData,
+    userData,
+  ]);
 
   return {
-    initialData,
+    initialBookmarkedJobsData,
     initialUserData,
   };
 };
 
 const BookmarkedJobs = () => {
-  const { initialData, initialUserData } = useLoaderData() as LoaderReturnType<typeof loader>;
+  const loaderData = useLoaderData() as LoaderReturnType<typeof loader>;
+  const initialBookmarkedJobsData = (
+    loaderData as { initialBookmarkedJobsData: BookmarkedJobsType }
+  ).initialBookmarkedJobsData;
   const { data: bookmarkedJobs } = useGetBookmarkedJobs({
-    initialData,
+    initialData: initialBookmarkedJobsData,
   });
+
+  const initialUserData = (loaderData as { initialUserData: GetUserProfileResponse })
+    .initialUserData;
+  const { data } = useGetProfile({ initialData: initialUserData });
+  const user = data as GetUserProfileResponse;
+
   const bookmarkJobMutation = useBookmarkJobPost();
   const [unbookmarkedJobs, setUnbookmarkedJobs] = useState<Set<string>>(new Set());
   const navigate = useNavigate();
-  const { data } = useGetProfile({ initialData: initialUserData });
-
-  const user = data as GetUserProfileResponse;
 
   const handleUnbookmarkJob = (jobId: string) => {
     setUnbookmarkedJobs((prev) => {
@@ -88,8 +102,8 @@ const BookmarkedJobs = () => {
       {bookmarkedJobs.total === 0 && (
         <div className="py-12 text-center space-y-4">
           <div className="space-y-1">
-            <p className="font-medium text-primary">No bookmarks yet</p>
-            <p className="text-sm">Keep track of bookmarked jobs here.</p>
+            <p className="text-lg tracking-tight font-bold text-primary">No bookmarks yet</p>
+            <p className="text-[0.9375rem]">Keep track of bookmarked jobs here.</p>
           </div>
           <Button onClick={() => navigate("/jobs")}>
             Find Jobs

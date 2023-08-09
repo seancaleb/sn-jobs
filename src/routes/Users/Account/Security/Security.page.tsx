@@ -18,7 +18,7 @@ const Security = () => {
       <div className="flex justify-between items-center gap-6">
         <div className="space-y-1 max-w-md flex-1">
           <div className="tracking-tight font-bold">Change Password</div>
-          <p className="text-[0.9375rem] text-light">
+          <p className="text-[0.9375rem]">
             Enter a new password to update your account's security.
           </p>
         </div>

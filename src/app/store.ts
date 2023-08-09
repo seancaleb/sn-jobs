@@ -1,5 +1,4 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import counter from "@/features/counter/counterSlice";
 import auth from "@/features/auth/authSlice";
 import notification from "@/features/notification/notificationSlice";
 import storage from "redux-persist/lib/storage";
@@ -12,7 +11,6 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  counter,
   auth,
   notification,
 });

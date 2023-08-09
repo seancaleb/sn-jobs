@@ -15,12 +15,12 @@ const links = [
   },
 ];
 
-const UserAccountRoute = () => {
+const AccountSettingsRoute = () => {
   return (
     <div className="py-8 space-y-6">
-      <div className="space-y-1">
-        <div className="text-2xl tracking-tight font-bold">Account Settings</div>
-        <p className="text-[0.9375rem]">Centralize your profile and settings.</p>
+      <div className="space-y-2">
+        <div className="text-3xl tracking-tight font-bold">Account Settings</div>
+        <p>Centralize your profile and settings.</p>
       </div>
 
       <div className="flex gap-6 items-start">
@@ -50,4 +50,4 @@ const UserAccountRoute = () => {
   );
 };
 
-export default UserAccountRoute;
+export default AccountSettingsRoute;

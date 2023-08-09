@@ -24,7 +24,7 @@ export const jobApplicationSchema = z.object({
   applicantId: z.string(),
   resume: z.string(),
   coverLetter: z.string(),
-  status: z.enum(["submitted", "accepted", "rejected", "under review"]),
+  status: z.enum(["Applied", "Application viewed", "Not selected by employer"]),
   applicationId: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),
