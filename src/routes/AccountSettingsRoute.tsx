@@ -15,7 +15,7 @@ const links = [
   },
 ];
 
-const UserAccountRoute = () => {
+const AccountSettingsRoute = () => {
   return (
     <div className="py-8 space-y-6">
       <div className="space-y-2">
@@ -50,4 +50,4 @@ const UserAccountRoute = () => {
   );
 };
 
-export default UserAccountRoute;
+export default AccountSettingsRoute;
