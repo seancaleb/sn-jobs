@@ -39,9 +39,9 @@ export const loader =
 
 const JobApplication = () => {
   const params = useParams<{ jobId: string }>();
-  const data = useLoaderData() as LoaderReturnType<typeof loader>;
-  const initialJobData = (data as { initialJobData: JobDetails }).initialJobData;
-  const { data: jobData } = useGetJobById({ initialData: initialJobData, jobId: params.jobId });
+  const loaderData = useLoaderData() as LoaderReturnType<typeof loader>;
+  const initialData = (loaderData as { initialJobData: JobDetails }).initialJobData;
+  const { data: jobData } = useGetJobById({ initialData, jobId: params.jobId });
   const job = jobData as JobDetails;
 
   return (
