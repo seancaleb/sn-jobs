@@ -2,7 +2,7 @@ import { Link, Outlet, useMatch } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const TabbedJobsRoute = () => {
-  const matchIndex = useMatch("/:role/*");
+  const matchIndex = useMatch("/jobseekers/*");
   const path = matchIndex?.params["*"] || "";
 
   return (
