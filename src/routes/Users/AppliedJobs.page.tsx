@@ -7,27 +7,32 @@ import { LoaderReturnType } from "@/types";
 import { QueryClient } from "@tanstack/react-query";
 import { MoveRight } from "lucide-react";
 import { Fragment } from "react";
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { Link, redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { userKeys } from "@/api/users/users";
 import { useDocumentTitle } from "@mantine/hooks";
+import { JobApplications } from "@/api/jobs/jobs.type";
 
 export const loader = (queryClient: QueryClient) => async () => {
   const auth = store.getState().auth;
 
-  const initialData = await queryClient.ensureQueryData({
+  if (!auth.isAuthenticated) return redirect("/");
+
+  const initialJobApplicationsData = await queryClient.ensureQueryData({
     queryKey: userKeys.applications(auth.userId),
     queryFn: fetchJobApplications,
   });
 
   return {
-    initialData,
+    initialJobApplicationsData,
   };
 };
 
 const AppliedJobs = () => {
-  const { initialData } = useLoaderData() as LoaderReturnType<typeof loader>;
+  const loaderData = useLoaderData() as LoaderReturnType<typeof loader>;
+  const initialData = (loaderData as { initialJobApplicationsData: JobApplications })
+    .initialJobApplicationsData;
   const { data } = useGetJobApplications({ initialData });
   const navigate = useNavigate();
 

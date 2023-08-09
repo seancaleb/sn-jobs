@@ -4,20 +4,31 @@ import EditProfile from "@/components/Profile/EditProfile/EditProfile";
 import { Separator } from "@/components/ui/separator";
 import { QueryClient } from "@tanstack/react-query";
 import store from "@/app/store";
-import { fetchUserProfile, userKeys } from "@/api/users/users";
+import { fetchUserProfile, useGetProfile, userKeys } from "@/api/users/users";
+import { redirect, useLoaderData } from "react-router-dom";
+import { LoaderReturnType } from "@/types";
+import { GetUserProfileResponse } from "@/api/users/users.type";
 
 export const loader = (queryClient: QueryClient) => async () => {
   const auth = store.getState().auth;
 
-  await queryClient.ensureQueryData({
+  if (!auth.isAuthenticated) return redirect("/");
+
+  const initialUserData = await queryClient.ensureQueryData({
     queryKey: userKeys.profile(auth.userId),
     queryFn: fetchUserProfile,
   });
 
-  return null;
+  return {
+    initialUserData,
+  };
 };
 
 const Profile = () => {
+  const loaderData = useLoaderData() as LoaderReturnType<typeof loader>;
+  const initialData = (loaderData as { initialUserData: GetUserProfileResponse }).initialUserData;
+
+  useGetProfile({ initialData });
   useDocumentTitle("Your Profile");
 
   return (
