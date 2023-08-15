@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import auth from "@/features/auth/authSlice";
 import notification from "@/features/notification/notificationSlice";
+import recentSearches from "@/features/recent-searches/recentSearchesSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 
@@ -13,6 +14,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth,
   notification,
+  recentSearches,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

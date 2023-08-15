@@ -16,8 +16,8 @@ const AuthHeader = ({ title, description }: AuthHeaderProps) => {
       </NavLink>
 
       <div className="text-center space-y-2">
-        <div className="text-4xl font-bold tracking-[-.5px]">{title}</div>
-        <p className="text-lg">{description}</p>
+        <div className="text-3xl sm:text-4xl font-bold">{title}</div>
+        <p className="sm:text-lg">{description}</p>
       </div>
     </>
   );

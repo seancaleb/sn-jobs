@@ -35,7 +35,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className="p-8 border border-slate-200 rounded-md max-w-md w-full">
+    <div className="p-8 border border-border rounded-md max-w-md w-full">
       <Form {...form}>
         <form
           id="login-form"

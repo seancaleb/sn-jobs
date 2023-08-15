@@ -17,7 +17,7 @@ type UnsavedChangesDialogProps = {
 const UnsavedChangesDialog = ({ isOpen, setIsOpen, onClose }: UnsavedChangesDialogProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-sm">
+      <DialogContent className="max-w-sm">
         <DialogHeader>
           <DialogTitle>Discard changes?</DialogTitle>
           <DialogDescription>

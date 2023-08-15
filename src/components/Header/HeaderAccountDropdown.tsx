@@ -6,20 +6,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { Bookmark, Briefcase, ChevronDown, LogOut, Settings } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useLogoutUser } from "@/api/auth/auth";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "@/app/hooks";
 import { selectAuthStatus } from "@/features/auth/authSlice";
-import { useGetProfile } from "@/api/users/users";
 import { Skeleton } from "@/components/ui/skeleton";
 import { capitalize } from "@/lib/utils";
+import { useMediaQuery } from "@mantine/hooks";
+import { useUserProfile } from "@/hooks";
 
 const HeaderAccountDropdown = () => {
   const { mutate } = useLogoutUser();
   const auth = useAppSelector(selectAuthStatus);
-  const { data: user, isSuccess } = useGetProfile();
+  const isDesktop = useMediaQuery("(min-width: 64rem)");
+  const user = useUserProfile();
 
   const handleLogoutUser = () => {
     mutate();
@@ -33,12 +35,12 @@ const HeaderAccountDropdown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex space-x-1 items-center text-sm">
-        <span>My Account</span> <ChevronDown className="h-4 w-4" />
+        <span>My Account</span> <ChevronDown className="h-4 w-4 ml-2" />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>
         <DropdownMenuLabel>
-          {!isSuccess ? (
+          {!user ? (
             <>
               <Skeleton className="h-4 w-32 mb-2" />
               <Skeleton className="h-4 w-14" />
@@ -57,28 +59,38 @@ const HeaderAccountDropdown = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        {auth.role === "user" && (
+        {isDesktop ? (
           <>
-            <Link to={pathRoute("applied-jobs")}>
-              <DropdownMenuItem>Applied Jobs</DropdownMenuItem>
-            </Link>
-            <Link to={pathRoute("bookmarked-jobs")}>
-              <DropdownMenuItem>Bookmarked Jobs</DropdownMenuItem>
+            {auth.role === "user" && (
+              <>
+                <Link to={pathRoute("applied-jobs")}>
+                  <DropdownMenuItem>
+                    <Briefcase className="h-4 w-4 mr-2" />
+                    Applied Jobs
+                  </DropdownMenuItem>
+                </Link>
+                <Link to={pathRoute("bookmarked-jobs")}>
+                  <DropdownMenuItem>
+                    <Bookmark className="h-4 w-4 mr-2" />
+                    Bookmarked Jobs
+                  </DropdownMenuItem>
+                </Link>
+              </>
+            )}
+            <Link to={pathRoute("account/profile")}>
+              <DropdownMenuItem>
+                <Settings className="h-4 w-4 mr-2" />
+                Settings
+              </DropdownMenuItem>
             </Link>
           </>
-        )}
-        {auth.role === "employer" && (
-          <Link to={pathRoute("job-listings")}>
-            <DropdownMenuItem>My Job Listings</DropdownMenuItem>
-          </Link>
-        )}
-
-        <Link to={pathRoute("account/profile")}>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-        </Link>
+        ) : null}
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogoutUser}>Sign Out</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogoutUser}>
+          <LogOut className="h-4 w-4 mr-2" />
+          Logout
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
