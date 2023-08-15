@@ -1,9 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Local fonts  */
-@font-face {
+/* @font-face {
   font-family: HelveticaNeue-Cyr;
   src: url(./assets/fonts/HelveticaNeueCyr-Bold.otf);
   font-weight: 700;
@@ -19,7 +21,7 @@
   font-family: HelveticaNeue-Cyr;
   src: url(./assets/fonts/HelveticaNeueCyr-Roman.otf);
   font-weight: 400;
-}
+} */
 
 @layer base {
   :root {
@@ -56,16 +58,16 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222.2 84% 2.9%;
     --foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222.2 84% 2.9%;
     --popover-foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 222.2 84% 2.9%;
     --card-foreground: 210 40% 98%;
 
     --border: 217.2 32.6% 17.5%;
@@ -89,10 +91,10 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border tracking-tight;
   }
   body {
-    @apply bg-background text-foreground font-helvetica-cyr;
+    @apply dark bg-background text-foreground font-helvetica-cyr;
   }
 
   p {
