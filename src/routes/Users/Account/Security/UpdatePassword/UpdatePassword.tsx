@@ -19,6 +19,7 @@ import UnsavedChangesDialog from "@/components/UnsavedChangesDialog";
 import { useUpdatePassword } from "@/api/users/users";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import PasswordVisibilityToggle from "@/components/PasswordVisibilityToggle/PasswordVisibilityToggle";
+import Prompt from "@/components/Prompt";
 
 const UpdatePassword = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -78,7 +79,7 @@ const UpdatePasswordDialog = ({ isOpen, setIsOpen }: UpdatePasswordProps) => {
 
   const handleEditOnClose = () => {
     if (isDirty) {
-      setIsOpenUnsavedChanges(true);
+      updatePasswordMutation.isLoading ? null : setIsOpenUnsavedChanges(true);
     } else {
       setIsOpen(false);
     }
@@ -109,6 +110,7 @@ const UpdatePasswordDialog = ({ isOpen, setIsOpen }: UpdatePasswordProps) => {
 
   return (
     <>
+      <Prompt hasUnsavedChanges={isDirty && isOpen} />
       <Dialog open={isOpen} onOpenChange={handleEditOnClose}>
         <DialogContent className="max-w-md">
           <DialogHeader>
@@ -132,6 +134,9 @@ const UpdatePasswordDialog = ({ isOpen, setIsOpen }: UpdatePasswordProps) => {
                 type={isVisible ? "text" : "password"}
                 label="Old password"
                 placeholder="Enter your old password"
+                InputProps={{
+                  disabled: updatePasswordMutation.isLoading,
+                }}
               >
                 <PasswordVisibilityToggle
                   isVisible={isVisible}
@@ -145,6 +150,9 @@ const UpdatePasswordDialog = ({ isOpen, setIsOpen }: UpdatePasswordProps) => {
                 type="password"
                 label="New password"
                 placeholder="Enter your new password"
+                InputProps={{
+                  disabled: updatePasswordMutation.isLoading,
+                }}
               />
 
               <FormInputField
@@ -153,22 +161,27 @@ const UpdatePasswordDialog = ({ isOpen, setIsOpen }: UpdatePasswordProps) => {
                 type="password"
                 label="Confirm password"
                 placeholder="Confirm your new password"
+                InputProps={{
+                  disabled: updatePasswordMutation.isLoading,
+                }}
               />
 
               <Button type="submit" disabled={updatePasswordMutation.isLoading}>
                 {updatePasswordMutation.isLoading && <LoaderSpinner />}
-                Update Password
+                Save Changes
               </Button>
             </form>
           </Form>
         </DialogContent>
       </Dialog>
 
-      <UnsavedChangesDialog
-        isOpen={isOpenUnsavedChanges}
-        setIsOpen={setIsOpenUnsavedChanges}
-        onClose={handleUnsavedOnClose}
-      />
+      {updatePasswordMutation.isLoading ? null : (
+        <UnsavedChangesDialog
+          isOpen={isOpenUnsavedChanges}
+          setIsOpen={setIsOpenUnsavedChanges}
+          onClose={handleUnsavedOnClose}
+        />
+      )}
     </>
   );
 };
