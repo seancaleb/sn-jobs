@@ -59,7 +59,7 @@ const ConfirmDeletionDialog = ({ isOpen, setIsOpen }: ConfirmDeletionDialogProps
   };
 
   const handleDeleteOnClose = () => {
-    setIsOpen(false);
+    deleteProfileMutation.isLoading ? null : setIsOpen(false);
   };
 
   useEffect(() => {
@@ -70,45 +70,50 @@ const ConfirmDeletionDialog = ({ isOpen, setIsOpen }: ConfirmDeletionDialogProps
   }, [isOpen, clearErrors, reset]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleDeleteOnClose}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle>Delete account</DialogTitle>
-          <DialogDescription>
-            Are you sure you want to delete your account? This action cannot be undone.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form
-            id="delete-profile-form"
-            role="form"
-            noValidate
-            onSubmit={handleSubmit(onSubmit)}
-            className="space-y-8 flex flex-col"
-          >
-            <FormInputField
-              control={control}
-              name="password"
-              type="password"
-              placeholder="Enter your password"
-            />
+    <>
+      <Dialog open={isOpen} onOpenChange={handleDeleteOnClose}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Delete account</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete your account? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form
+              id="delete-profile-form"
+              role="form"
+              noValidate
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-8 flex flex-col"
+            >
+              <FormInputField
+                control={control}
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                InputProps={{
+                  disabled: deleteProfileMutation.isLoading,
+                }}
+              />
 
-            <div className="self-end space-x-2">
-              <Button variant="ghost" onClick={handleDeleteOnClose} type="button">
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                type="submit"
-                disabled={deleteProfileMutation.isLoading}
-              >
-                {deleteProfileMutation.isLoading && <LoaderSpinner />}
-                Confirm Deletion
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              <div className="self-end space-x-2">
+                <Button variant="ghost" onClick={handleDeleteOnClose} type="button">
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  type="submit"
+                  disabled={deleteProfileMutation.isLoading}
+                >
+                  {deleteProfileMutation.isLoading && <LoaderSpinner />}
+                  Confirm Deletion
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
