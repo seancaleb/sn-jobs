@@ -3,20 +3,20 @@ import { z } from "zod";
 export const editProfileSchema = z.object({
   firstName: z
     .string()
-    .nonempty("First name is required")
-    .min(2, "Must be at least 2 characters long")
-    .max(50, "Cannot exceed 50 characters")
+    .nonempty("Please fill in your first name.")
+    .min(2, "First name should be at least 2 characters long.")
+    .max(50, "First name cannot exceed 50 characters.")
     .transform((str) => str.trim()),
   lastName: z
     .string()
-    .nonempty("Last name is required")
-    .min(2, "Must be at least 2 characters long")
-    .max(50, "Cannot exceed 50 characters")
+    .nonempty("Please fill in your last name.")
+    .min(2, "Last name should be at least 2 characters long.")
+    .max(50, "Last name cannot exceed 50 characters.")
     .transform((str) => str.trim()),
   email: z
     .string()
-    .nonempty("Email is required")
-    .email("Please enter a valid email")
+    .nonempty("Please fill in your email.")
+    .email("Please enter a valid email.")
     .transform((str) => str.trim()),
 });
 
