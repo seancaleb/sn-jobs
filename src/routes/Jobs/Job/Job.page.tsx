@@ -59,7 +59,7 @@ const Job = () => {
 
   return (
     <div className="py-8 space-y-6">
-      <div className="flex gap-x-6 items-start">
+      <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
         <Outlet />
 
         <JobPostView job={job} user={user} isApplicationPage={isApplicationPage} />

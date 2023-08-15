@@ -4,7 +4,7 @@ import { fetchJobs, jobKeys, useGetJobs } from "@/api/jobs/jobs";
 import JobList from "@/components/Jobs/JobList";
 import { QueryClient } from "@tanstack/react-query";
 import { ActionFunctionArgs, useLoaderData } from "react-router-dom";
-import { useDocumentTitle, useMediaQuery } from "@mantine/hooks";
+import { useDocumentTitle } from "@mantine/hooks";
 import JobPost from "@/components/Jobs/JobPost/JobPost";
 import SearchJob from "@/components/Jobs/SearchJob";
 import { capitalize } from "@/lib/utils";
@@ -13,6 +13,8 @@ import JobsFilter from "@/components/Jobs/JobsFilter";
 import { LoaderReturnType } from "@/types";
 import Pagination from "@/components/Pagination";
 import { useEffect } from "react";
+import useRecentSearches from "@/features/recent-searches/useRecentSearches";
+import RecentSearches from "@/features/recent-searches/RecentSearches";
 
 export const loader =
   (queryClient: QueryClient) =>
@@ -50,7 +52,7 @@ export const loader =
 const Jobs = () => {
   const { initialData, queryParams, search } = useLoaderData() as LoaderReturnType<typeof loader>;
   const { data: jobs } = useGetJobs({ queryParams, initialData });
-  const isDesktop = useMediaQuery("(min-width: 40em)");
+  const { addSearchKeywordEntry } = useRecentSearches();
 
   const searchResultsMsg = () => {
     const { keyword, location } = search;
@@ -75,28 +77,30 @@ const Jobs = () => {
     if (keyword && location) {
       return `${capitalize(keyword)} Work, Jobs in ${capitalize(
         location
-      )} - ${formattedDate} | SNJOBS`;
+      )} - ${formattedDate} - SNJOBS`;
     } else if (keyword) {
-      return `${capitalize(keyword)} Work, Jobs - ${formattedDate} | SNJOBS`;
+      return `${capitalize(keyword)} Work, Jobs - ${formattedDate} - SNJOBS`;
     } else if (location) {
-      return `Work, Jobs in ${capitalize(location)} - ${formattedDate} | SNJOBS`;
+      return `Work, Jobs in ${capitalize(location)} - ${formattedDate} - SNJOBS`;
     } else {
-      return `Job Search | SNJOBS`;
+      return `Job Search - SNJOBS`;
     }
   };
 
   useDocumentTitle(title());
 
   useEffect(() => {
+    if (search.keyword) {
+      addSearchKeywordEntry(search.keyword);
+    }
     window.scrollTo(0, 0);
-  }, [jobs]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobs, search.keyword]);
 
   return (
     <>
-      <div className="flex flex-col items-center space-y-6 py-8 border-b border-slate-200">
-        <div className="text-3xl tracking-tight font-bold text-center">
-          Explore Job Opportunities
-        </div>
+      <div className="flex flex-col items-center space-y-6 py-8 border-b border-border">
+        <div className="text-3xl font-semibold text-center">Explore Job Opportunities</div>
 
         {/* Search a job  */}
         <SearchJob {...search} />
@@ -120,7 +124,7 @@ const Jobs = () => {
 
           <div className="relative flex gap-x-6 items-start">
             {/* Job List  */}
-            <div className="max-w-md w-full space-y-6">
+            <div className="lg:max-w-md w-full space-y-6">
               <JobList jobs={jobs.jobs} />
               {jobs.totalPages !== 1 ? (
                 <Pagination total={jobs.totalPages} pageNumber={jobs.pageNumber} />
@@ -128,7 +132,9 @@ const Jobs = () => {
             </div>
 
             {/* Job Posting  */}
-            {isDesktop && <JobPost />}
+            <div className="w-full hidden lg:block lg:sticky lg:top-20 lg:bottom-20">
+              <JobPost />
+            </div>
           </div>
         </div>
       ) : (
@@ -136,7 +142,7 @@ const Jobs = () => {
           <div className="max-w-md w-full">
             <p>
               The search{" "}
-              <span className="font-bold text-primary">
+              <span className="font-medium text-primary">
                 {search.keyword ? `${search.keyword} jobs` : ""}{" "}
                 {search.location ? `in ${capitalize(search.location)}` : ""}
               </span>{" "}
@@ -145,9 +151,7 @@ const Jobs = () => {
           </div>
 
           {/* Recent Searches  */}
-          <div className="rounded-md border border-slate-200 p-6 sm:max-w-sm w-full">
-            <p>Recent searches</p>
-          </div>
+          <RecentSearches />
         </div>
       )}
     </>

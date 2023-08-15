@@ -1,25 +1,25 @@
 import { nanoid } from "@reduxjs/toolkit";
-import { Lock, User as ProfileUser } from "lucide-react";
+import { Bookmark, Briefcase } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 
 const links = [
   {
-    label: "My Profile",
-    path: "profile",
-    icon: <ProfileUser className="h-4 w-4 mr-3" />,
+    label: "Applied Jobs",
+    path: "applied-jobs",
+    icon: <Briefcase className="h-4 w-4 mr-3" />,
   },
   {
-    label: "Privacy & Security",
-    path: "privacy-and-security",
-    icon: <Lock className="h-4 w-4 mr-3" />,
+    label: "Bookmarked Jobs",
+    path: "bookmarked-jobs",
+    icon: <Bookmark className="h-4 w-4 mr-3" />,
   },
 ];
 
-const AccountSettingsRoute = () => {
+const PersonalizedJobsRoute = () => {
   return (
     <div className="py-8 space-y-6">
       <div className="flex gap-6 items-start">
-        <aside className="p-6 rounded-md border border-border max-w-[16rem] w-full hidden lg:block">
+        <aside className="sticky top-4 p-6 rounded-md border border-border max-w-[16rem] w-full hidden lg:block">
           <ul className="space-y-1">
             {links.map(({ label, path, icon }) => (
               <li key={nanoid()}>
@@ -47,4 +47,4 @@ const AccountSettingsRoute = () => {
   );
 };
 
-export default AccountSettingsRoute;
+export default PersonalizedJobsRoute;

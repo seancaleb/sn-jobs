@@ -29,26 +29,28 @@ const Profile = () => {
   const initialData = (loaderData as { initialUserData: GetUserProfileResponse }).initialUserData;
 
   useGetProfile({ initialData });
-  useDocumentTitle("Your Profile");
+  useDocumentTitle("Account Profile - SNJOBS");
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <div className="space-y-1">
-        <div className="text-lg tracking-tight font-bold">My Profile</div>
-        <p className="text-[0.9375rem] text-light">Centralize your profile and settings.</p>
+        <div className="text-xl sm:text-2xl font-semibold">My Profile</div>
+        <p className="text-sm">Centralize your profile and settings.</p>
       </div>
 
       <Separator orientation="horizontal" />
 
-      <div className="flex justify-between items-center gap-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-6">
         <div className="space-y-1 max-w-lg flex-1">
-          <div className="tracking-tight font-bold">Personal Information</div>
-          <p className="text-[0.9375rem] text-light">
+          <div className="font-medium">Personal Information</div>
+          <p className="text-sm">
             Review and update your personal details to keep your account up-to-date and accurate.
           </p>
         </div>
 
-        <EditProfile />
+        <div className="flex flex-col xs:block">
+          <EditProfile />
+        </div>
       </div>
     </div>
   );

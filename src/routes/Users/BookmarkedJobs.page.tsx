@@ -24,6 +24,7 @@ import { Link, redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { LoaderReturnType } from "@/types";
 import { JobDetails } from "@/api/jobs/jobs.type";
 import { useDocumentTitle } from "@mantine/hooks";
+import { Separator } from "@/components/ui/separator";
 
 export const loader = (queryClient: QueryClient) => async () => {
   const auth = store.getState().auth;
@@ -95,15 +96,22 @@ const BookmarkedJobs = () => {
     });
   };
 
-  useDocumentTitle("Bookmarked Jobs");
+  useDocumentTitle("Bookmarked Jobs - SNJOBS");
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-5">
+      <div className="space-y-1">
+        <div className="text-xl sm:text-2xl font-semibold">Bookmarked Jobs</div>
+        <p className="text-sm">Manage all your bookmarked jobs here.</p>
+      </div>
+
+      <Separator orientation="horizontal" />
+
       {bookmarkedJobs.total === 0 && (
-        <div className="py-12 text-center space-y-4">
+        <div className="py-8 text-center space-y-4">
           <div className="space-y-1">
-            <p className="text-lg tracking-tight font-bold text-primary">No bookmarks yet</p>
-            <p className="text-[0.9375rem]">Keep track of bookmarked jobs here.</p>
+            <p className="text-primary font-medium">No bookmarks yet</p>
+            <p className="text-sm">Keep track of bookmarked jobs here.</p>
           </div>
           <Button onClick={() => navigate("/jobs")}>
             Find Jobs
@@ -120,31 +128,39 @@ const BookmarkedJobs = () => {
           <Fragment key={job.jobId}>
             {!unbookmarkedJobs.has(job.jobId) && (
               <Card className="w-full">
-                <CardHeader className="flex flex-row gap-6 space-y-0">
-                  <Link to={`/jobs/${job.jobId}`} className="space-y-1.5 flex-1 group">
-                    <CardTitle className="text-lg leading-[1.2] group-hover:underline">
-                      {job.title}
-                    </CardTitle>
+                <CardHeader className="flex flex-col sm:flex-row gap-6 space-y-0">
+                  <Link to={`/jobs/${job.jobId}`} className="space-y-1 flex-1 group">
+                    <CardTitle className="text-lg group-hover:underline">{job.title}</CardTitle>
 
-                    <div className="space-y-1 text-sm">
-                      <p className="text-primary text-base">
-                        {job.employerName} &middot; {job.location}
-                      </p>
-                      <p>Posted {formattedJobDate}</p>
+                    <div className="space-y-2">
+                      <div className="flex flex-wrap gap-2 text-sm items-center">
+                        <p className="text-primary">{job.employerName}</p>
+                        <Separator className="h-4" orientation="vertical" />
+                        <p className="text-primary"> {job.location}</p>
+                      </div>
+
+                      <p className="text-xs">Posted {formattedJobDate}</p>
                     </div>
                   </Link>
 
-                  <div className="flex gap-x-3">
-                    {user.applications?.find((id) => id === job.jobId) ? (
-                      <Button disabled>
+                  <div className="flex flex-wrap gap-3">
+                    {user?.applications?.find((id) => id === job.jobId) ? (
+                      <Button className="flex-1" disabled>
                         <Send className="mr-2 h-4 w-4" /> Application Submitted
                       </Button>
                     ) : (
-                      <Button onClick={() => navigate(`/jobs/${job.jobId}/apply`)}>
+                      <Button
+                        className="flex-1"
+                        onClick={() => navigate(`/jobs/${job.jobId}/apply`)}
+                      >
                         <Briefcase className="mr-2 h-4 w-4" /> Apply Now
                       </Button>
                     )}
-                    <Button variant="outline" onClick={() => handleUnbookmarkJob(job.jobId)}>
+                    <Button
+                      className="flex-1"
+                      variant="outline"
+                      onClick={() => handleUnbookmarkJob(job.jobId)}
+                    >
                       <Bookmark className="h-4 w-4 fill-teal-500 text-teal-500 mr-2" />
                       Saved
                     </Button>
@@ -157,7 +173,7 @@ const BookmarkedJobs = () => {
               <Alert className="border-teal-500">
                 <span
                   role="button"
-                  className={`absolute right-4 ${
+                  className={`absolute right-4 text-foreground/50 hover:text-foreground ${
                     bookmarkJobMutation.isLoading ? "disable-interactions" : ""
                   }`}
                   onClick={() => handleMutateUnbookmarkJob(job)}

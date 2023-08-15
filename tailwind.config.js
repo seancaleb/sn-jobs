@@ -9,6 +9,14 @@ module.exports = {
     "./src/**/*.{ts,tsx}",
   ],
   theme: {
+    screens: {
+      xs: "375px",
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
+    },
     container: {
       center: true,
       padding: "2rem",
@@ -27,7 +35,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        "helvetica-cyr": ["HelveticaNeue-Cyr", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -78,10 +86,20 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        "chevron-right-down": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(90deg)" },
+        },
+        "chevron-right-normal": {
+          from: { transform: "rotate(90deg)" },
+          to: { transform: "rotate(0deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "chevron-right-down": "chevron-right-down 0.2s ease-out forwards",
+        "chevron-right-normal": "chevron-right-normal 0.2s ease-out forwards",
       },
     },
   },
