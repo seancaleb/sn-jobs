@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const JobPostSkeleton = () => {
   return (
-    <Card className="sticky top-4 bottom-4 w-full">
+    <Card className="w-full">
       <CardHeader>
         <div className="flex justify-between gap-x-4">
           <Skeleton className="h-4 w-64" />
