@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { userKeys } from "@/api/users/users";
 import { useDocumentTitle } from "@mantine/hooks";
 import { JobApplications } from "@/api/jobs/jobs.type";
+import { Separator } from "@/components/ui/separator";
 
 export const loader = (queryClient: QueryClient) => async () => {
   const auth = store.getState().auth;
@@ -36,15 +37,22 @@ const AppliedJobs = () => {
   const { data } = useGetJobApplications({ initialData });
   const navigate = useNavigate();
 
-  useDocumentTitle("Applied Jobs");
+  useDocumentTitle("Applied Jobs - SNJOBS");
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-5">
+      <div className="space-y-1">
+        <div className="text-xl sm:text-2xl font-semibold">Applied Jobs</div>
+        <p className="text-sm">Manage all your applied jobs here.</p>
+      </div>
+
+      <Separator orientation="horizontal" />
+
       {data.total === 0 && (
-        <div className="py-12 text-center space-y-4">
+        <div className="py-8 text-center space-y-4">
           <div className="space-y-1">
-            <p className="text-lg tracking-tight font-bold text-primary">No applied jobs yet</p>
-            <p className="text-[0.9375rem]">Keep track of applied jobs here.</p>
+            <p className="text-primary font-medium">No applied jobs yet</p>
+            <p className="text-sm">Keep track of applied jobs here.</p>
           </div>
           <Button onClick={() => navigate("/jobs")}>
             Find Jobs
@@ -53,37 +61,42 @@ const AppliedJobs = () => {
         </div>
       )}
 
-      {data.jobApplications.map((application) => {
-        const jobDatePosted = new Date(application.job.createdAt);
-        const formattedJobDate = formatJobPostTime(jobDatePosted);
+      <div className="space-y-3">
+        {data.jobApplications.map((application) => {
+          const jobDatePosted = new Date(application.job.createdAt);
+          const formattedJobDate = formatJobPostTime(jobDatePosted);
 
-        return (
-          <Fragment key={application.applicationId}>
-            <Card className="w-full">
-              <CardHeader className="flex flex-row justify-between gap-6 space-y-0">
-                <div className="space-y-1.5">
-                  <Link to={`/jobs/${application.job.jobId}`} className="space-y-1.5 flex-1 group">
-                    <CardTitle className="text-lg leading-[1.2] group-hover:underline">
-                      {application.job.title}
-                    </CardTitle>
+          return (
+            <Fragment key={application.applicationId}>
+              <Card className="w-full">
+                <CardHeader className="flex flex-col sm:flex-row justify-between gap-6 space-y-0">
+                  <div className="space-y-1.5">
+                    <Link to={`/jobs/${application.job.jobId}`} className="space-y-1 flex-1 group">
+                      <CardTitle className="text-lg group-hover:underline">
+                        {application.job.title}
+                      </CardTitle>
 
-                    <div className="space-y-1 text-sm">
-                      <p className="text-primary text-base">
-                        {application.job.employerName} &middot; {application.job.location}
-                      </p>
-                      <p>Posted {formattedJobDate}</p>
-                    </div>
-                  </Link>
-                </div>
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap gap-2 text-sm items-center">
+                          <p className="text-primary">{application.job.employerName}</p>
+                          <Separator className="h-4" orientation="vertical" />
+                          <p className="text-primary"> {application.job.location}</p>
+                        </div>
 
-                <div>
-                  <Badge>{application.status}</Badge>
-                </div>
-              </CardHeader>
-            </Card>
-          </Fragment>
-        );
-      })}
+                        <p className="text-xs">Posted {formattedJobDate}</p>
+                      </div>
+                    </Link>
+                  </div>
+
+                  <div>
+                    <Badge>{application.status}</Badge>
+                  </div>
+                </CardHeader>
+              </Card>
+            </Fragment>
+          );
+        })}
+      </div>
     </div>
   );
 };

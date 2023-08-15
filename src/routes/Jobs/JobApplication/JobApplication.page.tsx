@@ -45,7 +45,7 @@ const JobApplication = () => {
   const job = jobData as JobDetails;
 
   return (
-    <div className="max-w-md w-full">
+    <div className="w-full mb-4 sm:mb-0 lg:max-w-md">
       <JobApplicationForm job={job} />
     </div>
   );
