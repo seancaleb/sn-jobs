@@ -69,8 +69,11 @@ export const useLogoutUser = () => {
     mutationFn: logoutUserRequest,
     onSuccess: () => {
       queryClient.removeQueries();
+      navigate("/");
+      navigate(0);
+    },
+    onMutate: () => {
       logoutUser();
-      navigate("/", { replace: true });
     },
   });
 };
