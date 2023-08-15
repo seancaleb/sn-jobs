@@ -1,18 +1,18 @@
 import { Link, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Menu } from "lucide-react";
-import { useMediaQuery } from "@mantine/hooks";
 import { useAppSelector } from "@/app/hooks";
 import { selectAuthStatus } from "@/features/auth/authSlice";
 import HeaderAccountDropdown from "./HeaderAccountDropdown";
 
 const Header = () => {
-  const isDesktop = useMediaQuery("(min-width: 40em)");
-  const { isAuthenticated, role } = useAppSelector(selectAuthStatus);
+  const { isAuthenticated } = useAppSelector(selectAuthStatus);
 
   return (
-    <header className="h-16 border-b border-slate-200 w-full" aria-label="navigation header">
+    <header
+      className="fixed top-0 left-0 right-0 z-10 bg-background h-16 border-b border-border w-full"
+      aria-label="navigation header"
+    >
       <div className="container h-full flex items-center justify-between">
         <NavLink
           to={isAuthenticated ? "/jobs" : "/"}
@@ -21,54 +21,31 @@ const Header = () => {
           SNJOBS
         </NavLink>
 
-        {isDesktop ? (
-          <nav>
-            <ul aria-label="Navigation Menu List" className="flex space-x-6 items-center">
-              {!isAuthenticated && (
+        <nav>
+          <ul aria-label="Navigation Menu List" className="flex space-x-2 items-center">
+            {!isAuthenticated && (
+              <>
                 <li>
-                  <Button variant="ghost">Job Board</Button>
+                  <Button asChild variant="ghost">
+                    <Link to="sign-in">Sign In</Link>
+                  </Button>
                 </li>
-              )}
 
-              {isAuthenticated && (
+                <li className="self-stretch">
+                  <Separator orientation="vertical" />
+                </li>
+
                 <li>
-                  <div className="flex space-x-2">
-                    {role === "employer" && <Button variant="ghost">Post a Job</Button>}
-                    <Button asChild variant="ghost">
-                      <Link to="jobs">Job Board</Link>
-                    </Button>
-                  </div>
+                  <Button asChild variant="ghost">
+                    <Link to="sign-up">Sign Up</Link>
+                  </Button>
                 </li>
-              )}
+              </>
+            )}
 
-              <li className="self-stretch">
-                <Separator orientation="vertical" />
-              </li>
-
-              {!isAuthenticated && (
-                <li>
-                  <div className="flex space-x-2">
-                    <Button asChild variant="ghost">
-                      <Link to="sign-in">Sign In</Link>
-                    </Button>
-                    <Button asChild variant="ghost">
-                      <Link to="sign-up">Sign Up</Link>
-                    </Button>
-                  </div>
-                </li>
-              )}
-
-              {isAuthenticated && <HeaderAccountDropdown />}
-            </ul>
-          </nav>
-        ) : (
-          <Menu
-            role="graphics-document"
-            aria-label="navigation menu burger"
-            size={32}
-            className="cursor-pointer"
-          />
-        )}
+            {isAuthenticated && <HeaderAccountDropdown />}
+          </ul>
+        </nav>
       </div>
     </header>
   );

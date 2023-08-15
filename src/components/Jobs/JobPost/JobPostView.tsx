@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Briefcase, Bookmark, Send } from "lucide-react";
@@ -44,27 +44,33 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
   }, [user]);
 
   return (
-    <Card className="sticky top-4 bottom-4 w-full">
-      <CardHeader>
-        <div className="flex justify-between gap-x-4">
-          <CardTitle className="text-2xl leading-[1.2]">{job.title}</CardTitle>
-          {applications !== 0 && (
-            <Badge className="bg-teal-50 text-teal-950 hover:bg-teal-100 transition duration-300">
-              <User className="h-4 w-4 mr-1" />
-              {applications} applicant{applications > 1 ? "s" : ""}
-            </Badge>
-          )}
+    <Card className="w-full border-0 sm:border">
+      <CardHeader className="p-0 sm:p-6">
+        <div className="flex flex-wrap justify-between items-center gap-4 mb-2">
+          <CardTitle className="text-2xl">{job.title}</CardTitle>
+          <div className="flex-shrink-0">
+            {applications !== 0 && (
+              <Badge>
+                <User className="h-4 w-4 mr-1" />
+                {applications} applicant{applications > 1 ? "s" : ""}
+              </Badge>
+            )}
+          </div>
         </div>
 
-        <CardDescription>
-          {job.employerName} &middot; {job.location} &middot; {formattedJobDate}
-        </CardDescription>
+        <div className="flex flex-wrap gap-2 text-sm items-center">
+          <p className="text-primary">{job.employerName}</p>
+          <Separator className="h-4" orientation="vertical" />
+          <p className="text-primary"> {job.location}</p>
+        </div>
+
+        <p className="text-xs">Posted {formattedJobDate}</p>
 
         <div className="space-y-6 pt-4">
           {auth.role === "user" && (
-            <div className="flex gap-x-3">
+            <div className="flex flex-wrap gap-3">
               {!isApplicationPage &&
-                (user.applications?.find((id) => id === job.jobId) ? (
+                (user?.applications?.find((id) => id === job.jobId) ? (
                   <Button disabled>
                     <Send className="mr-2 h-4 w-4" /> Application Submitted
                   </Button>
@@ -87,7 +93,7 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
           <Separator orientation="horizontal" />
         </div>
       </CardHeader>
-      <CardContent className="max-h-[70vh] overflow-y-auto text-sm">
+      <CardContent className="overflow-y-auto text-sm px-0 py-6 sm:px-6 sm:pt-0 lg:max-h-[70vh]">
         <div className="space-y-6">
           <div className="space-y-1">
             <div className="underline font-medium">Job description</div>
