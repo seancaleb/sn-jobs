@@ -45,7 +45,7 @@ const MutateJob = ({ mode = "create", job }: MutateJobProps) => {
     resolver: zodResolver(mutateJobSchema),
   });
   const { control, handleSubmit, register, formState } = form;
-  const { errors, isDirty } = formState;
+  const { errors, isDirty, isSubmitSuccessful } = formState;
   const createJobMutation = useCreateNewJobPost();
   const updateJobMutation = useUpdateJobPost();
   const [isOpenUnsavedChanges, setIsOpenUnsavedChanges] = useState(false);
@@ -87,7 +87,7 @@ const MutateJob = ({ mode = "create", job }: MutateJobProps) => {
 
   return (
     <>
-      {isOpenUnsavedChanges ? null : <Prompt hasUnsavedChanges={isDirty} />}
+      {isOpenUnsavedChanges ? null : <Prompt hasUnsavedChanges={isDirty && !isSubmitSuccessful} />}
       <Form {...form}>
         <form
           id="mutate-job-form"
