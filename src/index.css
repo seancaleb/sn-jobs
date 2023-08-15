@@ -94,7 +94,7 @@
     @apply border-border tracking-tight;
   }
   body {
-    @apply dark bg-background text-foreground font-helvetica-cyr;
+    @apply dark bg-background text-foreground font-inter;
   }
 
   p {
