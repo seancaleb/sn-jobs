@@ -22,6 +22,7 @@ import UnsavedChangesDialog from "@/components/UnsavedChangesDialog";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAppSelector } from "@/app/hooks";
 import { selectAuthStatus } from "@/features/auth/authSlice";
+import Prompt from "@/components/Prompt";
 
 const EditProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,17 +81,14 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
 
   const handleEditOnClose = () => {
     if (!isValid || isDirty) {
-      setIsOpenUnsavedChanges(true);
+      updateProfileMutation.isLoading ? null : setIsOpenUnsavedChanges(true);
     } else {
       setIsOpen(false);
     }
   };
 
-  const handleUnsavedOnClose = async () => {
-    reset();
+  const handleUnsavedOnClose = () => {
     setIsOpenUnsavedChanges(false);
-
-    await new Promise((res) => setTimeout(res, 500));
     setIsOpen(false);
   };
 
@@ -115,8 +113,15 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateProfileMutation.isSuccess]);
 
+  useEffect(() => {
+    if (isOpen) {
+      reset();
+    }
+  }, [isOpen, reset]);
+
   return (
     <>
+      <Prompt hasUnsavedChanges={isDirty && isOpen} />
       <Dialog open={isOpen} onOpenChange={handleEditOnClose}>
         <DialogContent className="max-w-md">
           <DialogHeader>
@@ -137,7 +142,10 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
                 control={control}
                 name="firstName"
                 placeholder="Enter your first name"
-                InputProps={{ onBlur: () => trigger("firstName") }}
+                InputProps={{
+                  onBlur: () => trigger("firstName"),
+                  disabled: updateProfileMutation.isLoading,
+                }}
                 label="First name"
               />
 
@@ -145,7 +153,10 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
                 control={control}
                 name="lastName"
                 placeholder="Enter your last name"
-                InputProps={{ onBlur: () => trigger("lastName") }}
+                InputProps={{
+                  onBlur: () => trigger("lastName"),
+                  disabled: updateProfileMutation.isLoading,
+                }}
                 label="Last name"
               />
 
@@ -157,6 +168,7 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
                 placeholder="Enter your email"
                 InputProps={{
                   onBlur: () => trigger("email"),
+                  disabled: updateProfileMutation.isLoading,
                 }}
               />
 
@@ -169,11 +181,13 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
         </DialogContent>
       </Dialog>
 
-      <UnsavedChangesDialog
-        isOpen={isOpenUnsavedChanges}
-        setIsOpen={handleSetIsOpen}
-        onClose={handleUnsavedOnClose}
-      />
+      {updateProfileMutation.isLoading ? null : (
+        <UnsavedChangesDialog
+          isOpen={isOpenUnsavedChanges}
+          setIsOpen={handleSetIsOpen}
+          onClose={handleUnsavedOnClose}
+        />
+      )}
     </>
   );
 };
