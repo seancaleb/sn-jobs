@@ -14,17 +14,19 @@ const RootLayout = () => {
   const location = useLocation();
   const { id } = useAppSelector(selectNotification);
   const { dismiss } = useToast();
-  const matchers = useMatch("/jobs/:jobId");
+  const matchJobDetails = useMatch("/jobs/:jobId");
+  const matchJobListings = useMatch("/employer/job-listings");
+  const matchJobDetailsDashboard = useMatch("/employer/job-listings/:jobId");
   const isEmployer = location.pathname.includes("employer");
   const isAdmin = location.pathname.includes("admin");
   const isEmployerOrAdmin = isEmployer || isAdmin;
 
   useEffect(() => {
     if (id) {
-      if (matchers) return;
+      if (matchJobDetails || matchJobListings || matchJobDetailsDashboard) return;
       dismiss(id);
     }
-  }, [location.pathname, matchers]);
+  }, [location.pathname, matchJobDetails, matchJobListings, matchJobDetailsDashboard]);
 
   return (
     <>
