@@ -8,7 +8,11 @@ import { redirect } from "react-router-dom";
 export const loader = () => {
   const auth = store.getState().auth;
 
-  return auth.isAuthenticated ? redirect("/") : null;
+  return auth.isAuthenticated
+    ? auth.role === "user"
+      ? redirect("/jobs")
+      : redirect("/employer/job-listings")
+    : null;
 };
 
 const Login = () => {
