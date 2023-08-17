@@ -1,3 +1,3 @@
-import Login from "./Login.page";
+import Login, { loader as loginLoader } from "./Login.page";
 
-export { Login };
+export { Login, loginLoader };

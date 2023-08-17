@@ -1,6 +1,14 @@
+/* eslint-disable react-refresh/only-export-components */
+import store from "@/app/store";
 import AuthHeader from "@/components/Header/AuthHeader";
 import SignIn from "@/components/auth/SignIn/SignIn";
 import { useDocumentTitle } from "@mantine/hooks";
+import { redirect } from "react-router-dom";
+
+export const loader = () => {
+  const auth = store.getState().auth;
+  return auth.isAuthenticated ? redirect("/") : null;
+};
 
 const Login = () => {
   useDocumentTitle("Sign In");

@@ -5,8 +5,8 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { QueryClient } from "@tanstack/react-query";
-import { Login } from "@/routes/auth/Login";
-import { Register } from "@/routes/auth/Register";
+import { Login, loginLoader } from "@/routes/auth/Login";
+import { Register, registerLoader } from "@/routes/auth/Register";
 import { Home } from "@/routes/Home";
 import {
   Jobs,
@@ -58,8 +58,8 @@ const ApplicationRouter = () => {
             <Route path="/" element={<RootLayout />}>
               <Route errorElement={<ErrorRoute />}>
                 <Route index={true} element={<Home />} />
-                <Route path="sign-in" element={<Login />} />
-                <Route path="sign-up" element={<Register />} />
+                <Route path="sign-in" element={<Login />} loader={loginLoader} />
+                <Route path="sign-up" element={<Register />} loader={registerLoader} />
                 <Route element={<PrivateRoute />}>
                   {/* Users  */}
                   <Route element={<ProtectedRoute role="user" />}>
