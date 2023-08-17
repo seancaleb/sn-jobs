@@ -1,3 +1,3 @@
-import Register from "./Register.page";
+import Register, { loader as registerLoader } from "./Register.page";
 
-export { Register };
+export { Register, registerLoader };
