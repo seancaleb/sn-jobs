@@ -13,6 +13,10 @@ export const parsedTokenSchema = z.object({
   }).shape,
 });
 
+export const tokenSchema = z.object({
+  accessToken: z.string(),
+});
+
 export type Token = {
   accessToken: string;
 };
