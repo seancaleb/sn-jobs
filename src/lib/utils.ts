@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { toast } from "@/components/ui/use-toast";
 import { SetURLSearchParams } from "react-router-dom";
 import { APIResponseError } from "@/services/apiClient";
+import { addMilliseconds } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -126,4 +127,15 @@ export const removeDisableInteractions = () => {
 // Function to check if error is an instance of APIResponseError interface
 export const isAPIResponseError = (value: unknown): value is APIResponseError => {
   return typeof value === "object" && "message" in value! && typeof value.message === "string";
+};
+
+// Verify if token expiration threshold has been met
+export const isTokenExpirationThresholdMet = (exp: number) => {
+  const bufferTimeInMilliseconds = 3 * 60 * 1000;
+  const currentTime = new Date(Date.now());
+  const tokenExpirationTime = new Date(exp * 1000);
+  // 3 minutes before tokenExpirationTime
+  const expirationThreshold = addMilliseconds(tokenExpirationTime, -bufferTimeInMilliseconds);
+
+  return currentTime >= expirationThreshold;
 };
