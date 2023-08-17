@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
 
-const DashboardLayout = () => {
+const AuthRoute = () => {
   return (
-    <main>
+    <main className="main">
       <Outlet />
     </main>
   );
 };
 
-export default DashboardLayout;
+export default AuthRoute;

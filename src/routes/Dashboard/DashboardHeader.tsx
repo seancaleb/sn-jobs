@@ -7,7 +7,7 @@ const DashboardHeader = () => {
   const dateToday = format(new Date(), "PP");
 
   return (
-    <div className="h-16 flex items-center justify-between border-b border-border px-8 sticky top-0 z-10 bg-background">
+    <header className="h-16 flex items-center justify-between border-b border-border px-8 sticky top-0 z-10 bg-background">
       <div />
 
       <div className="flex flex-col gap-1 items-end">
@@ -20,7 +20,7 @@ const DashboardHeader = () => {
         )}
         <div className="text-xs text-slate-500">{dateToday}</div>
       </div>
-    </div>
+    </header>
   );
 };
 

@@ -1,7 +1,7 @@
 import { useDocumentTitle } from "@mantine/hooks";
 import MutateJob from "./MutateJob";
 
-const CreateJobPage = () => {
+const CreateJob = () => {
   useDocumentTitle("Create New Job - SNJOBS");
 
   return (
@@ -18,4 +18,4 @@ const CreateJobPage = () => {
   );
 };
 
-export default CreateJobPage;
+export default CreateJob;

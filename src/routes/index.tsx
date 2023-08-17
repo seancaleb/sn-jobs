@@ -5,8 +5,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { QueryClient } from "@tanstack/react-query";
-import { Login, loginLoader } from "@/routes/auth/Login";
-import { Register, registerLoader } from "@/routes/auth/Register";
+import { Login, loginLoader, Register, registerLoader } from "@/routes/auth";
 import { Home } from "@/routes/Home";
 import {
   Jobs,
@@ -26,8 +25,8 @@ import {
   profileLoader,
 } from "@/routes/Users";
 import {
-  CreateJobPage,
-  EditJobPage,
+  CreateJob,
+  EditJob,
   JobApplicationDetails,
   JobDetails,
   JobListings,
@@ -36,15 +35,16 @@ import {
   jobDetailsLoader,
   jobPostingsLoader,
 } from "@/routes/Employer";
-import RootLayout from "@/components/RootLayout";
-import ErrorRoute from "@/components/Error";
 import PrivateRoute from "@/routes/PrivateRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import AccountSettingsRoute from "@/routes/AccountSettingsRoute";
+import PersonalizedJobsRoute from "@/routes/PersonalizedJobsRoute";
+import AuthRoute from "@/routes/AuthRoute";
+import ApplicationRoot from "@/routes/ApplicationRoot";
+import RootRoute from "@/routes/RootRoute";
+import { DashboardRoute } from "@/routes/Dashboard";
+import ErrorRoute from "@/components/Error";
 import NotFound from "@/components/NotFound";
-
-import Dashboard from "@/routes/Dashboard/Dashboard";
-import PersonalizedJobsRoute from "./PersonalizedJobsRoute";
 
 const queryClient = new QueryClient();
 
@@ -53,15 +53,18 @@ const ApplicationRouter = () => {
     <RouterProvider
       router={createBrowserRouter(
         createRoutesFromElements(
-          <>
-            <Route path="*" element={<NotFound />} />
-            <Route path="/" element={<RootLayout />}>
-              <Route errorElement={<ErrorRoute />}>
-                <Route index={true} element={<Home />} />
+          <Route element={<ApplicationRoot />}>
+            <Route errorElement={<ErrorRoute />}>
+              <Route path="*" element={<NotFound />} />
+
+              <Route element={<AuthRoute />}>
                 <Route path="sign-in" element={<Login />} loader={loginLoader} />
                 <Route path="sign-up" element={<Register />} loader={registerLoader} />
+              </Route>
+
+              <Route path="/" element={<RootRoute />}>
+                <Route index={true} element={<Home />} />
                 <Route element={<PrivateRoute />}>
-                  {/* Users  */}
                   <Route element={<ProtectedRoute role="user" />}>
                     <Route path="jobs">
                       <Route index={true} element={<Jobs />} loader={jobsLoader(queryClient)} />
@@ -96,42 +99,44 @@ const ApplicationRouter = () => {
                       </Route>
                     </Route>
                   </Route>
-                  {/* Employers  */}
+                </Route>
+              </Route>
+
+              <Route path="employer" element={<DashboardRoute />}>
+                <Route element={<PrivateRoute />}>
                   <Route element={<ProtectedRoute role="employer" />}>
-                    <Route path="employer" element={<Dashboard />}>
-                      <Route
-                        path="account/profile"
-                        element={<Profile />}
-                        loader={profileLoader(queryClient)}
-                      />
-                      <Route path="account/privacy-and-security" element={<Security />} />
-                      <Route
-                        path="job-listings"
-                        element={<JobListings />}
-                        loader={jobPostingsLoader(queryClient)}
-                      />
-                      <Route
-                        path="job-listings/:jobId"
-                        element={<JobDetails />}
-                        loader={jobDetailsLoader(queryClient)}
-                      />
-                      <Route
-                        path="job-listings/:jobId/edit"
-                        element={<EditJobPage />}
-                        loader={editJobLoader(queryClient)}
-                      />
-                      <Route path="job-listings/create" element={<CreateJobPage />} />
-                      <Route
-                        path="job-listings/:jobId/applications/:applicationId"
-                        element={<JobApplicationDetails />}
-                        loader={jobApplicationDetailsLoader(queryClient)}
-                      />
-                    </Route>
+                    <Route
+                      path="account/profile"
+                      element={<Profile />}
+                      loader={profileLoader(queryClient)}
+                    />
+                    <Route path="account/privacy-and-security" element={<Security />} />
+                    <Route
+                      path="job-listings"
+                      element={<JobListings />}
+                      loader={jobPostingsLoader(queryClient)}
+                    />
+                    <Route
+                      path="job-listings/:jobId"
+                      element={<JobDetails />}
+                      loader={jobDetailsLoader(queryClient)}
+                    />
+                    <Route
+                      path="job-listings/:jobId/edit"
+                      element={<EditJob />}
+                      loader={editJobLoader(queryClient)}
+                    />
+                    <Route path="job-listings/create" element={<CreateJob />} />
+                    <Route
+                      path="job-listings/:jobId/applications/:applicationId"
+                      element={<JobApplicationDetails />}
+                      loader={jobApplicationDetailsLoader(queryClient)}
+                    />
                   </Route>
                 </Route>
               </Route>
             </Route>
-          </>
+          </Route>
         )
       )}
     />

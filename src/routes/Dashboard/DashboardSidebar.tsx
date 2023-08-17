@@ -33,7 +33,7 @@ const DashboardSidebar = () => {
   };
 
   return (
-    <div className="fixed left-0 top-0 bottom-0 max-w-[16rem] w-full h-full border-r border-border flex flex-col">
+    <aside className="fixed left-0 top-0 bottom-0 max-w-[16rem] w-full h-full border-r border-border flex flex-col">
       {/* Logo  */}
       <div className="text-xl font-bold px-6 h-16 border-b border-border flex items-center ">
         SNJOBS
@@ -92,7 +92,7 @@ const DashboardSidebar = () => {
           Logout
         </Button>
       </div>
-    </div>
+    </aside>
   );
 };
 
