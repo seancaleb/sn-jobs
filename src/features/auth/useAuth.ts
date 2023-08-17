@@ -16,9 +16,14 @@ const useAuth = () => {
     dispatch(AuthActions.logoutUser());
   };
 
+  const refreshAuthToken = (newTokenExpiration: number) => {
+    dispatch(AuthActions.refreshAuthToken(newTokenExpiration));
+  };
+
   return {
     loginUser,
     logoutUser,
+    refreshAuthToken,
   };
 };
 
