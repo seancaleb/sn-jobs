@@ -1,3 +1,4 @@
+import { nanoid } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import { useNavigation } from "react-router";
 import LoadingBar from "react-top-loading-bar";
@@ -5,6 +6,7 @@ import LoadingBar from "react-top-loading-bar";
 const TopLoadingBar = () => {
   const [progress, setProgress] = useState(0);
   const navigation = useNavigation();
+  const [flag, setFlag] = useState(nanoid());
 
   useEffect(() => {
     const bodyEl = document.querySelector("body");
@@ -20,10 +22,14 @@ const TopLoadingBar = () => {
 
   return (
     <LoadingBar
-      height={3}
+      height={2}
       color="linear-gradient(90deg, #0d9488, #0891b2)"
       progress={progress}
-      onLoaderFinished={() => setProgress(0)}
+      onLoaderFinished={() => {
+        setProgress(0);
+        setFlag(nanoid());
+      }}
+      key={flag}
     />
   );
 };
