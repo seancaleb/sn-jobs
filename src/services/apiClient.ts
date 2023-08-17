@@ -2,7 +2,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 interface ServiceRequestConfigs {
-  token?: string;
   options: AxiosRequestConfig;
 }
 
@@ -16,17 +15,17 @@ export type APIResponseSuccess = {
 
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_PROD_URL : import.meta.env.VITE_DEV_URL;
 
-const client = axios.create({
+export const client = axios.create({
   baseURL,
+  withCredentials: true,
 });
 
-export default async function <T>({ token, options }: ServiceRequestConfigs): Promise<T> {
-  if (token) {
-    client.defaults.headers.common.Authorization = `Bearer ${token}`;
-  }
+const authInstance = axios.create({
+  baseURL,
+  withCredentials: true,
+});
 
-  client.defaults.withCredentials = true;
-
+export default async function <T>({ options }: ServiceRequestConfigs): Promise<T> {
   const onSuccess = (response: AxiosResponse<T>) => response.data;
   const onError = (err?: APIResponseError) => err;
 
@@ -37,3 +36,15 @@ export default async function <T>({ token, options }: ServiceRequestConfigs): Pr
     throw onError(e.response?.data);
   }
 }
+
+export const apiClientAuth = async <T>({ options }: ServiceRequestConfigs) => {
+  const onSuccess = (response: AxiosResponse<T>) => response.data;
+  const onError = (err?: APIResponseError) => err;
+
+  try {
+    return onSuccess(await authInstance(options));
+  } catch (error) {
+    const e = error as AxiosError<APIResponseError>;
+    throw onError(e.response?.data);
+  }
+};
