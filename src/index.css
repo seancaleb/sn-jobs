@@ -122,4 +122,8 @@
   .disable-interactions {
     @apply pointer-events-none;
   }
+
+  .main {
+    @apply relative min-h-screen container max-w-6xl;
+  }
 }
