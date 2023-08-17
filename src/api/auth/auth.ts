@@ -1,6 +1,16 @@
-import apiClient, { APIResponseSuccess, APIResponseError } from "@/services/apiClient";
+import apiClient, {
+  APIResponseSuccess,
+  APIResponseError,
+  apiClientAuth,
+} from "@/services/apiClient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LoginCredentials, Token, RegisterCredentials, parsedTokenSchema } from "./auth.type";
+import {
+  LoginCredentials,
+  Token,
+  RegisterCredentials,
+  parsedTokenSchema,
+  tokenSchema,
+} from "./auth.type";
 import jwt_decode from "jwt-decode";
 import useAuth from "@/features/auth/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -103,4 +113,21 @@ export const useRegisterUser = () => {
     onSuccess: ({ message }) => displaySuccessNotification(message, toast, initNotificationId),
     onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
   });
+};
+
+/**
+ * @desc  Refresh token
+ */
+export const refreshToken = async () => {
+  const response = await apiClientAuth<Token>({
+    options: {
+      url: "/auth/refresh",
+      method: "GET",
+    },
+  });
+
+  const { accessToken } = tokenSchema.parse(response);
+  const decodedToken = jwt_decode<User>(accessToken);
+
+  return parsedTokenSchema.parse(decodedToken);
 };
