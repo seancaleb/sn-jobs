@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import ScrollToTop from "@/components/ScrollToTop";
 import UserLayout from "./UserLayout";
 import DashboardLayout from "./DashboardLayout";
+import AxiosInterceptor from "@/services/AxiosInterceptor";
 
 const RootLayout = () => {
   const location = useLocation();
@@ -33,7 +34,10 @@ const RootLayout = () => {
       <ScrollToTop />
       <TopLoadingBar />
       <Toaster />
-      {isEmployerOrAdmin ? <DashboardLayout /> : <UserLayout />}
+
+      <AxiosInterceptor>
+        {isEmployerOrAdmin ? <DashboardLayout /> : <UserLayout />}
+      </AxiosInterceptor>
     </>
   );
 };
