@@ -30,7 +30,7 @@ const MobileNavigation = () => {
   const location = useLocation();
 
   const handleIsOpen = () => {
-    setIsOpen(true);
+    setIsOpen((prev) => !prev);
   };
 
   useEffect(() => {
@@ -40,6 +40,7 @@ const MobileNavigation = () => {
   return (
     <div className="fixed top-16 left-0 right-0 h-12 bg-background border-b border-border z-10 lg:hidden">
       <div
+        role="button"
         onClick={handleIsOpen}
         className="px-5 h-full flex items-center gap-2 text-sm font-semibold cursor-pointer hover:bg-accent container"
       >
