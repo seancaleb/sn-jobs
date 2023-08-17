@@ -21,7 +21,7 @@ export const loader =
     };
   };
 
-const EditJobPage = () => {
+const EditJob = () => {
   const { jobId, initialJobData } = useLoaderData() as LoaderReturnType<typeof loader>;
   const { data } = useGetJobById({ jobId, initialData: initialJobData });
   const job = data as JobDetails;
@@ -42,4 +42,4 @@ const EditJobPage = () => {
   );
 };
 
-export default EditJobPage;
+export default EditJob;
