@@ -2,6 +2,20 @@ import { RootState } from "@/app/store";
 import { Role } from "@/types/user";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type AuthenticatedUserState = {
+  isAuthenticated: true;
+  tokenExpiration: number;
+  role: Role;
+  userId: string;
+};
+
+type UnauthenticatedUserState = {
+  isAuthenticated: false;
+  tokenExpiration: null;
+  role: null;
+  userId: null;
+};
+
 type AuthState = {
   isAuthenticated: boolean;
   tokenExpiration: number | null;
@@ -37,10 +51,16 @@ const authSlice = createSlice({
       state.role = null;
       state.userId = null;
     },
+    refreshAuthToken: (state, action: PayloadAction<number>) => {
+      state.tokenExpiration = action.payload;
+    },
   },
 });
 
-export const selectAuthStatus = (state: RootState) => state.auth;
+export const selectAuthStatus = (state: RootState) =>
+  state.auth.isAuthenticated
+    ? (state.auth as AuthenticatedUserState)
+    : (state.auth as UnauthenticatedUserState);
 
 export const AuthActions = authSlice.actions;
 export default authSlice.reducer;
