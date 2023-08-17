@@ -26,7 +26,7 @@ const JobApplication = ({ job }: JobApplicationProps) => {
     resolver: zodResolver(jobApplicationSchema),
   });
   const { control, handleSubmit, formState } = form;
-  const { isValid, isDirty } = formState;
+  const { isValid, isDirty, isSubmitSuccessful } = formState;
   const applyJobMutation = useApplyJob();
 
   const onSubmit = (values: JobApplicationValues) => {
@@ -42,7 +42,7 @@ const JobApplication = ({ job }: JobApplicationProps) => {
         </p>
       </div>
 
-      <Prompt hasUnsavedChanges={isDirty} />
+      <Prompt hasUnsavedChanges={isDirty && !isSubmitSuccessful} />
 
       <Form {...form}>
         <form
