@@ -52,7 +52,8 @@ const AxiosInterceptor = ({ children }: AxiosInterceptorProps) => {
     return () => {
       client.interceptors.request.eject(interceptor);
     };
-  }, [navigate, auth.isAuthenticated, auth.tokenExpiration, refreshAuthToken, logoutUser]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate, auth.isAuthenticated, auth.tokenExpiration]);
 
   return isSet && children;
 };
