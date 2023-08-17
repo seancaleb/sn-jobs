@@ -1,8 +1,8 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const navigationLinks = [
   {
@@ -27,10 +27,15 @@ const navigationLinks = [
 
 const MobileNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   const handleIsOpen = () => {
-    setIsOpen((prev) => !prev);
+    setIsOpen(true);
   };
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
 
   return (
     <div className="fixed top-16 left-0 right-0 h-12 bg-background border-b border-border z-10 lg:hidden">
