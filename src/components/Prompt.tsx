@@ -12,8 +12,6 @@ const Prompt = ({
 }: PromptProps) => {
   const block = hasUnsavedChanges;
 
-  console.log(hasUnsavedChanges);
-
   useBeforeUnload(
     useCallback(
       (event) => {
