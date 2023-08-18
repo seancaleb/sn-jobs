@@ -1,21 +1,23 @@
-import { useAppSelector } from "@/app/hooks";
-import { selectAuthStatus } from "@/features/auth/authSlice";
+/* eslint-disable react-refresh/only-export-components */
+import store from "@/app/store";
 import { Role } from "@/types/user";
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet, redirect } from "react-router-dom";
 
-type ProtectedRouteProps = {
-  role: Role;
+export const loader = (role: Role) => () => {
+  const auth = store.getState().auth;
+
+  if (!auth.isAuthenticated) return redirect("/");
+
+  const isAuthorized = role === (auth.role as Role);
+
+  return !isAuthorized
+    ? auth.role === "user"
+      ? redirect("/jobs")
+      : redirect("/employer/job-listings")
+    : null;
 };
 
-const ProtectedRoute = ({ role }: ProtectedRouteProps) => {
-  const auth = useAppSelector(selectAuthStatus);
-
-  if (auth.role === null) return <Navigate to="/" replace />;
-
-  const isAuthorized = auth.role === role;
-
-  if (!isAuthorized) return <Navigate to="/" replace />;
-
+const ProtectedRoute = () => {
   return <Outlet />;
 };
 

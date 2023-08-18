@@ -1,3 +1,3 @@
-import Home from "./Home.page";
+import Home, { loader as homeLoader } from "./Home.page";
 
-export { Home };
+export { Home, homeLoader };
