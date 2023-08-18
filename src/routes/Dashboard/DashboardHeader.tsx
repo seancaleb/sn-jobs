@@ -1,17 +1,19 @@
-import { useGetProfile } from "@/api/users/users";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useUserProfile } from "@/hooks";
 
 const DashboardHeader = () => {
-  const { data: user, isLoading } = useGetProfile();
+  const user = useUserProfile();
   const dateToday = format(new Date(), "PP");
+
+  console.log(user);
 
   return (
     <header className="h-16 flex items-center justify-between border-b border-border px-8 sticky top-0 z-10 bg-background">
       <div />
 
       <div className="flex flex-col gap-1 items-end">
-        {isLoading ? (
+        {!user ? (
           <Skeleton className="h-3 w-36" />
         ) : (
           <div className="text-sm">
