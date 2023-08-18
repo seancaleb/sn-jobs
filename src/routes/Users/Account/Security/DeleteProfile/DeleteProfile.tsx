@@ -98,7 +98,12 @@ const ConfirmDeletionDialog = ({ isOpen, setIsOpen }: ConfirmDeletionDialogProps
               />
 
               <div className="self-end space-x-2">
-                <Button variant="ghost" onClick={handleDeleteOnClose} type="button">
+                <Button
+                  variant="ghost"
+                  onClick={handleDeleteOnClose}
+                  type="button"
+                  disabled={deleteProfileMutation.isLoading}
+                >
                   Cancel
                 </Button>
                 <Button
