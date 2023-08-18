@@ -161,7 +161,7 @@ const BookmarkedJobs = () => {
                       variant="outline"
                       onClick={() => handleUnbookmarkJob(job.jobId)}
                     >
-                      <Bookmark className="h-4 w-4 fill-teal-500 text-teal-500 mr-2" />
+                      <Bookmark className="h-4 w-4 fill-teal-600 text-teal-600 mr-2" />
                       Saved
                     </Button>
                   </div>
@@ -170,7 +170,7 @@ const BookmarkedJobs = () => {
             )}
 
             {unbookmarkedJobs.has(job.jobId) && (
-              <Alert className="border-teal-500">
+              <Alert className="border-teal-600">
                 <span
                   role="button"
                   className={`absolute right-4 text-foreground/50 hover:text-foreground ${

@@ -24,12 +24,12 @@ const JobItem = (job: JobDetails) => {
   return (
     <Card
       onClick={handleOnClickJobPost}
-      className={`cursor-pointer break-all ${jobId === job.jobId ? "border-teal-500" : ""}`}
+      className={`cursor-pointer break-all ${jobId === job.jobId ? "border-teal-600" : ""}`}
     >
       <CardHeader>
-        {formattedJobDate === "Just now" ? (
+        {formattedJobDate === "just now" ? (
           <div>
-            <p className="text-green-700 font-medium text-xs">New</p>
+            <p className="text-green-500 font-medium text-xs">New</p>
           </div>
         ) : null}
         <CardTitle className="text-xl">{job.title}</CardTitle>
