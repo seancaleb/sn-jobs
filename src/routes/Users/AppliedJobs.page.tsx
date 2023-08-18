@@ -68,7 +68,7 @@ const AppliedJobs = () => {
 
           return (
             <Fragment key={application.applicationId}>
-              <Card className="w-full">
+              <Card className="w-full break-all">
                 <CardHeader className="flex flex-col sm:flex-row justify-between gap-6 space-y-0">
                   <div className="space-y-1.5">
                     <Link to={`/jobs/${application.job.jobId}`} className="space-y-1 flex-1 group">
@@ -88,7 +88,7 @@ const AppliedJobs = () => {
                     </Link>
                   </div>
 
-                  <div>
+                  <div className="flex-shrink-0">
                     <Badge variant={getBadgeVariant(application.status)}>
                       {application.status}
                     </Badge>

@@ -24,7 +24,7 @@ const JobItem = (job: JobDetails) => {
   return (
     <Card
       onClick={handleOnClickJobPost}
-      className={`cursor-pointer ${jobId === job.jobId ? "border-teal-500" : ""}`}
+      className={`cursor-pointer break-all ${jobId === job.jobId ? "border-teal-500" : ""}`}
     >
       <CardHeader>
         {formattedJobDate === "Just now" ? (
