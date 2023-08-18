@@ -127,7 +127,7 @@ const BookmarkedJobs = () => {
         return (
           <Fragment key={job.jobId}>
             {!unbookmarkedJobs.has(job.jobId) && (
-              <Card className="w-full">
+              <Card className="w-full break-all">
                 <CardHeader className="flex flex-col sm:flex-row gap-6 space-y-0">
                   <Link to={`/jobs/${job.jobId}`} className="space-y-1 flex-1 group">
                     <CardTitle className="text-lg group-hover:underline">{job.title}</CardTitle>

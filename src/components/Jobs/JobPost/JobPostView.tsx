@@ -44,7 +44,7 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
   }, [user]);
 
   return (
-    <Card className="w-full border-0 sm:border">
+    <Card className="w-full border-0 sm:border break-all">
       <CardHeader className="p-0 sm:p-6">
         <div className="flex flex-wrap justify-between items-center gap-4 mb-2">
           <CardTitle className="text-2xl">{job.title}</CardTitle>
