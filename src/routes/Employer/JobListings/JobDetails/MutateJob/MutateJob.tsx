@@ -27,7 +27,6 @@ type MutateJobProps = {
 const defaultValues = {
   title: "",
   description: "",
-  location: "" as const,
   requirements: [{ requirement: "" }],
 };
 
@@ -61,7 +60,6 @@ const MutateJob = ({ mode = "create", job }: MutateJobProps) => {
 
     const updatedValues = {
       ...values,
-      location: values.location as Exclude<z.infer<typeof mutateJobSchema>["location"], "">,
       requirements: modifiedRequirements,
     };
 

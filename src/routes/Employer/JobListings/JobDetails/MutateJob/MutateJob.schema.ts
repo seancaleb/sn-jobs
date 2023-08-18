@@ -31,7 +31,7 @@ export const mutateJobSchema = z.object({
       })
     )
     .nonempty("Should contain at least one requirement"),
-  location: z.enum([...defaultCities, ""], {
+  location: z.enum([...defaultCities], {
     errorMap: () => ({ message: "Please fill in job location." }),
   }),
 });
