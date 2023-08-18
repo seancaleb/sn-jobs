@@ -207,7 +207,11 @@ const ColumnDropdownActions = ({ jobPost }: ColumnDropdownActions) => {
           </>
         }
         actionButtons={[
-          <Button variant="ghost" onClick={handleCancelAlert}>
+          <Button
+            variant="ghost"
+            onClick={handleCancelAlert}
+            disabled={deleteJobMutation.isLoading}
+          >
             Cancel
           </Button>,
           <Button
