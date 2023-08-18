@@ -15,7 +15,12 @@ import jwt_decode from "jwt-decode";
 import useAuth from "@/features/auth/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { displayErrorNotification, displaySuccessNotification } from "@/lib/utils";
+import {
+  disableInteractions,
+  displayErrorNotification,
+  displaySuccessNotification,
+  removeDisableInteractions,
+} from "@/lib/utils";
 import useNotification from "@/features/notification/useNotification";
 import { useAppSelector } from "@/app/hooks";
 import { selectNotification } from "@/features/notification/notificationSlice";
@@ -55,6 +60,12 @@ export const useLoginUser = () => {
       navigate(`/${role === "user" ? "jobseekers" : role}/account/profile`, { replace: true });
     },
     onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
+    onMutate: () => {
+      disableInteractions();
+    },
+    onSettled: () => {
+      removeDisableInteractions();
+    },
   });
 };
 
@@ -111,6 +122,12 @@ export const useRegisterUser = () => {
     mutationFn: registerUserRequest,
     onSuccess: ({ message }) => displaySuccessNotification(message, toast, initNotificationId),
     onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
+    onMutate: () => {
+      disableInteractions();
+    },
+    onSettled: () => {
+      removeDisableInteractions();
+    },
   });
 };
 
