@@ -1,9 +1,21 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useAppSelector } from "@/app/hooks";
+import store from "@/app/store";
 import { Button } from "@/components/ui/button";
 import { selectAuthStatus } from "@/features/auth/authSlice";
 import { useDocumentTitle } from "@mantine/hooks";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, redirect, useNavigate } from "react-router-dom";
 import Balancer from "react-wrap-balancer";
+
+export const loader = () => {
+  const auth = store.getState().auth;
+
+  if (auth.isAuthenticated) {
+    return auth.role === "user" ? redirect("/jobs") : redirect("/employer/job-listings");
+  }
+
+  return null;
+};
 
 const Home = () => {
   const { isAuthenticated } = useAppSelector(selectAuthStatus);

@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import { QueryClient } from "@tanstack/react-query";
 import { Login, loginLoader, Register, registerLoader } from "@/routes/auth";
-import { Home } from "@/routes/Home";
+import { Home, homeLoader } from "@/routes/Home";
 import {
   Jobs,
   Job,
@@ -35,16 +35,16 @@ import {
   jobDetailsLoader,
   jobPostingsLoader,
 } from "@/routes/Employer";
-import PrivateRoute from "@/routes/PrivateRoute";
-import ProtectedRoute from "@/routes/ProtectedRoute";
 import AccountSettingsRoute from "@/routes/AccountSettingsRoute";
 import PersonalizedJobsRoute from "@/routes/PersonalizedJobsRoute";
 import AuthRoute from "@/routes/AuthRoute";
 import ApplicationRoot from "@/routes/ApplicationRoot";
-import RootRoute from "@/routes/RootRoute";
 import { DashboardRoute } from "@/routes/Dashboard";
 import ErrorRoute from "@/components/Error";
 import NotFound from "@/components/NotFound";
+import RootRoute from "@/routes/RootRoute";
+import PrivateRoute, { loader as privateRouteLoader } from "@/routes/PrivateRoute";
+import ProtectedRoute, { loader as protectedRouteLoader } from "@/routes/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -63,9 +63,9 @@ const ApplicationRouter = () => {
               </Route>
 
               <Route path="/" element={<RootRoute />}>
-                <Route index={true} element={<Home />} />
-                <Route element={<PrivateRoute />}>
-                  <Route element={<ProtectedRoute role="user" />}>
+                <Route index={true} element={<Home />} loader={homeLoader} />
+                <Route element={<PrivateRoute />} loader={privateRouteLoader}>
+                  <Route element={<ProtectedRoute />} loader={protectedRouteLoader("user")}>
                     <Route path="jobs">
                       <Route index={true} element={<Jobs />} loader={jobsLoader(queryClient)} />
                       <Route path=":jobId" element={<Job />} loader={jobLoader(queryClient)}>
@@ -102,9 +102,9 @@ const ApplicationRouter = () => {
                 </Route>
               </Route>
 
-              <Route path="employer" element={<DashboardRoute />}>
-                <Route element={<PrivateRoute />}>
-                  <Route element={<ProtectedRoute role="employer" />}>
+              <Route element={<PrivateRoute />} loader={privateRouteLoader}>
+                <Route element={<ProtectedRoute />} loader={protectedRouteLoader("employer")}>
+                  <Route path="employer" element={<DashboardRoute />}>
                     <Route
                       path="account/profile"
                       element={<Profile />}
