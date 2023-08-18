@@ -4,7 +4,6 @@ import TopLoadingBar from "@/components/TopLoadingBar";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { selectNotification } from "@/features/notification/notificationSlice";
-import AxiosInterceptor from "@/services/AxiosInterceptor";
 import { useDocumentTitle } from "@mantine/hooks";
 import { Fragment, useEffect } from "react";
 import { Outlet, useLocation, useMatch } from "react-router-dom";
@@ -32,9 +31,7 @@ const ApplicationRoot = () => {
       <ScrollToTop />
       <TopLoadingBar />
       <Toaster />
-      <AxiosInterceptor>
-        <Outlet />
-      </AxiosInterceptor>
+      <Outlet />
     </Fragment>
   );
 };

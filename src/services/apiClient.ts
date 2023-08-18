@@ -20,7 +20,7 @@ export const client = axios.create({
   withCredentials: true,
 });
 
-const authInstance = axios.create({
+export const authClient = axios.create({
   baseURL,
   withCredentials: true,
 });
@@ -42,7 +42,7 @@ export const apiClientAuth = async <T>({ options }: ServiceRequestConfigs) => {
   const onError = (err?: APIResponseError) => err;
 
   try {
-    return onSuccess(await authInstance(options));
+    return onSuccess(await authClient(options));
   } catch (error) {
     const e = error as AxiosError<APIResponseError>;
     throw onError(e.response?.data);

@@ -1,7 +1,6 @@
 import { useAppSelector } from "@/app/hooks";
 import { selectAuthStatus } from "@/features/auth/authSlice";
-import { ReactNode, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { ReactNode, useState, useEffect, useCallback } from "react";
 import { APIResponseError, client } from "@/services/apiClient";
 import { isTokenExpirationThresholdMet } from "@/lib/utils";
 import { refreshToken } from "@/api/auth/auth";
@@ -14,12 +13,11 @@ type AxiosInterceptorProps = {
 
 const AxiosInterceptor = ({ children }: AxiosInterceptorProps) => {
   const [isSet, setIsSet] = useState(false);
-  const navigate = useNavigate();
   const auth = useAppSelector(selectAuthStatus);
   const { logoutUser, refreshAuthToken } = useAuth();
 
-  useEffect(() => {
-    const requestInterceptor = async (config: InternalAxiosRequestConfig) => {
+  const requestInterceptor = useCallback(
+    async (config: InternalAxiosRequestConfig) => {
       if (auth.isAuthenticated && isTokenExpirationThresholdMet(auth.tokenExpiration)) {
         try {
           const { exp } = await refreshToken();
@@ -27,24 +25,25 @@ const AxiosInterceptor = ({ children }: AxiosInterceptorProps) => {
         } catch (error) {
           console.error("Token refresh failed:", error);
           logoutUser();
-          navigate("/", { replace: true });
         }
       }
 
       return config;
-    };
+    },
+    [auth.isAuthenticated, auth.tokenExpiration, logoutUser, refreshAuthToken]
+  );
 
-    const errInterceptor = (error: unknown) => {
-      const e = error as AxiosError<APIResponseError>;
+  const errInterceptor = useCallback((error: unknown) => {
+    const e = error as AxiosError<APIResponseError>;
 
-      if (e.status === 401) {
-        console.log("Unauthorized:", e.response?.data);
-        navigate("/", { replace: true });
-      }
+    if (e.status === 401) {
+      console.log("Unauthorized:", e.response?.data);
+    }
 
-      return Promise.reject(e.response?.data.message);
-    };
+    return Promise.reject(e.response?.data.message);
+  }, []);
 
+  useEffect(() => {
     const interceptor = client.interceptors.request.use(requestInterceptor, errInterceptor);
 
     setIsSet(true);
@@ -52,8 +51,7 @@ const AxiosInterceptor = ({ children }: AxiosInterceptorProps) => {
     return () => {
       client.interceptors.request.eject(interceptor);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigate, auth.isAuthenticated, auth.tokenExpiration]);
+  }, [requestInterceptor, errInterceptor]);
 
   return isSet && children;
 };
