@@ -3,7 +3,7 @@
 import { fetchJobs, jobKeys, useGetJobs } from "@/api/jobs/jobs";
 import JobList from "@/components/Jobs/JobList";
 import { QueryClient } from "@tanstack/react-query";
-import { ActionFunctionArgs, useLoaderData } from "react-router-dom";
+import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { useDocumentTitle } from "@mantine/hooks";
 import JobPost from "@/components/Jobs/JobPost/JobPost";
 import SearchJob from "@/components/Jobs/SearchJob";
@@ -18,7 +18,7 @@ import RecentSearches from "@/features/recent-searches/RecentSearches";
 
 export const loader =
   (queryClient: QueryClient) =>
-  async ({ request }: ActionFunctionArgs) => {
+  async ({ request }: LoaderFunctionArgs) => {
     const url = new URL(request.url);
 
     const queryParams = Object.fromEntries(url.searchParams.entries());
