@@ -7,11 +7,11 @@ const DashboardSizeWarning = () => {
 
   return (
     <div className="bg-background fixed h-screen top-0 left-0 right-0 bottom-0 z-50 grid place-items-center">
-      <div className="section-padding flex flex-col gap-4 items-center sm:items-start max-w-2xl w-full px-5 text-center sm:text-left">
+      <div className="section-padding flex flex-col gap-4 items-center sm:items-start sm:max-w-lg w-full px-5 text-center sm:text-left">
         <AlertTriangle className="w-9 h-9 sm:w-10 sm:h-10 text-light" />
 
         <h1 className="text-3xl sm:text-4xl font-bold">
-          <Balancer>Dashboard experience reminder</Balancer>
+          <Balancer>Dashboard reminder</Balancer>
         </h1>
 
         <div className="space-y-2">
