@@ -64,11 +64,11 @@ describe("SignUp", () => {
     it("triggers validation and renders an error message upon leaving both First name and Last name input fields with empty value", async () => {
       await user.tab();
 
-      const firstNameErrorMsg = screen.getByText(/first name is required/i);
+      const firstNameErrorMsg = screen.getByText(/please fill in your first name/i);
       expect(firstNameErrorMsg).toBeInTheDocument();
 
       await user.tab();
-      const lastNameErrorMsg = screen.getByText(/last name is required/i);
+      const lastNameErrorMsg = screen.getByText(/please fill in your last name/i);
       expect(lastNameErrorMsg).toBeInTheDocument();
     });
 
@@ -128,7 +128,7 @@ describe("SignUp", () => {
     it("triggers validation and renders an error message upon leaving both Email input field with empty value", async () => {
       await user.tab();
 
-      const emailErrorMsg = screen.getByText(/email is required/i);
+      const emailErrorMsg = screen.getByText(/please fill in your email/i);
       expect(emailErrorMsg).toBeInTheDocument();
     });
 

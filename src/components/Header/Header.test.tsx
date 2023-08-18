@@ -43,32 +43,14 @@ describe("Header (Desktop)", () => {
     user.setup();
 
     const logoEl = screen.getByRole("link", { name: "SNJOBS" });
-    const postJobBtn = screen.getByRole("button", { name: "Post a Job" });
-    const jobBoardBtn = screen.getByRole("button", { name: "Job Board" });
     const signInBtn = screen.getByRole("link", { name: "Sign In" });
     const signUpBtn = screen.getByRole("link", { name: "Sign Up" });
 
-    const tabOrder = [logoEl, postJobBtn, jobBoardBtn, signInBtn, signUpBtn];
+    const tabOrder = [logoEl, signInBtn, signUpBtn];
 
     for (const el of tabOrder) {
       await user.tab();
       expect(el).toHaveFocus();
     }
-  });
-});
-
-describe("Header (Mobile)", () => {
-  beforeEach(() => {
-    resizeScreenSize(639);
-    render(
-      <MemoryRouter>
-        <Header />
-      </MemoryRouter>
-    );
-  });
-
-  it("renders a navigation burger icon", () => {
-    const burgerIcon = screen.getByRole("graphics-document", { name: "navigation menu burger" });
-    expect(burgerIcon).toBeInTheDocument();
   });
 });

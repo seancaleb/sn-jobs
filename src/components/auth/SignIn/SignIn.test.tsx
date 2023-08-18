@@ -111,7 +111,7 @@ describe("SignIn", () => {
     await user.tab();
     await user.tab();
 
-    const errorMessage = screen.getByText(/email is required/i);
+    const errorMessage = screen.getByText(/please fill in your email/i);
     expect(errorMessage).toBeInTheDocument();
   });
 });
