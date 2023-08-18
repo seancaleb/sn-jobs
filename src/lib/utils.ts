@@ -49,7 +49,7 @@ export const formatJobPostTime = (date: Date) => {
   const hoursAgo = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
   const daysAgo = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
 
-  if (hoursAgo < 1) return "Just now";
+  if (hoursAgo < 1) return "just now";
   else if (hoursAgo < 2) return "1 hour ago";
   else if (hoursAgo < 3) return "2 hours ago";
   else if (hoursAgo < 4) return "3 hours ago";
@@ -57,9 +57,9 @@ export const formatJobPostTime = (date: Date) => {
 
   if (daysAgo < 8) {
     if (daysAgo === 0) {
-      return "Today";
+      return "today";
     } else if (daysAgo === 1) {
-      return "Yesterday";
+      return "yesterday";
     } else if (daysAgo < 8) {
       return `${daysAgo} days ago`;
     }
