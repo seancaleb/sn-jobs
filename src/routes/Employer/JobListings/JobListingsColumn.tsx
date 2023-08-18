@@ -194,7 +194,7 @@ const ColumnDropdownActions = ({ jobPost }: ColumnDropdownActions) => {
       </DropdownMenu>
 
       <AlertDialog
-        isOpen={isOpenAlert}
+        isOpen={isOpenAlert || deleteJobMutation.isLoading}
         setIsOpen={handleIsOpenAlert}
         title="Delete Job Post?"
         message={
