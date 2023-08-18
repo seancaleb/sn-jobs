@@ -8,6 +8,7 @@ import Prompt from "@/components/Prompt";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import { getBadgeVariant } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -111,7 +112,7 @@ const MutateJobApplicationStatus = ({
         </>
       ) : (
         <div>
-          <Badge>{applicationStatus}</Badge>
+          <Badge variant={getBadgeVariant(applicationStatus)}>{applicationStatus}</Badge>
         </div>
       )}
     </>

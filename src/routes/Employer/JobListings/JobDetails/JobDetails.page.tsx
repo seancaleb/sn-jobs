@@ -10,7 +10,7 @@ import { fetchJobById, jobKeys, useGetJobById } from "@/api/jobs/jobs";
 import { LoaderReturnType } from "@/types";
 import { JobDetails as JobDetailsType } from "@/api/jobs/jobs.type";
 import { parseISO } from "date-fns";
-import { formatJobPostTime } from "@/lib/utils";
+import { formatJobPostTime, getBadgeVariant } from "@/lib/utils";
 import { useGetAllJobPostApplications } from "@/api/employer/employer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -124,7 +124,9 @@ const JobDetails = () => {
                         {application.user.firstName} {application.user.lastName}
                       </div>
                       <div className="flex-shrink-0">
-                        <Badge>{application.status}</Badge>
+                        <Badge variant={getBadgeVariant(application.status)}>
+                          {application.status}
+                        </Badge>
                       </div>
                     </Link>
                   );

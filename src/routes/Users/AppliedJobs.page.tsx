@@ -2,7 +2,7 @@
 import { fetchJobApplications, useGetJobApplications } from "@/api/jobs/jobs";
 import store from "@/app/store";
 import { Button } from "@/components/ui/button";
-import { formatJobPostTime } from "@/lib/utils";
+import { formatJobPostTime, getBadgeVariant } from "@/lib/utils";
 import { LoaderReturnType } from "@/types";
 import { QueryClient } from "@tanstack/react-query";
 import { MoveRight } from "lucide-react";
@@ -89,7 +89,9 @@ const AppliedJobs = () => {
                   </div>
 
                   <div>
-                    <Badge>{application.status}</Badge>
+                    <Badge variant={getBadgeVariant(application.status)}>
+                      {application.status}
+                    </Badge>
                   </div>
                 </CardHeader>
               </Card>

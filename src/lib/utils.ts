@@ -139,3 +139,17 @@ export const isTokenExpirationThresholdMet = (exp: number) => {
 
   return currentTime >= expirationThreshold;
 };
+
+// Determine variant of Badge component based on status of job application
+export const getBadgeVariant = (status: string) => {
+  switch (status) {
+    case "Applied":
+      return "applied" as const;
+    case "Application viewed":
+      return "application-viewed" as const;
+    case "Not selected by employer":
+      return "not-selected" as const;
+    default:
+      return "default";
+  }
+};
