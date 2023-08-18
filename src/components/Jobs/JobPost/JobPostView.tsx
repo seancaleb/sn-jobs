@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Briefcase, Bookmark, Send } from "lucide-react";
 import { nanoid } from "@reduxjs/toolkit";
 import { Badge } from "@/components/ui/badge";
-import { formatJobPostTime } from "@/lib/utils";
+import { cn, formatJobPostTime } from "@/lib/utils";
 import { JobDetails } from "@/api/jobs/jobs.type";
 import { useBookmarkJobPost } from "@/api/jobs/jobs";
 import { useAppSelector } from "@/app/hooks";
 import { selectAuthStatus } from "@/features/auth/authSlice";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { User } from "lucide-react";
 import { GetUserProfileResponse } from "@/api/users/users.type";
 
@@ -28,6 +28,7 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
   const auth = useAppSelector(selectAuthStatus);
   const [bookmarkedJobsSet, setBookmarkedJobsSet] = useState<Set<string> | null>();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleBookmarkJobPost = () => {
     bookmarkJobMutation.mutate(job);
@@ -44,8 +45,13 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
   }, [user]);
 
   return (
-    <Card className="w-full border-0 sm:border break-all">
-      <CardHeader className="p-0 sm:p-6">
+    <Card
+      className={cn(
+        "w-full border-0 sm:border break-all overflow-y-auto h-fit",
+        location.pathname === "/jobs" && "max-h-[calc(100vh-6rem)]"
+      )}
+    >
+      <CardHeader className="p-0 sm:p-6 sticky top-0 bg-background">
         <div className="flex flex-wrap justify-between items-center gap-4 mb-2">
           <CardTitle className="text-2xl">{job.title}</CardTitle>
           <div className="flex-shrink-0">
@@ -82,7 +88,7 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
               <Button variant="outline" onClick={handleBookmarkJobPost}>
                 <Bookmark
                   className={`h-4 w-4 ${
-                    bookmarkedJobsSet?.has(job.jobId) ? "fill-teal-500 text-teal-500 mr-2" : ""
+                    bookmarkedJobsSet?.has(job.jobId) ? "fill-teal-600 text-teal-600 mr-2" : ""
                   }`}
                 />
                 {bookmarkedJobsSet?.has(job.jobId) && "Saved"}
@@ -93,7 +99,7 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
           <Separator orientation="horizontal" />
         </div>
       </CardHeader>
-      <CardContent className="overflow-y-auto text-sm px-0 py-6 sm:px-6 sm:pt-0 lg:max-h-[70vh]">
+      <CardContent className="overflow-y-auto text-sm px-0 py-6 sm:px-6 sm:pt-0">
         <div className="space-y-6">
           <div className="space-y-1">
             <div className="underline font-medium">Job description</div>
