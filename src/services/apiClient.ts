@@ -14,6 +14,8 @@ export type APIResponseSuccess = {
 };
 
 const baseURL = import.meta.env.PROD ? import.meta.env.VITE_PROD_URL : import.meta.env.VITE_DEV_URL;
+const NETWORK_ERROR =
+  "Unable to Connect: The server is currently unreachable or refusing the connection. Please check your network connection and try again later.";
 
 export const client = axios.create({
   baseURL,
@@ -33,7 +35,11 @@ export default async function <T>({ options }: ServiceRequestConfigs): Promise<T
     return onSuccess(await client(options));
   } catch (error) {
     const e = error as AxiosError<APIResponseError>;
-    throw onError(e.response?.data);
+    if (e.code === "ERR_NETWORK")
+      throw onError({
+        message: NETWORK_ERROR,
+      });
+    else throw onError(e.response?.data);
   }
 }
 
