@@ -12,6 +12,7 @@ import { selectAuthStatus } from "@/features/auth/authSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 import { User } from "lucide-react";
 import { GetUserProfileResponse } from "@/api/users/users.type";
+import { useState } from "react";
 
 type JobPostViewProps = {
   job: JobDetails;
@@ -29,9 +30,14 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
   const location = useLocation();
 
   const isBookmarked = user.bookmark?.find((id) => id === job.jobId);
+  const [debouncedBookmark, setDebouncedBookmark] = useState<NodeJS.Timeout | undefined>(undefined);
 
   const handleBookmarkJobPost = () => {
-    bookmarkJobMutation.mutate(job);
+    clearTimeout(debouncedBookmark);
+    const timeout = setTimeout(() => {
+      bookmarkJobMutation.mutate(job);
+    }, 300);
+    setDebouncedBookmark(timeout);
   };
 
   const handleApplyNow = (jobId: string) => {
@@ -40,6 +46,7 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
 
   return (
     <Card
+      key={job.jobId}
       className={cn(
         "w-full border-0 sm:border break-all overflow-y-auto h-fit",
         location.pathname === "/jobs" && "max-h-[calc(100vh-6rem)]"
