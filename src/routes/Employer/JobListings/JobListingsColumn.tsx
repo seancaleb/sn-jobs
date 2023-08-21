@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ArrowUpDown, Eye, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
 import { EmployerJob } from "@/api/employer/employer.type";
 import { format, parseISO } from "date-fns";
 import { Badge } from "@/components/ui/badge";
@@ -24,32 +24,41 @@ import { formatJobPostTime } from "@/lib/utils";
 import AlertDialog from "@/components/AlertDialog";
 
 export const columns: ColumnDef<EmployerJob>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={table.getIsAllPageRowsSelected()}
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "title",
     header: "Job Title",
     cell: ({ row }) => {
       const title = row.getValue<string>("title");
+      const createdAt = row.getValue<string>("createdAt");
+      const modifiedDate = formatJobPostTime(parseISO(createdAt));
 
-      return <div className="max-w-xs w-full break-all">{title}</div>;
+      return (
+        <div className="max-w-xs w-full break-all">
+          {modifiedDate === "just now" ? (
+            <span className="text-green-500 font-medium text-xs">New</span>
+          ) : null}
+          <div>{title}</div>
+        </div>
+      );
     },
   },
   {
@@ -73,11 +82,11 @@ export const columns: ColumnDef<EmployerJob>[] = [
     },
     cell: ({ row }) => {
       const createdAt = row.getValue<string>("createdAt");
-      const modifedDate = format(parseISO(createdAt), "PP");
+      const modifiedDate = format(parseISO(createdAt), "PP");
 
       return (
         <div className="text-right">
-          <Badge variant="outline">{modifedDate}</Badge>
+          <Badge variant="outline">{modifiedDate}</Badge>
         </div>
       );
     },
