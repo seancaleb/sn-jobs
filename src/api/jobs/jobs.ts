@@ -144,19 +144,13 @@ type BookmarkJobPostContext = {
 };
 
 export const useBookmarkJobPost = () => {
-  const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
+  const { toast } = useToast();
   const { initNotificationId } = useNotification();
   const queryClient = useQueryClient();
   const auth = useAppSelector(selectAuthStatus);
 
   return useMutation<APIResponseSuccess, APIResponseError, JobDetails, BookmarkJobPostContext>({
     mutationFn: bookmarkJobPost,
-    onSuccess: ({ message }) => {
-      if (notificationId) dismiss(notificationId);
-
-      displaySuccessNotification(message, toast, initNotificationId);
-    },
     onMutate: async (job: JobDetails) => {
       await queryClient.cancelQueries({ queryKey: userKeys.profile(auth.userId) });
 
@@ -205,7 +199,7 @@ export const useBookmarkJobPost = () => {
     },
     onSettled: async (_data, _error, job) => {
       await Promise.all([
-        queryClient.invalidateQueries(userKeys.bookmarks(auth.userId)),
+        queryClient.invalidateQueries(userKeys.all),
         queryClient.invalidateQueries(jobKeys.detail(job.jobId)),
       ]);
     },
