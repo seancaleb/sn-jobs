@@ -53,9 +53,7 @@ export const columns: ColumnDef<EmployerJob>[] = [
 
       return (
         <div className="max-w-xs w-full break-all">
-          {modifiedDate === "just now" ? (
-            <span className="text-green-500 font-medium text-xs">New</span>
-          ) : null}
+          {modifiedDate === "just now" ? <span className="text-green-500 text-xs">New</span> : null}
           <div>{title}</div>
         </div>
       );
