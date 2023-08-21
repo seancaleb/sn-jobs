@@ -9,7 +9,6 @@ import { JobDetails } from "@/api/jobs/jobs.type";
 import { useBookmarkJobPost } from "@/api/jobs/jobs";
 import { useAppSelector } from "@/app/hooks";
 import { selectAuthStatus } from "@/features/auth/authSlice";
-import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { User } from "lucide-react";
 import { GetUserProfileResponse } from "@/api/users/users.type";
@@ -26,9 +25,10 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
   const applications = job.applications.length;
   const bookmarkJobMutation = useBookmarkJobPost();
   const auth = useAppSelector(selectAuthStatus);
-  const [bookmarkedJobsSet, setBookmarkedJobsSet] = useState<Set<string> | null>();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const isBookmarked = user.bookmark?.find((id) => id === job.jobId);
 
   const handleBookmarkJobPost = () => {
     bookmarkJobMutation.mutate(job);
@@ -37,12 +37,6 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
   const handleApplyNow = (jobId: string) => {
     navigate(`/jobs/${jobId}/apply`);
   };
-
-  useEffect(() => {
-    if (user) {
-      setBookmarkedJobsSet(new Set(user.bookmark));
-    }
-  }, [user]);
 
   return (
     <Card
@@ -87,11 +81,9 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
                 ))}
               <Button variant="outline" onClick={handleBookmarkJobPost}>
                 <Bookmark
-                  className={`h-4 w-4 ${
-                    bookmarkedJobsSet?.has(job.jobId) ? "fill-teal-600 text-teal-600 mr-2" : ""
-                  }`}
+                  className={`h-4 w-4 ${isBookmarked ? "fill-teal-600 text-teal-600 mr-2" : ""}`}
                 />
-                {bookmarkedJobsSet?.has(job.jobId) && "Saved"}
+                {isBookmarked ? "Saved" : null}
               </Button>
             </div>
           )}
@@ -103,7 +95,7 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
         <div className="space-y-6">
           <div className="space-y-1">
             <div className="underline font-medium">Job description</div>
-            <p>{job.description}</p>
+            <p className="whitespace-pre-wrap">{job.description}</p>
           </div>
 
           <div className="space-y-1">
