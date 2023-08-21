@@ -4,6 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { useAppSelector } from "@/app/hooks";
 import { selectAuthStatus } from "@/features/auth/authSlice";
 import HeaderAccountDropdown from "./HeaderAccountDropdown";
+import logo from "@/assets/images/logo.svg";
 
 const Header = () => {
   const { isAuthenticated } = useAppSelector(selectAuthStatus);
@@ -16,9 +17,9 @@ const Header = () => {
       <div className="container h-full flex items-center justify-between">
         <NavLink
           to={isAuthenticated ? "/jobs" : "/"}
-          className="text-xl font-bold tracking-[-.5px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md"
+          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md"
         >
-          SNJOBS
+          <img src={logo} className="h-7" />
         </NavLink>
 
         <nav>
