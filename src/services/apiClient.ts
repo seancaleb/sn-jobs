@@ -15,8 +15,8 @@ export type APIResponseSuccess = {
 
 const baseURL =
   import.meta.env.MODE === "development"
-    ? import.meta.env.VITE_DEV_URL
-    : import.meta.env.VITE_PROD_URL;
+    ? import.meta.env.VITE_DEV_API_URL
+    : import.meta.env.VITE_PROD_API_URL;
 const NETWORK_ERROR =
   "Unable to Connect: The server is currently unreachable or refusing the connection. Please check your network connection and try again later.";
 
