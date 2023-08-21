@@ -13,7 +13,10 @@ export type APIResponseSuccess = {
   message: string;
 };
 
-const baseURL = import.meta.env.PROD ? import.meta.env.VITE_PROD_URL : import.meta.env.VITE_DEV_URL;
+const baseURL =
+  import.meta.env.MODE === "development"
+    ? import.meta.env.VITE_DEV_URL
+    : import.meta.env.VITE_PROD_URL;
 const NETWORK_ERROR =
   "Unable to Connect: The server is currently unreachable or refusing the connection. Please check your network connection and try again later.";
 
