@@ -29,7 +29,7 @@ const JobItem = (job: JobDetails) => {
       <CardHeader>
         {formattedJobDate === "just now" ? (
           <div>
-            <p className="text-green-500 font-medium text-xs">New</p>
+            <p className="text-green-500 text-xs">New</p>
           </div>
         ) : null}
         <CardTitle className="text-xl">{job.title}</CardTitle>
