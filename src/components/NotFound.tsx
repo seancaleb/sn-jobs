@@ -7,7 +7,7 @@ import { Balancer } from "react-wrap-balancer";
 const NotFound = () => {
   const navigate = useNavigate();
 
-  useDocumentTitle("Page Not Found - SNJOBS");
+  useDocumentTitle("Page Content Not Found - SNJOBS");
 
   const handleNavigateBack = () => {
     navigate(-1);
