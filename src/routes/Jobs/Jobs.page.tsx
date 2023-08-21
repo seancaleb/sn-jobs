@@ -53,6 +53,9 @@ const Jobs = () => {
   const { initialData, queryParams, search } = useLoaderData() as LoaderReturnType<typeof loader>;
   const { data: jobs } = useGetJobs({ queryParams, initialData });
   const { addSearchKeywordEntry } = useRecentSearches();
+  const hasSearchResults = !!search.keyword || !!search.location;
+  const hasFilters = !!queryParams.sortBy || !!queryParams.fromAge;
+  const jobsLength = jobs.jobs.length;
 
   const searchResultsMsg = () => {
     const { keyword, location } = search;
@@ -106,38 +109,7 @@ const Jobs = () => {
         <SearchJob {...search} />
       </div>
 
-      {jobs.jobs.length > 0 ? (
-        <div className="py-6 space-y-6">
-          {(search.keyword || search.location) && (
-            <div className="flex flex-col sm:flex-row justify-between gap-4">
-              <div>
-                <p className="text-teal-600">
-                  {jobs.total} job{jobs.total > 1 ? "s" : ""}
-                </p>
-                <div className="text-light text-sm">{searchResultsMsg()}</div>
-              </div>
-
-              {/* Filters  */}
-              <JobsFilter />
-            </div>
-          )}
-
-          <div className="relative flex gap-x-6 items-start">
-            {/* Job List  */}
-            <div className="lg:max-w-md w-full space-y-6">
-              <JobList jobs={jobs.jobs} />
-              {jobs.totalPages !== 1 ? (
-                <Pagination total={jobs.totalPages} pageNumber={jobs.pageNumber} />
-              ) : null}
-            </div>
-
-            {/* Job Posting  */}
-            <div className="w-full hidden lg:block lg:sticky lg:top-20 lg:bottom-20">
-              <JobPost />
-            </div>
-          </div>
-        </div>
-      ) : (
+      {hasSearchResults && !hasFilters && jobsLength === 0 ? (
         <div className="py-6 flex flex-col sm:flex-row gap-6">
           <div className="max-w-md w-full">
             <p>
@@ -153,6 +125,53 @@ const Jobs = () => {
           {/* Recent Searches  */}
           <RecentSearches />
         </div>
+      ) : (
+        <>
+          <div className="py-6 space-y-6">
+            {(search.keyword || search.location) && (
+              <div className="flex flex-col sm:flex-row justify-between gap-4">
+                <div>
+                  <p className="text-teal-600">
+                    {jobs.total} job{jobs.total > 1 ? "s" : ""}
+                  </p>
+                  <div className="text-light text-sm">{searchResultsMsg()}</div>
+                </div>
+
+                {/* Filters  */}
+                <JobsFilter />
+              </div>
+            )}
+
+            {jobsLength > 0 ? (
+              <div className="relative flex gap-x-6 items-start">
+                {/* Job List  */}
+                <div className="lg:max-w-md w-full space-y-6">
+                  <JobList jobs={jobs.jobs} />
+                  {jobs.totalPages !== 1 ? (
+                    <Pagination total={jobs.totalPages} pageNumber={jobs.pageNumber} />
+                  ) : null}
+                </div>
+
+                {/* Job Posting  */}
+                <div className="w-full hidden lg:block lg:sticky lg:top-20 lg:bottom-20">
+                  <JobPost />
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          {jobsLength === 0 ? (
+            <div className="py-24 flex flex-col sm:flex-row gap-6">
+              <div className="max-w-md w-full mx-auto text-center">
+                {hasSearchResults && hasFilters ? (
+                  <p>There are no active jobs found.</p>
+                ) : (
+                  <p>There are no active jobs listed yet.</p>
+                )}
+              </div>
+            </div>
+          ) : null}
+        </>
       )}
     </>
   );
