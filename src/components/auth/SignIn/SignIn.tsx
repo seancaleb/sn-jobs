@@ -52,6 +52,7 @@ const SignIn = () => {
             placeholder="Enter your email"
             InputProps={{
               onBlur: () => trigger("email"),
+              disabled: loginUserMutation.isLoading,
             }}
           />
 
@@ -61,6 +62,9 @@ const SignIn = () => {
             name="password"
             placeholder="Enter your password"
             label="Password"
+            InputProps={{
+              disabled: loginUserMutation.isLoading,
+            }}
           >
             <PasswordVisibilityToggle
               isVisible={isVisible}

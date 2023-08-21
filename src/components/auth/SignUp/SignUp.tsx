@@ -105,7 +105,7 @@ const SignIn = () => {
                 control={control}
                 name="email"
                 placeholder="Enter your email"
-                InputProps={{ onBlur: () => trigger("email") }}
+                InputProps={{ onBlur: () => trigger("email"), disabled: isLoading }}
                 label="Email"
               />
 
@@ -114,7 +114,7 @@ const SignIn = () => {
                 type={isVisible ? "text" : "password"}
                 name="password"
                 placeholder="Enter your password"
-                InputProps={{ onBlur: () => trigger("password") }}
+                InputProps={{ onBlur: () => trigger("password"), disabled: isLoading }}
                 label="Password"
               >
                 <PasswordVisibilityToggle
