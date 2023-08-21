@@ -20,8 +20,8 @@ const AxiosInterceptor = ({ children }: AxiosInterceptorProps) => {
     async (config: InternalAxiosRequestConfig) => {
       if (auth.isAuthenticated && isTokenExpirationThresholdMet(auth.tokenExpiration)) {
         try {
-          const { exp } = await refreshToken();
-          refreshAuthToken(exp);
+          const { exp, role } = await refreshToken();
+          refreshAuthToken({ role, exp });
         } catch (error) {
           console.error("Token refresh failed:", error);
           logoutUser();

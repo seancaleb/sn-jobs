@@ -16,8 +16,8 @@ const useAuth = () => {
     dispatch(AuthActions.logoutUser());
   };
 
-  const refreshAuthToken = (newTokenExpiration: number) => {
-    dispatch(AuthActions.refreshAuthToken(newTokenExpiration));
+  const refreshAuthToken = ({ role, exp }: Pick<User, "role" | "exp">) => {
+    dispatch(AuthActions.refreshAuthToken({ role, tokenExpiration: exp }));
   };
 
   return {

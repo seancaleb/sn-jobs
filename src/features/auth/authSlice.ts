@@ -51,8 +51,13 @@ const authSlice = createSlice({
       state.role = null;
       state.userId = null;
     },
-    refreshAuthToken: (state, action: PayloadAction<number>) => {
-      state.tokenExpiration = action.payload;
+    refreshAuthToken: (
+      state,
+      action: PayloadAction<Pick<AuthState, "tokenExpiration" | "role">>
+    ) => {
+      const { tokenExpiration, role } = action.payload;
+      state.tokenExpiration = tokenExpiration;
+      state.role = role;
     },
   },
 });
