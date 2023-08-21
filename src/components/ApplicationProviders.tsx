@@ -13,8 +13,21 @@ import { Provider as WrapBalancerProvider } from "react-wrap-balancer";
 // Redux Persist
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
+import { disableInteractions, removeDisableInteractions } from "@/lib/utils";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    mutations: {
+      onMutate: () => {
+        disableInteractions();
+      },
+      onSettled: () => {
+        removeDisableInteractions();
+      },
+    },
+  },
+});
+
 const persistor = persistStore(store);
 
 const ApplicationProviders = ({ children }: { children: ReactNode }) => {
