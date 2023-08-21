@@ -49,7 +49,7 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
         <div className="flex flex-wrap justify-between items-center gap-4 mb-2">
           <CardTitle className="text-2xl">{job.title}</CardTitle>
           <div className="flex-shrink-0">
-            {applications !== 0 && (
+            {applications !== 0 && !isApplicationPage && (
               <Badge>
                 <User className="h-4 w-4 mr-1" />
                 {applications} applicant{applications > 1 ? "s" : ""}
