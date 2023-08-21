@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { nanoid } from "@reduxjs/toolkit";
 import { Briefcase, Lock, LogOut, User } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import logo from "@/assets/images/logo.svg";
 
 const featureLinks = [
   {
@@ -35,8 +36,13 @@ const DashboardSidebar = () => {
   return (
     <aside className="fixed left-0 top-0 bottom-0 max-w-[16rem] w-full h-full border-r border-border flex flex-col">
       {/* Logo  */}
-      <div className="text-xl font-bold px-6 h-16 border-b border-border flex items-center ">
-        SNJOBS
+      <div className="px-6 h-16 border-b border-border flex items-center ">
+        <NavLink
+          to="/"
+          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md"
+        >
+          <img src={logo} className="h-7" />
+        </NavLink>
       </div>
 
       {/* Links  */}
