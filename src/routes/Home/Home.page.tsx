@@ -37,17 +37,16 @@ const Home = () => {
         <div className="flex flex-col items-center space-y-6 mb-16">
           <h1 className="text-5xl lg:text-6xl text-center tracking-[-1px] font-bold max-w-4xl">
             <Balancer>
-              Find the right{" "}
+              Explore{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-600">
-                Job
+                career
               </span>{" "}
-              for you.
+              opportunities.
             </Balancer>
           </h1>
           <p className="text-lg text-center max-w-lg">
             <Balancer>
-              Connecting talented professionals with remote opportunities in the Philippines and
-              beyond.
+              Connecting talented professionals with remote opportunities in the Philippines.
             </Balancer>
           </p>
           <Button onClick={handleNavigate} size="lg">

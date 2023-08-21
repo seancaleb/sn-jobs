@@ -14,21 +14,26 @@ const NotFound = () => {
   };
 
   return (
-    <div className="bg-background fixed h-screen top-0 left-0 right-0 bottom-0 z-[5] grid place-items-center">
-      <div className="section-padding flex flex-col gap-4 items-center sm:items-start max-w-lg w-full px-5 text-center sm:text-left">
-        <AlertTriangle className="w-9 h-9 sm:w-10 sm:h-10 text-light" />
+    <>
+      <div className="bg-background fixed h-screen top-0 left-0 right-0 bottom-0 z-[5] grid place-items-center">
+        <div className="section-padding flex flex-col gap-4 items-center sm:items-start max-w-lg w-full px-5 text-center sm:text-left">
+          <AlertTriangle className="w-9 h-9 sm:w-10 sm:h-10 text-teal-600" strokeWidth={1.5} />
 
-        <h1 className="text-3xl sm:text-4xl font-bold">
-          <Balancer>Page not found</Balancer>
-        </h1>
+          <h1 className="text-3xl sm:text-4xl font-semibold">
+            <Balancer>Page content not found.</Balancer>
+          </h1>
 
-        <p>
-          <Balancer>The page you are trying to access doesn't exist.</Balancer>
-        </p>
+          <p>
+            <Balancer>
+              We're sorry, but it appears that the page you're trying to access isn't available at
+              the moment.
+            </Balancer>
+          </p>
 
-        <Button onClick={handleNavigateBack}>Go Back</Button>
+          <Button onClick={handleNavigateBack}>Go Back</Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

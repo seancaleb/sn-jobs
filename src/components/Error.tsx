@@ -33,17 +33,17 @@ const ErrorRoute = () => {
         id="error-page"
         className="section-padding flex flex-col gap-4 items-center sm:items-start max-w-lg w-full px-5 text-center sm:text-left"
       >
-        <AlertTriangle className="w-9 h-9 sm:w-10 sm:h-10 text-light" />
+        <AlertTriangle className="w-9 h-9 sm:w-10 sm:h-10 text-teal-600" strokeWidth={1.5} />
 
-        <h1 className="text-3xl sm:text-4xl font-bold">
-          <Balancer>Something went wrong</Balancer>
+        <h1 className="text-3xl sm:text-4xl font-semibold">
+          <Balancer>Something went wrong.</Balancer>
         </h1>
 
         <p>
           <Balancer>{errorMessage}</Balancer>
         </p>
 
-        <Button onClick={() => navigate(-1)}>Back</Button>
+        <Button onClick={() => navigate(-1)}>Go Back</Button>
       </div>
     </div>
   );
