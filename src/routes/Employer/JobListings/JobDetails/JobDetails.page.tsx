@@ -54,7 +54,7 @@ const JobDetails = () => {
               <CardTitle className="text-2xl leading-[1.2]">{job.title}</CardTitle>
               <div className="flex-shrink-0">
                 {job.applications.length !== 0 && (
-                  <Badge>
+                  <Badge variant="primary">
                     <User className="h-4 w-4 mr-1" />
                     {job.applications.length} applicant{job.applications.length > 1 ? "s" : ""}
                   </Badge>

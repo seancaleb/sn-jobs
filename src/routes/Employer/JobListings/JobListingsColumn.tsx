@@ -122,7 +122,7 @@ export const columns: ColumnDef<EmployerJob>[] = [
 
       return (
         <div className="text-right">
-          <Badge variant={jobApplications.length > 0 ? "default" : "outline"}>
+          <Badge variant={jobApplications.length > 0 ? "primary" : "outline"}>
             {jobApplications.length > 0
               ? `${jobApplications.length} application${jobApplications.length > 1 ? "s" : ""}`
               : "No applications yet"}
