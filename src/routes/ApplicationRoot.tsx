@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { selectNotification } from "@/features/notification/notificationSlice";
 import { useDocumentHeightResize } from "@/hooks";
-import { useDocumentTitle } from "@mantine/hooks";
 import { Fragment, useEffect } from "react";
 import { Outlet, useLocation, useMatch } from "react-router-dom";
 
@@ -17,7 +16,6 @@ const ApplicationRoot = () => {
   const matchJobListings = useMatch("/employer/job-listings");
   const matchJobDetailsDashboard = useMatch("/employer/job-listings/:jobId");
 
-  useDocumentTitle("SNJOBS - Virtual Job Board in the Philippines");
   useDocumentHeightResize();
 
   useEffect(() => {

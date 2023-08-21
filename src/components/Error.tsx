@@ -10,7 +10,7 @@ const ErrorRoute = () => {
   let errorMessage: string;
   const navigate = useNavigate();
 
-  useDocumentTitle("Unexpected Error - SNJOBS");
+  useDocumentTitle("Something Went Wrong - SNJOBS");
 
   if (isRouteErrorResponse(error)) {
     // error is type `ErrorResponse`
