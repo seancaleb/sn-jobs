@@ -4,25 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Local fonts  */
-/* @font-face {
-  font-family: HelveticaNeue-Cyr;
-  src: url(./assets/fonts/HelveticaNeueCyr-Bold.otf);
-  font-weight: 700;
-}
-
-@font-face {
-  font-family: HelveticaNeue-Cyr;
-  src: url(./assets/fonts/HelveticaNeueCyr-Medium.otf);
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: HelveticaNeue-Cyr;
-  src: url(./assets/fonts/HelveticaNeueCyr-Roman.otf);
-  font-weight: 400;
-} */
-
 @layer base {
   :root {
     --background: 0 0% 100%;
