@@ -74,11 +74,11 @@ const JobDetails = () => {
               <Separator orientation="horizontal" />
             </div>
           </CardHeader>
-          <CardContent className="max-h-[70vh] overflow-y-auto text-sm">
+          <CardContent className="overflow-y-auto text-sm">
             <div className="space-y-6">
               <div className="space-y-1">
                 <div className="underline font-medium">Job description</div>
-                <p>{job.description}</p>
+                <p className="whitespace-pre-wrap">{job.description}</p>
               </div>
 
               <div className="space-y-1">
