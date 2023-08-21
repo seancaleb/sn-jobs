@@ -44,7 +44,7 @@ export const employerKeys = {
  * @desc  Get all job postings
  */
 export const fetchAllJobPostings = async () => {
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
 
   const data = await apiClient({
     options: {
@@ -76,7 +76,7 @@ export const fetchAllJobPostApplications = async ({
 
   if (!jobId) return Promise.reject("Job ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
 
   const data = await apiClient({
     options: {
@@ -282,7 +282,7 @@ export const updateJobApplicationStatus: MutationFunction<
   APIResponseSuccess,
   UpdateJobStatusVariables
 > = async ({ data, jobId, applicationId }) => {
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
 
   return await apiClient({
     options: {
