@@ -30,7 +30,7 @@ import { User } from "@/types/user";
  * @desc  Login user
  */
 export const loginUserRequest = async (data: LoginCredentials): Promise<Token> => {
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
   return await apiClient({
     options: {
       url: "/auth/login",
@@ -104,7 +104,7 @@ export const useLogoutUser = () => {
 export const registerUserRequest = async (
   data: RegisterCredentials
 ): Promise<APIResponseSuccess> => {
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
   return await apiClient({
     options: {
       url: "/auth/register",

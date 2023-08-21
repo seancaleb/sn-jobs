@@ -46,7 +46,7 @@ export const fetchUserProfile = async ({
 
   if (userId === null) return Promise.reject("User ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
 
   const data = await apiClient({
     options: {
@@ -79,7 +79,7 @@ export const useGetProfile = ({ initialData }: { initialData?: GetUserProfileRes
 export const updateUserProfile: MutationFunction<UpdateProfileResponse, UpdateProfile> = async (
   data
 ) => {
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
 
   const responseData = await apiClient({
     options: {
@@ -116,7 +116,7 @@ export const useUpdateProfile = () => {
 export const updatePassword: MutationFunction<APIResponseSuccess, UpdatePassword> = async (
   data
 ) => {
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
 
   return await apiClient({
     options: {
@@ -149,7 +149,7 @@ export const useUpdatePassword = () => {
 export const deleteUserProfile: MutationFunction<unknown, DeleteProfile> = async (
   data
 ): Promise<unknown> => {
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
 
   return await apiClient({
     options: {
@@ -193,7 +193,7 @@ export const fetchBookmarkedJobs = async ({
 
   if (userId === null) return Promise.reject("User ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
 
   const data = await apiClient({
     options: {

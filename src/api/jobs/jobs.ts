@@ -47,7 +47,7 @@ export const fetchJobs = async ({
 }: QueryFunctionContext<ReturnType<(typeof jobKeys)["filters"]>>) => {
   const [, filters] = queryKey;
 
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
 
   const data = await apiClient({
     options: {
@@ -84,7 +84,7 @@ export const fetchJobById = async ({
 
   if (!jobId) return Promise.reject("Job ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
 
   const data = await apiClient({
     options: {
@@ -213,7 +213,7 @@ export const applyJob: MutationFunction<APIResponseSuccess, ApplyJobVariables> =
   data,
   jobId,
 }): Promise<APIResponseSuccess> => {
-  await new Promise((res) => setTimeout(res, 2000));
+  await new Promise((res) => setTimeout(res, 300));
 
   return await apiClient({
     options: {
@@ -276,7 +276,7 @@ export const fetchJobApplications = async ({
 
   if (userId === null) return Promise.reject("User ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 1000));
+  await new Promise((res) => setTimeout(res, 300));
 
   const data = await apiClient({
     options: {
