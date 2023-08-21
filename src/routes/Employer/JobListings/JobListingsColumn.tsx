@@ -99,9 +99,10 @@ export const columns: ColumnDef<EmployerJob>[] = [
     },
     cell: ({ row }) => {
       const updatedAt = row.getValue<string>("updatedAt");
-      const modifedDate = formatJobPostTime(parseISO(updatedAt));
+      const modifiedDate = formatJobPostTime(parseISO(updatedAt));
+      const capitalizedDate = modifiedDate[0].toUpperCase() + modifiedDate.slice(1);
 
-      return <div className="text-right">{modifedDate}</div>;
+      return <div className="text-right">{capitalizedDate}</div>;
     },
   },
   {
