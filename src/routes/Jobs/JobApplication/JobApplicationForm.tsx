@@ -10,14 +10,10 @@ import { useApplyJob } from "@/api/jobs/jobs";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import { Send } from "lucide-react";
 import FormTextarea from "@/components/FormTextareaField/FormTextareaField";
-import { JobDetails } from "@/api/jobs/jobs.type";
 import Prompt from "@/components/Prompt";
+import { useParams } from "react-router-dom";
 
-type JobApplicationProps = {
-  job: JobDetails;
-};
-
-const JobApplication = ({ job }: JobApplicationProps) => {
+const JobApplication = () => {
   const form = useForm<JobApplicationValues>({
     defaultValues: {
       resume: "",
@@ -28,9 +24,10 @@ const JobApplication = ({ job }: JobApplicationProps) => {
   const { control, handleSubmit, formState } = form;
   const { isValid, isDirty, isSubmitSuccessful } = formState;
   const applyJobMutation = useApplyJob();
+  const { jobId } = useParams<{ jobId: string }>();
 
   const onSubmit = (values: JobApplicationValues) => {
-    isValid ? applyJobMutation.mutate({ data: values, jobId: job.jobId }) : null;
+    isValid && jobId ? applyJobMutation.mutate({ data: values, jobId }) : null;
   };
 
   return (
