@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Bookmark, Briefcase, MoveRight, Send, X } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useBookmarkJobPost } from "@/api/jobs/jobs";
-import { formatJobPostTime } from "@/lib/utils";
+import { displaySuccessNotification, formatJobPostTime } from "@/lib/utils";
 import {
   fetchBookmarkedJobs,
   fetchUserProfile,
@@ -25,6 +25,8 @@ import { LoaderReturnType } from "@/types";
 import { JobDetails } from "@/api/jobs/jobs.type";
 import { useDocumentTitle } from "@mantine/hooks";
 import { Separator } from "@/components/ui/separator";
+import useNotification from "@/features/notification/useNotification";
+import { useToast } from "@/components/ui/use-toast";
 
 export const loader = (queryClient: QueryClient) => async () => {
   const auth = store.getState().auth;
@@ -52,6 +54,8 @@ export const loader = (queryClient: QueryClient) => async () => {
   };
 };
 
+const bookmarkMsg = "Job Bookmarked: The job has been successfully bookmarked.";
+
 const BookmarkedJobs = () => {
   const loaderData = useLoaderData() as LoaderReturnType<typeof loader>;
   const initialBookmarkedJobsData = (
@@ -69,6 +73,8 @@ const BookmarkedJobs = () => {
   const bookmarkJobMutation = useBookmarkJobPost();
   const [unbookmarkedJobs, setUnbookmarkedJobs] = useState<Set<string>>(new Set());
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const { initNotificationId } = useNotification();
 
   const handleUnbookmarkJob = (jobId: string) => {
     setUnbookmarkedJobs((prev) => {
@@ -94,6 +100,7 @@ const BookmarkedJobs = () => {
           return updatedSet;
         }),
     });
+    displaySuccessNotification(bookmarkMsg, toast, initNotificationId);
   };
 
   useDocumentTitle("Bookmarked Jobs - SNJOBS");
