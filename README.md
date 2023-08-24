@@ -1,6 +1,5 @@
 # SNJOBS (A Full-Stack MERN Application)
 
----
 This repository contains the client (front-end) part of the full-stack application SNJOBS that uses [SNJOBS API](https://github.com/seancaleb/snjobs-backend-api).
 
 ## Table of Contents
