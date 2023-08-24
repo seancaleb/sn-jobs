@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormDescription } from "@/components/ui/form";
 import FormInputField from "@/components/FormInputField/FormInputField";
 import { Button } from "@/components/ui/button";
-import { DevTool } from "@hookform/devtools";
 import { useApplyJob } from "@/api/jobs/jobs";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import { Send } from "lucide-react";
@@ -75,8 +74,6 @@ const JobApplication = () => {
           </div>
         </form>
       </Form>
-
-      <DevTool control={control} />
     </div>
   );
 };

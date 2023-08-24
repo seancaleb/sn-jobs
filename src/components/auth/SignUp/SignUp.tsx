@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { DevTool } from "@hookform/devtools";
 import { Link } from "react-router-dom";
 import { useLoginUser, useRegisterUser } from "@/api/auth/auth";
 import { SignUpValues, signUpSchema } from "./SignUp.schema";
@@ -171,8 +170,6 @@ const SignIn = () => {
           </p>
         </form>
       </Form>
-
-      <DevTool control={control} />
     </div>
   );
 };
