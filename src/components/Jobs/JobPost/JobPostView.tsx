@@ -1,18 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Briefcase, Bookmark, Send } from "lucide-react";
+import { Briefcase, Send } from "lucide-react";
 import { nanoid } from "@reduxjs/toolkit";
 import { Badge } from "@/components/ui/badge";
 import { cn, formatJobPostTime } from "@/lib/utils";
 import { JobDetails } from "@/api/jobs/jobs.type";
-import { useBookmarkJobPost } from "@/api/jobs/jobs";
 import { useAppSelector } from "@/app/hooks";
 import { selectAuthStatus } from "@/features/auth/authSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 import { User } from "lucide-react";
 import { GetUserProfileResponse } from "@/api/users/users.type";
-import { useState } from "react";
+import { useMemo } from "react";
+import BookmarkJobPost from "@/components/Jobs/BookmarkJobPost";
 
 type JobPostViewProps = {
   job: JobDetails;
@@ -24,21 +24,13 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
   const jobDatePosted = new Date(job.createdAt);
   const formattedJobDate = formatJobPostTime(jobDatePosted);
   const applications = job.applications.length;
-  const bookmarkJobMutation = useBookmarkJobPost();
   const auth = useAppSelector(selectAuthStatus);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const isBookmarked = user.bookmark?.find((id) => id === job.jobId);
-  const [debouncedBookmark, setDebouncedBookmark] = useState<NodeJS.Timeout | undefined>(undefined);
-
-  const handleBookmarkJobPost = () => {
-    clearTimeout(debouncedBookmark);
-    const timeout = setTimeout(() => {
-      bookmarkJobMutation.mutate(job);
-    }, 300);
-    setDebouncedBookmark(timeout);
-  };
+  const isBookmarked = useMemo(
+    () => user.bookmark?.find((id) => id === job.jobId),
+    [job.jobId, user.bookmark]
+  );
 
   const handleApplyNow = (jobId: string) => {
     navigate(`/jobs/${jobId}/apply`);
@@ -86,12 +78,7 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
                     <Briefcase className="mr-2 h-4 w-4" /> Apply Now
                   </Button>
                 ))}
-              <Button variant="outline" onClick={handleBookmarkJobPost}>
-                <Bookmark
-                  className={`h-4 w-4 ${isBookmarked ? "fill-teal-600 text-teal-600 mr-2" : ""}`}
-                />
-                {isBookmarked ? "Saved" : null}
-              </Button>
+              <BookmarkJobPost job={job} isBookmarked={isBookmarked} />
             </div>
           )}
 
