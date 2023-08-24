@@ -2,7 +2,6 @@
 import { Form } from "@/components/ui/form";
 import FormInputField from "@/components/FormInputField/FormInputField";
 import FormCombobox from "@/components/FormCombobox/FormCombobox";
-import { DevTool } from "@hookform/devtools";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -112,7 +111,6 @@ const SearchJob = ({ keyword, location }: SearchJobProps) => {
           <Button type="submit">Find jobs</Button>
         </form>
       </Form>
-      <DevTool control={control} />
     </>
   );
 };

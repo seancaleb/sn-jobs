@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import store from "@/app/store";
+import { AuthActions } from "@/features/auth/authSlice";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 interface ServiceRequestConfigs {
@@ -42,7 +44,10 @@ export default async function <T>({ options }: ServiceRequestConfigs): Promise<T
       throw onError({
         message: NETWORK_ERROR,
       });
-    else throw onError(e.response?.data);
+    else if (e.response?.status === 401) {
+      store.dispatch(AuthActions.logoutUser());
+      throw onError(e.response?.data);
+    } else throw onError(e.response?.data);
   }
 }
 
