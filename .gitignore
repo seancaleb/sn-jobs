@@ -26,3 +26,7 @@ dist-ssr
 
 # vitest test-specific files
 html/*
+
+# etc.
+user-stories.md
+requirements.md
