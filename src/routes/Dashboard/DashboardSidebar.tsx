@@ -1,11 +1,16 @@
 import { useLogoutUser } from "@/api/auth/auth";
 import { Button } from "@/components/ui/button";
 import { nanoid } from "@reduxjs/toolkit";
-import { Briefcase, Lock, LogOut, User } from "lucide-react";
+import { Briefcase, LayoutDashboard, Lock, LogOut, User } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import logo from "@/assets/images/logo.svg";
 
 const featureLinks = [
+  {
+    label: "Dashboard",
+    path: "dashboard",
+    icon: <LayoutDashboard className="h-4 w-4 mr-3" />,
+  },
   {
     label: "My Job Listings",
     path: "job-listings",

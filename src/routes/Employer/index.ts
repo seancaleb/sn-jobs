@@ -6,6 +6,7 @@ import EditJob, { loader as editJobLoader } from "./JobListings/JobDetails/Mutat
 import JobApplicationDetails, {
   loader as jobApplicationDetailsLoader,
 } from "./JobListings/JobDetails/JobApplicationDetails/JobApplicationDetails.page";
+import Dashboard, { loader as dashboardLoader } from "./Dashboard/Dashboard.page";
 
 export {
   JobListings,
@@ -18,4 +19,6 @@ export {
   editJobLoader,
   JobApplicationDetails,
   jobApplicationDetailsLoader,
+  Dashboard as EmployerDashboard,
+  dashboardLoader,
 };

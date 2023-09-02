@@ -27,6 +27,7 @@ import {
   removeDisableInteractions,
 } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { Applications, applicationsSchema } from "./employer.type";
 
 /**
  * @desc Keys related to employers
@@ -38,6 +39,8 @@ export const employerKeys = {
     [...employerKeys.profile(userId), "job-postings"] as const,
   jobPostApplications: (userId: string | null, jobId: string | null | undefined) =>
     [...employerKeys.profile(userId), ...jobKeys.detail(jobId), "job-applications"] as const,
+  applications: (userId: string | null) =>
+    [...employerKeys.profile(userId), "applications"] as const,
 };
 
 /**
@@ -311,7 +314,13 @@ export const useUpdateJobApplicationStatus = () => {
     onSuccess: async ({ message }, { jobId }) => {
       if (notificationId) dismiss(notificationId);
 
-      await queryClient.invalidateQueries(employerKeys.jobPostApplications(auth.userId, jobId));
+      await Promise.all([
+        queryClient.invalidateQueries(employerKeys.jobPostApplications(auth.userId, jobId)),
+        queryClient.prefetchQuery({
+          queryFn: fetchAllApplications,
+          queryKey: employerKeys.applications(auth.userId),
+        }),
+      ]);
 
       displaySuccessNotification(message, toast, initNotificationId);
     },
@@ -323,6 +332,51 @@ export const useUpdateJobApplicationStatus = () => {
     },
     onSettled: () => {
       removeDisableInteractions();
+    },
+  });
+};
+
+/**
+ * @desc  Get all job applications
+ */
+export const fetchAllApplications = async ({
+  queryKey,
+}: QueryFunctionContext<ReturnType<(typeof employerKeys)["applications"]>>) => {
+  const [, userId] = queryKey;
+
+  if (!userId) return Promise.reject("Job ID needs to be provided.");
+
+  await new Promise((res) => setTimeout(res, 300));
+
+  const data = await apiClient({
+    options: {
+      url: `/employers/jobs/applications`,
+      method: "GET",
+    },
+  });
+
+  return applicationsSchema.parse(data);
+};
+
+export const useGetAllApplications = ({ initialData }: { initialData?: Applications }) => {
+  const auth = useAppSelector(selectAuthStatus);
+  const { toast, dismiss } = useToast();
+  const { id: notificationId } = useAppSelector(selectNotification);
+  const { initNotificationId } = useNotification();
+
+  return useQuery<
+    Applications,
+    APIResponseError,
+    Applications,
+    ReturnType<(typeof employerKeys)["applications"]>
+  >({
+    queryKey: employerKeys.applications(auth.userId),
+    queryFn: fetchAllApplications,
+    initialData,
+    onError: ({ message }) => {
+      if (notificationId) dismiss(notificationId);
+
+      displayErrorNotification(message, toast, initNotificationId);
     },
   });
 };

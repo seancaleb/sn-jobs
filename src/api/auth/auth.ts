@@ -57,7 +57,11 @@ export const useLoginUser = () => {
       if (id) dismiss(id);
 
       loginUser({ role, exp, userId });
-      navigate(`/${role === "user" ? "jobseekers" : role}/account/profile`, { replace: true });
+      if (role === "user") {
+        navigate("/jobseekers/account/profile", { replace: true });
+      } else {
+        navigate(`/${role}/dashboard`, { replace: true });
+      }
     },
     onError: ({ message }) => displayErrorNotification(message, toast, initNotificationId),
     onMutate: () => {
