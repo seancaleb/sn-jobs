@@ -19,10 +19,21 @@ export default defineConfig({
     css: true,
     setupFiles: "./src/test/setup.ts",
     reporters: ["default", "html"],
-    // coverage: {
-    //   provider: "v8",
-    //   enabled: true,
-    //   include: ["src/components/**/*.{ts,tsx}"],
-    // },
+    coverage: {
+      provider: "v8",
+      enabled: true,
+      include: ["src/components/**/*.{ts,tsx}"],
+      exclude: ["src/components/ui"],
+    },
+  },
+  build: {
+    minify: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          recharts: ["recharts"],
+        },
+      },
+    },
   },
 });
