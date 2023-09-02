@@ -13,7 +13,7 @@ export const loader = (role: Role) => () => {
   return !isAuthorized
     ? auth.role === "user"
       ? redirect("/jobs")
-      : redirect("/employer/job-listings")
+      : redirect("/employer/dashboard")
     : null;
 };
 
