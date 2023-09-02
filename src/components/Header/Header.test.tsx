@@ -20,7 +20,7 @@ describe("Header (Desktop)", () => {
   });
 
   it("renders logo", () => {
-    const logoEl = screen.getByRole("link", { name: "SNJOBS" });
+    const logoEl = screen.getByRole("link", { name: "logo" });
     expect(logoEl).toBeInTheDocument();
   });
 
@@ -42,7 +42,7 @@ describe("Header (Desktop)", () => {
   it("correctly works when tabbing upon elements", async () => {
     user.setup();
 
-    const logoEl = screen.getByRole("link", { name: "SNJOBS" });
+    const logoEl = screen.getByRole("link", { name: "logo" });
     const signInBtn = screen.getByRole("link", { name: "Sign In" });
     const signUpBtn = screen.getByRole("link", { name: "Sign Up" });
 

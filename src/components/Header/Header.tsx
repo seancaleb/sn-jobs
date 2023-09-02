@@ -19,6 +19,7 @@ const Header = () => {
           to={isAuthenticated ? "/jobs" : "/"}
           className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md"
           onClick={() => window.scrollTo(0, 0)}
+          aria-label="logo"
         >
           <img src={logo} className="h-7" />
         </NavLink>
