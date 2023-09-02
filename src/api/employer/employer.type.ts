@@ -45,9 +45,34 @@ export const mutateJobApplicationStatusSchema = z.object({
   }).shape,
 });
 
+export const applicationsSchema = z.object({
+  totalJobs: z.number(),
+  totalApplications: z.number(),
+  applications: z.array(
+    jobApplicationSchema.pick({
+      status: true,
+      createdAt: true,
+    })
+  ),
+  applicationStatusDistribution: z.array(
+    z.object({
+      name: z.enum(["Applied", "Viewed", "Rejected"]),
+      value: z.number(),
+    })
+  ),
+  applicationTrends: z.array(
+    z.object({
+      date: z.string(),
+      applications: z.number(),
+    })
+  ),
+  applicationTrendsGraphActive: z.boolean(),
+});
+
 export type EmployerJob = z.infer<typeof employerJobSchema>;
 export type EmployerJobPostings = z.infer<typeof employerJobPostingsSchema>;
 export type JobPostApplication = z.infer<typeof jobPostApplicationSchema>;
 export type JobPostApplications = z.infer<typeof jobPostApplicationsSchema>;
 export type MutateJob = z.infer<typeof mutateJobSchema>;
 export type MutateJobApplicationStatus = z.infer<typeof mutateJobApplicationStatusSchema>;
+export type Applications = z.infer<typeof applicationsSchema>;
