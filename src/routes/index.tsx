@@ -27,9 +27,11 @@ import {
 import {
   CreateJob,
   EditJob,
+  EmployerDashboard,
   JobApplicationDetails,
   JobDetails,
   JobListings,
+  dashboardLoader,
   editJobLoader,
   jobApplicationDetailsLoader,
   jobDetailsLoader,
@@ -105,6 +107,11 @@ const ApplicationRouter = () => {
               <Route element={<PrivateRoute />} loader={privateRouteLoader}>
                 <Route element={<ProtectedRoute />} loader={protectedRouteLoader("employer")}>
                   <Route path="employer" element={<DashboardRoute />}>
+                    <Route
+                      path="dashboard"
+                      element={<EmployerDashboard />}
+                      loader={dashboardLoader(queryClient)}
+                    />
                     <Route
                       path="account/profile"
                       element={<Profile />}
