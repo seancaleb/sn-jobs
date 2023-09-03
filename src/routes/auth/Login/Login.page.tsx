@@ -11,7 +11,7 @@ export const loader = () => {
   return auth.isAuthenticated
     ? auth.role === "user"
       ? redirect("/jobs")
-      : redirect("/employer/job-listings")
+      : redirect("/employer/dashboard")
     : null;
 };
 

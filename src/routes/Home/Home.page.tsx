@@ -11,7 +11,7 @@ export const loader = () => {
   const auth = store.getState().auth;
 
   if (auth.isAuthenticated) {
-    return auth.role === "user" ? redirect("/jobs") : redirect("/employer/job-listings");
+    return auth.role === "user" ? redirect("/jobs") : redirect("/employer/dashboard");
   }
 
   return null;

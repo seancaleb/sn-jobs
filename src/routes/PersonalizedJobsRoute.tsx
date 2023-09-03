@@ -19,7 +19,7 @@ const PersonalizedJobsRoute = () => {
   return (
     <div className="py-8 space-y-6">
       <div className="flex gap-6 items-start">
-        <aside className="sticky top-4 p-6 rounded-md border border-border max-w-[16rem] w-full hidden lg:block">
+        <aside className="sticky top-20 p-6 rounded-md border border-border max-w-[16rem] w-full hidden lg:block">
           <ul className="space-y-1">
             {links.map(({ label, path, icon }) => (
               <li key={nanoid()}>

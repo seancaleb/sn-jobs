@@ -16,10 +16,10 @@ const DashboardRoute = () => {
           <main className="h-screen flex">
             <DashboardSidebar />
 
-            <div className="flex-1 h-full fixed top-0 right-0 left-[16rem] overflow-y-auto">
+            <div className="flex-1 h-full fixed top-0 right-0 left-[16rem]">
               <DashboardHeader />
 
-              <div className="h-[calc(100%-4rem)] px-8 py-6">
+              <div className="h-[calc(100%-4rem)] overflow-y-auto px-8 py-6">
                 <Outlet />
               </div>
             </div>
