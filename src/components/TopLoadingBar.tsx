@@ -5,8 +5,8 @@ import LoadingBar from "react-top-loading-bar";
 
 const TopLoadingBar = () => {
   const [progress, setProgress] = useState(0);
+  const [flag, setFlag] = useState(() => nanoid());
   const navigation = useNavigation();
-  const [flag, setFlag] = useState(nanoid());
 
   useEffect(() => {
     const bodyEl = document.querySelector("body");
