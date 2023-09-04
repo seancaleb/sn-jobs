@@ -205,7 +205,13 @@ export const useDeleteJobPostById = () => {
     onSuccess: async ({ message }) => {
       if (notificationId) dismiss(notificationId);
 
-      await Promise.all([queryClient.invalidateQueries(employerKeys.jobPostings(auth.userId))]);
+      await Promise.all([
+        queryClient.invalidateQueries(employerKeys.jobPostings(auth.userId)),
+        queryClient.prefetchQuery({
+          queryFn: fetchAllApplications,
+          queryKey: employerKeys.applications(auth.userId),
+        }),
+      ]);
 
       displaySuccessNotification(message, toast, initNotificationId);
     },
