@@ -1,8 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@/lib/utils";
-import { Eye, Frown, Send } from "lucide-react";
 
 const badgeVariants = cva(
   "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
@@ -37,9 +35,6 @@ export interface BadgeProps
 function Badge({ className, variant, children, ...props }: BadgeProps) {
   return (
     <div className={cn(badgeVariants({ variant }), className)} {...props}>
-      {variant === "applied" ? <Send className="h-4 w-4 mr-2" /> : null}
-      {variant === "application-viewed" ? <Eye className="h-4 w-4 mr-2" /> : null}
-      {variant === "not-selected" ? <Frown className="h-4 w-4 mr-2" /> : null}
       {children}
     </div>
   );
