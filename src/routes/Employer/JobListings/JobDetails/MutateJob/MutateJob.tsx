@@ -170,7 +170,7 @@ const MutateJob = ({ mode = "create", job }: MutateJobProps) => {
                 ) : (
                   <Save className="h-4 w-4 mr-2" />
                 )}
-                Save Changes
+                Publish
               </Button>
             ) : (
               <Button type="submit" disabled={updateJobMutation.isLoading || !isDirty}>
@@ -179,7 +179,7 @@ const MutateJob = ({ mode = "create", job }: MutateJobProps) => {
                 ) : (
                   <Save className="h-4 w-4 mr-2" />
                 )}
-                Save Changes
+                Save changes
               </Button>
             )}
           </div>

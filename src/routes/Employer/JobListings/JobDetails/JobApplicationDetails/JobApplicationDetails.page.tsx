@@ -69,7 +69,7 @@ const JobApplicationDetails = () => {
         {!isEditMode ? (
           <Button type="button" onClick={() => handleSetIsEditMode(true)}>
             <Pencil className="h-4 w-4 mr-2" />
-            Edit Status
+            Update application
           </Button>
         ) : null}
       </div>

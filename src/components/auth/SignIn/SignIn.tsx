@@ -73,7 +73,7 @@ const SignIn = () => {
 
           <Button type="submit" disabled={!isDirty || !isValid || isLoading}>
             {isLoading && <LoaderSpinner />}
-            Sign In
+            Sign in
           </Button>
 
           <p className="text-light text-sm">

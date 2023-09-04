@@ -39,7 +39,7 @@ const JobListings = () => {
 
         <Button asChild>
           <Link to="create">
-            <Plus className="h-4 w-4 mr-2" /> New Job
+            <Plus className="h-4 w-4 mr-2" /> Create new job
           </Link>
         </Button>
       </div>

@@ -34,7 +34,7 @@ const EditProfile = () => {
   return (
     <>
       <Button onClick={() => setIsOpen(true)}>
-        <Pencil className="mr-2 h-4 w-4" /> Edit Profile
+        <Pencil className="mr-2 h-4 w-4" /> Edit profile
       </Button>
 
       <EditDialog isOpen={isOpen} setIsOpen={handleSetIsOpen} />

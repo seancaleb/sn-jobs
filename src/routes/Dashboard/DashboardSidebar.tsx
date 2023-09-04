@@ -67,7 +67,7 @@ const DashboardSidebar = () => {
                   <NavLink
                     to={path}
                     className={({ isActive }) =>
-                      `text-sm rounded-md px-4 py-2 h-10 flex items-center transition duration-150 hover:bg-accent hover:text-accent-foreground ${
+                      `text-sm rounded-md px-4 py-2 h-10 font-medium flex items-center transition duration-150 hover:bg-accent hover:text-accent-foreground ${
                         isActive ? "bg-accent text-accent-foreground" : "text-slate-500"
                       }`
                     }
@@ -88,7 +88,7 @@ const DashboardSidebar = () => {
                   <NavLink
                     to={path}
                     className={({ isActive }) =>
-                      `text-sm rounded-md px-4 py-2 h-10 flex items-center transition duration-150 hover:bg-accent hover:text-accent-foreground ${
+                      `text-sm rounded-md px-4 py-2 h-10 font-medium flex items-center transition duration-150 hover:bg-accent hover:text-accent-foreground ${
                         isActive ? "bg-accent text-accent-foreground" : "text-slate-500"
                       }`
                     }

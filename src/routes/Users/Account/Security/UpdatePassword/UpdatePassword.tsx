@@ -28,7 +28,7 @@ const UpdatePassword = () => {
     <>
       <Button onClick={() => setIsOpen(true)}>
         <KeyRound className="mr-2 h-4 w-4" />
-        Change Password
+        Change password
       </Button>
 
       <UpdatePasswordDialog isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -166,10 +166,15 @@ const UpdatePasswordDialog = ({ isOpen, setIsOpen }: UpdatePasswordProps) => {
                 }}
               />
 
-              <Button type="submit" disabled={updatePasswordMutation.isLoading}>
-                {updatePasswordMutation.isLoading && <LoaderSpinner />}
-                Save Changes
-              </Button>
+              <div className="self-end space-x-2">
+                <Button type="button" variant="ghost" onClick={handleEditOnClose}>
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={updatePasswordMutation.isLoading}>
+                  {updatePasswordMutation.isLoading && <LoaderSpinner />}
+                  Save changes
+                </Button>
+              </div>
             </form>
           </Form>
         </DialogContent>

@@ -103,7 +103,7 @@ const ColumnDropdownActions = ({ jobPost }: ColumnDropdownActions) => {
             disabled={deleteJobMutation.isLoading}
           >
             {deleteJobMutation.isLoading ? <LoaderSpinner /> : null}
-            Confirm Deletion
+            Confirm deletion
           </Button>,
         ]}
       />

@@ -121,7 +121,7 @@ const BookmarkedJobs = () => {
             <p className="text-sm">Keep track of bookmarked jobs here.</p>
           </div>
           <Button onClick={() => navigate("/jobs")}>
-            Find Jobs
+            Find jobs
             <MoveRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -153,14 +153,14 @@ const BookmarkedJobs = () => {
                   <div className="flex flex-wrap gap-3">
                     {user?.applications?.find((id) => id === job.jobId) ? (
                       <Button className="flex-1" disabled>
-                        <Send className="mr-2 h-4 w-4" /> Application Submitted
+                        <Send className="mr-2 h-4 w-4" /> Application submitted
                       </Button>
                     ) : (
                       <Button
                         className="flex-1"
                         onClick={() => navigate(`/jobs/${job.jobId}/apply`)}
                       >
-                        <Briefcase className="mr-2 h-4 w-4" /> Apply Now
+                        <Briefcase className="mr-2 h-4 w-4" /> Apply now
                       </Button>
                     )}
                     <Button

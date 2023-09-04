@@ -157,7 +157,7 @@ const SignIn = () => {
             {count === 2 && (
               <Button type="submit" disabled={!isDirty || !isValid || isLoading}>
                 {isLoading && <LoaderSpinner />}
-                Sign Up
+                Sign up
               </Button>
             )}
           </div>

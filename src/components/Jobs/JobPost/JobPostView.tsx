@@ -71,11 +71,11 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
               {!isApplicationPage &&
                 (user?.applications?.find((id) => id === job.jobId) ? (
                   <Button disabled>
-                    <Send className="mr-2 h-4 w-4" /> Application Submitted
+                    <Send className="mr-2 h-4 w-4" /> Application submitted
                   </Button>
                 ) : (
                   <Button onClick={() => handleApplyNow(job.jobId)}>
-                    <Briefcase className="mr-2 h-4 w-4" /> Apply Now
+                    <Briefcase className="mr-2 h-4 w-4" /> Apply now
                   </Button>
                 ))}
               <BookmarkJobPost job={job} isBookmarked={isBookmarked} />

@@ -28,7 +28,7 @@ const DeleteProfile = () => {
     <>
       <Button variant="destructive" onClick={() => setIsOpen(true)}>
         <Trash2 className="mr-2 h-4 w-4" />
-        Delete Account
+        Delete account
       </Button>
 
       <ConfirmDeletionDialog isOpen={isOpen} setIsOpen={handleSetIsOpen} />
@@ -112,7 +112,7 @@ const ConfirmDeletionDialog = ({ isOpen, setIsOpen }: ConfirmDeletionDialogProps
                   disabled={deleteProfileMutation.isLoading}
                 >
                   {deleteProfileMutation.isLoading && <LoaderSpinner />}
-                  Confirm Deletion
+                  Confirm deletion
                 </Button>
               </div>
             </form>
