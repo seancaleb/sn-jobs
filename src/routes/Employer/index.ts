@@ -7,6 +7,7 @@ import JobApplicationDetails, {
   loader as jobApplicationDetailsLoader,
 } from "./JobListings/JobDetails/JobApplicationDetails/JobApplicationDetails.page";
 import Dashboard, { loader as dashboardLoader } from "./Dashboard/Dashboard.page";
+import Applications, { loader as applicationsLoader } from "./Applications/Applications.page";
 
 export {
   JobListings,
@@ -21,4 +22,6 @@ export {
   jobApplicationDetailsLoader,
   Dashboard as EmployerDashboard,
   dashboardLoader,
+  Applications,
+  applicationsLoader,
 };
