@@ -25,12 +25,14 @@ import {
   profileLoader,
 } from "@/routes/Users";
 import {
+  Applications,
   CreateJob,
   EditJob,
   EmployerDashboard,
   JobApplicationDetails,
   JobDetails,
   JobListings,
+  applicationsLoader,
   dashboardLoader,
   editJobLoader,
   jobApplicationDetailsLoader,
@@ -111,6 +113,11 @@ const ApplicationRouter = () => {
                       path="dashboard"
                       element={<EmployerDashboard />}
                       loader={dashboardLoader(queryClient)}
+                    />
+                    <Route
+                      path="applications"
+                      element={<Applications />}
+                      loader={applicationsLoader(queryClient)}
                     />
                     <Route
                       path="account/profile"

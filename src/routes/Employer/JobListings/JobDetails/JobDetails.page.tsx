@@ -11,31 +11,56 @@ import { LoaderReturnType } from "@/types";
 import { JobDetails as JobDetailsType } from "@/api/jobs/jobs.type";
 import { parseISO } from "date-fns";
 import { formatJobPostTime, getBadgeVariant } from "@/lib/utils";
-import { useGetAllJobPostApplications } from "@/api/employer/employer";
-import { Skeleton } from "@/components/ui/skeleton";
+import {
+  employerKeys,
+  fetchAllJobPostApplications,
+  useGetAllJobPostApplications,
+} from "@/api/employer/employer";
 import { Button } from "@/components/ui/button";
 import { useDocumentTitle } from "@mantine/hooks";
+import store from "@/app/store";
+import { JobPostApplications } from "@/api/employer/employer.type";
 
 export const loader =
   (queryClient: QueryClient) =>
   async ({ params }: LoaderFunctionArgs) => {
-    const initialJobData = await queryClient.ensureQueryData({
+    const auth = store.getState().auth;
+
+    const initialJobDataQuery = queryClient.ensureQueryData({
       queryKey: jobKeys.detail(params.jobId),
       queryFn: fetchJobById,
     });
 
+    const initialJobPostApplicationsQuery = queryClient.ensureQueryData({
+      queryKey: employerKeys.jobPostApplications(auth.userId, params.jobId as string),
+      queryFn: fetchAllJobPostApplications,
+    });
+
+    const [initialJobData, initialJobPostApplications] = await Promise.all([
+      initialJobDataQuery,
+      initialJobPostApplicationsQuery,
+    ]);
+
     return {
       jobId: params.jobId as string,
       initialJobData,
+      initialJobPostApplications,
     };
   };
 
 const JobDetails = () => {
-  const { jobId, initialJobData } = useLoaderData() as LoaderReturnType<typeof loader>;
-  const { data } = useGetJobById({ jobId, initialData: initialJobData });
-  const job = data as JobDetailsType;
+  const { jobId, initialJobData, initialJobPostApplications } = useLoaderData() as LoaderReturnType<
+    typeof loader
+  >;
+  const { data: jobData } = useGetJobById({ jobId, initialData: initialJobData });
+  const { data: jobPostApplicationsData } = useGetAllJobPostApplications({
+    initialData: initialJobPostApplications,
+    jobId,
+  });
+
+  const job = jobData as JobDetailsType;
+  const jobPostApplications = jobPostApplicationsData as JobPostApplications;
   const formattedJobDate = formatJobPostTime(parseISO(job.createdAt));
-  const { data: jobPostApplications, isSuccess } = useGetAllJobPostApplications({ jobId });
 
   useDocumentTitle("Job Details - SNJOBS");
 
@@ -103,43 +128,34 @@ const JobDetails = () => {
             </div>
           </CardHeader>
 
-          {!isSuccess ? (
-            <CardContent className="space-y-1.5">
-              <Skeleton className="h-3 w-11/12" />
-              <Skeleton className="h-3 w-4/5" />
-              <Skeleton className="h-3 w-10/12" />
-              <Skeleton className="h-3 w-8/12" />
-            </CardContent>
-          ) : (
-            <CardContent>
-              <div className="space-y-2">
-                {jobPostApplications.jobApplications.map((application) => {
-                  return (
-                    <Link
-                      to={`applications/${application.applicationId}`}
-                      key={application.applicationId}
-                      className="flex justify-between items-start hover:underline gap-4"
-                    >
-                      <div className="text-sm font-medium">
-                        {application.user.firstName} {application.user.lastName}
-                      </div>
-                      <div className="flex-shrink-0">
-                        <Badge variant={getBadgeVariant(application.status)}>
-                          {application.status}
-                        </Badge>
-                      </div>
-                    </Link>
-                  );
-                })}
+          <CardContent>
+            <div className="space-y-2">
+              {jobPostApplications.jobApplications.map((application) => {
+                return (
+                  <Link
+                    to={`applications/${application.applicationId}`}
+                    key={application.applicationId}
+                    className="flex justify-between items-start hover:underline gap-4"
+                  >
+                    <div className="text-sm font-medium">
+                      {application.user.firstName} {application.user.lastName}
+                    </div>
+                    <div className="flex-shrink-0">
+                      <Badge variant={getBadgeVariant(application.status)}>
+                        {application.status}
+                      </Badge>
+                    </div>
+                  </Link>
+                );
+              })}
 
-                {jobPostApplications.total === 0 ? (
-                  <div className="text-center text-sm h-24 grid place-items-center text-light">
-                    No applications yet.
-                  </div>
-                ) : null}
-              </div>
-            </CardContent>
-          )}
+              {jobPostApplications.total === 0 ? (
+                <div className="text-center text-sm h-24 grid place-items-center text-light">
+                  No applications yet.
+                </div>
+              ) : null}
+            </div>
+          </CardContent>
         </Card>
       </div>
     </div>

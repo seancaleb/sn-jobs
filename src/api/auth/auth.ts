@@ -20,17 +20,16 @@ import {
   displayErrorNotification,
   displaySuccessNotification,
   removeDisableInteractions,
+  responseDelay,
 } from "@/lib/utils";
 import useNotification from "@/features/notification/useNotification";
-import { useAppSelector } from "@/app/hooks";
-import { selectNotification } from "@/features/notification/notificationSlice";
 import { User } from "@/types/user";
 
 /**
  * @desc  Login user
  */
 export const loginUserRequest = async (data: LoginCredentials): Promise<Token> => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
   return await apiClient({
     options: {
       url: "/auth/login",
@@ -43,9 +42,8 @@ export const loginUserRequest = async (data: LoginCredentials): Promise<Token> =
 export const useLoginUser = () => {
   const { loginUser } = useAuth();
   const navigate = useNavigate();
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const { toast, dismiss } = useToast();
-  const { id } = useAppSelector(selectNotification);
 
   return useMutation<Token, APIResponseError, LoginCredentials>({
     mutationFn: loginUserRequest,
@@ -54,7 +52,7 @@ export const useLoginUser = () => {
       const parsedUser = parsedTokenSchema.parse(decodedToken);
       const { role, exp, userId } = parsedUser;
 
-      if (id) dismiss(id);
+      if (notificationId) dismiss(notificationId);
 
       loginUser({ role, exp, userId });
       if (role === "user") {
@@ -108,7 +106,7 @@ export const useLogoutUser = () => {
 export const registerUserRequest = async (
   data: RegisterCredentials
 ): Promise<APIResponseSuccess> => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
   return await apiClient({
     options: {
       url: "/auth/register",

@@ -1,6 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import DataTable from "../../../components/DataTable";
-import { columns } from "./JobListingsColumn";
+import { columns } from "./table/JobListingsColumn";
 import { QueryClient } from "@tanstack/react-query";
 import store from "@/app/store";
 import { employerKeys, fetchAllJobPostings, useGetAllJobPostings } from "@/api/employer/employer";
@@ -9,6 +8,7 @@ import { LoaderReturnType } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useDocumentTitle } from "@mantine/hooks";
+import JobListingsTable from "./table/JobListingsTable";
 
 export const loader = (queryClient: QueryClient) => async () => {
   const auth = store.getState().auth;
@@ -39,12 +39,12 @@ const JobListings = () => {
 
         <Button asChild>
           <Link to="create">
-            <Plus className="h-4 w-4 mr-2" /> New Job
+            <Plus className="h-4 w-4 mr-2" /> Create new job
           </Link>
         </Button>
       </div>
 
-      <DataTable columns={columns} data={jobPostings.jobs} />
+      <JobListingsTable columns={columns} data={jobPostings.jobs} />
     </div>
   );
 };

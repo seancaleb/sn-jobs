@@ -17,12 +17,12 @@ import {
 import useNotification from "@/features/notification/useNotification";
 import { useAppSelector } from "@/app/hooks";
 import { useToast } from "@/components/ui/use-toast";
-import { selectNotification } from "@/features/notification/notificationSlice";
 import {
   disableInteractions,
   displayErrorNotification,
   displaySuccessNotification,
   removeDisableInteractions,
+  responseDelay,
 } from "@/lib/utils";
 import { selectAuthStatus } from "@/features/auth/authSlice";
 import { userKeys } from "../users/users";
@@ -47,7 +47,7 @@ export const fetchJobs = async ({
 }: QueryFunctionContext<ReturnType<(typeof jobKeys)["filters"]>>) => {
   const [, filters] = queryKey;
 
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {
@@ -84,7 +84,7 @@ export const fetchJobById = async ({
 
   if (!jobId) return Promise.reject("Job ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {
@@ -104,8 +104,7 @@ export const useGetJobById = ({
   initialData?: JobDetails;
 }) => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const [searchParams] = useSearchParams();
 
   return useQuery<JobDetails, APIResponseError, JobDetails, ReturnType<(typeof jobKeys)["detail"]>>(
@@ -213,7 +212,7 @@ export const applyJob: MutationFunction<APIResponseSuccess, ApplyJobVariables> =
   data,
   jobId,
 }): Promise<APIResponseSuccess> => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   return await apiClient({
     options: {
@@ -231,8 +230,7 @@ type ApplyJobVariables = {
 
 export const useApplyJob = () => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const auth = useAppSelector(selectAuthStatus);
@@ -276,7 +274,7 @@ export const fetchJobApplications = async ({
 
   if (userId === null) return Promise.reject("User ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {
@@ -290,8 +288,7 @@ export const fetchJobApplications = async ({
 
 export const useGetJobApplications = ({ initialData }: { initialData: JobApplications }) => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const auth = useAppSelector(selectAuthStatus);
 
   return useQuery<

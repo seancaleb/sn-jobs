@@ -55,7 +55,7 @@ const AppliedJobs = () => {
             <p className="text-sm">Keep track of applied jobs here.</p>
           </div>
           <Button onClick={() => navigate("/jobs")}>
-            Find Jobs
+            Find jobs
             <MoveRight className="ml-2 h-4 w-4" />
           </Button>
         </div>

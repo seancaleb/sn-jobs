@@ -153,3 +153,10 @@ export const getBadgeVariant = (status: string) => {
       return "default";
   }
 };
+
+// API Response delay
+export const responseDelay = async () => {
+  return import.meta.env.MODE === "development"
+    ? await new Promise((res) => setTimeout(res, 300))
+    : null;
+};

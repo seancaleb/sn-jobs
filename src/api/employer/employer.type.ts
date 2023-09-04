@@ -45,15 +45,18 @@ export const mutateJobApplicationStatusSchema = z.object({
   }).shape,
 });
 
+export const applicationSchema = jobApplicationSchema.pick({
+  jobId: true,
+  applicationId: true,
+  status: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export const applicationsSchema = z.object({
   totalJobs: z.number(),
   totalApplications: z.number(),
-  applications: z.array(
-    jobApplicationSchema.pick({
-      status: true,
-      createdAt: true,
-    })
-  ),
+  applications: z.array(applicationSchema),
   applicationStatusDistribution: z.array(
     z.object({
       name: z.enum(["Applied", "Viewed", "Rejected"]),
@@ -76,3 +79,4 @@ export type JobPostApplications = z.infer<typeof jobPostApplicationsSchema>;
 export type MutateJob = z.infer<typeof mutateJobSchema>;
 export type MutateJobApplicationStatus = z.infer<typeof mutateJobApplicationStatusSchema>;
 export type Applications = z.infer<typeof applicationsSchema>;
+export type Application = z.infer<typeof applicationSchema>;

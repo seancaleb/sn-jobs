@@ -19,12 +19,12 @@ import { selectAuthStatus } from "@/features/auth/authSlice";
 import { jobKeys } from "../jobs/jobs";
 import { useToast } from "@/components/ui/use-toast";
 import useNotification from "@/features/notification/useNotification";
-import { selectNotification } from "@/features/notification/notificationSlice";
 import {
   disableInteractions,
   displayErrorNotification,
   displaySuccessNotification,
   removeDisableInteractions,
+  responseDelay,
 } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { Applications, applicationsSchema } from "./employer.type";
@@ -47,7 +47,7 @@ export const employerKeys = {
  * @desc  Get all job postings
  */
 export const fetchAllJobPostings = async () => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {
@@ -79,7 +79,7 @@ export const fetchAllJobPostApplications = async ({
 
   if (!jobId) return Promise.reject("Job ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {
@@ -100,8 +100,7 @@ export const useGetAllJobPostApplications = ({
 }) => {
   const auth = useAppSelector(selectAuthStatus);
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
 
   return useQuery<
     JobPostApplications,
@@ -142,8 +141,7 @@ type MutateJobVariables = {
 
 export const useCreateNewJobPost = () => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const auth = useAppSelector(selectAuthStatus);
@@ -195,8 +193,7 @@ export const deleteJobPostById: MutationFunction<
 
 export const useDeleteJobPostById = () => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const queryClient = useQueryClient();
   const auth = useAppSelector(selectAuthStatus);
 
@@ -205,7 +202,13 @@ export const useDeleteJobPostById = () => {
     onSuccess: async ({ message }) => {
       if (notificationId) dismiss(notificationId);
 
-      await Promise.all([queryClient.invalidateQueries(employerKeys.jobPostings(auth.userId))]);
+      await Promise.all([
+        queryClient.invalidateQueries(employerKeys.jobPostings(auth.userId)),
+        queryClient.prefetchQuery({
+          queryFn: fetchAllApplications,
+          queryKey: employerKeys.applications(auth.userId),
+        }),
+      ]);
 
       displaySuccessNotification(message, toast, initNotificationId);
     },
@@ -244,8 +247,7 @@ type UpdateJobVariables = {
 
 export const useUpdateJobPost = () => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const auth = useAppSelector(selectAuthStatus);
@@ -285,7 +287,7 @@ export const updateJobApplicationStatus: MutationFunction<
   APIResponseSuccess,
   UpdateJobStatusVariables
 > = async ({ data, jobId, applicationId }) => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   return await apiClient({
     options: {
@@ -304,8 +306,7 @@ type UpdateJobStatusVariables = {
 
 export const useUpdateJobApplicationStatus = () => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const queryClient = useQueryClient();
   const auth = useAppSelector(selectAuthStatus);
 
@@ -346,7 +347,7 @@ export const fetchAllApplications = async ({
 
   if (!userId) return Promise.reject("Job ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {
@@ -361,8 +362,7 @@ export const fetchAllApplications = async ({
 export const useGetAllApplications = ({ initialData }: { initialData?: Applications }) => {
   const auth = useAppSelector(selectAuthStatus);
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
 
   return useQuery<
     Applications,

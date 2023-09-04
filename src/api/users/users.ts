@@ -17,10 +17,9 @@ import {
   BookmarkedJobs,
   bookmarkedJobsSchema,
 } from "./users.type";
-import { displayErrorNotification, displaySuccessNotification } from "@/lib/utils";
+import { displayErrorNotification, displaySuccessNotification, responseDelay } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import useNotification from "@/features/notification/useNotification";
-import { selectNotification } from "@/features/notification/notificationSlice";
 import { useAppSelector } from "@/app/hooks";
 import { useNavigate } from "react-router-dom";
 import useAuth from "@/features/auth/useAuth";
@@ -46,7 +45,7 @@ export const fetchUserProfile = async ({
 
   if (userId === null) return Promise.reject("User ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {
@@ -79,7 +78,7 @@ export const useGetProfile = ({ initialData }: { initialData?: GetUserProfileRes
 export const updateUserProfile: MutationFunction<UpdateProfileResponse, UpdateProfile> = async (
   data
 ) => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const responseData = await apiClient({
     options: {
@@ -94,15 +93,14 @@ export const updateUserProfile: MutationFunction<UpdateProfileResponse, UpdatePr
 
 export const useUpdateProfile = () => {
   const { toast, dismiss } = useToast();
-  const { id } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
 
   return useMutation<UpdateProfileResponse, APIResponseError, UpdateProfile>({
     mutationFn: updateUserProfile,
     onSuccess: () => {
       const message = "Profile Updated: Your profile has been successfully updated.";
 
-      if (id) dismiss(id);
+      if (notificationId) dismiss(notificationId);
 
       displaySuccessNotification(message, toast, initNotificationId);
     },
@@ -116,7 +114,7 @@ export const useUpdateProfile = () => {
 export const updatePassword: MutationFunction<APIResponseSuccess, UpdatePassword> = async (
   data
 ) => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   return await apiClient({
     options: {
@@ -129,13 +127,12 @@ export const updatePassword: MutationFunction<APIResponseSuccess, UpdatePassword
 
 export const useUpdatePassword = () => {
   const { toast, dismiss } = useToast();
-  const { id } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
 
   return useMutation<APIResponseSuccess, APIResponseError, UpdatePassword>({
     mutationFn: updatePassword,
     onSuccess: ({ message }) => {
-      if (id) dismiss(id);
+      if (notificationId) dismiss(notificationId);
 
       displaySuccessNotification(message, toast, initNotificationId);
     },
@@ -149,7 +146,7 @@ export const useUpdatePassword = () => {
 export const deleteUserProfile: MutationFunction<unknown, DeleteProfile> = async (
   data
 ): Promise<unknown> => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   return await apiClient({
     options: {
@@ -162,8 +159,7 @@ export const deleteUserProfile: MutationFunction<unknown, DeleteProfile> = async
 
 export const useDeleteProfile = () => {
   const { toast, dismiss } = useToast();
-  const { id } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const { logoutUser } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -171,7 +167,7 @@ export const useDeleteProfile = () => {
   return useMutation<unknown, APIResponseError, DeleteProfile>({
     mutationFn: deleteUserProfile,
     onSuccess: () => {
-      if (id) dismiss(id);
+      if (notificationId) dismiss(notificationId);
 
       queryClient.removeQueries();
 
@@ -193,7 +189,7 @@ export const fetchBookmarkedJobs = async ({
 
   if (userId === null) return Promise.reject("User ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {

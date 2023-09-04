@@ -69,7 +69,7 @@ const JobApplication = () => {
           <div className="flex flex-col xs:block">
             <Button type="submit" disabled={applyJobMutation.isLoading}>
               {applyJobMutation.isLoading ? <LoaderSpinner /> : <Send className="h-4 w-4 mr-2" />}
-              Submit Application
+              Submit application
             </Button>
           </div>
         </form>

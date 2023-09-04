@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import auth from "@/features/auth/authSlice";
 import notification from "@/features/notification/notificationSlice";
@@ -9,6 +10,7 @@ const persistConfig = {
   key: "snjobs-client",
   version: 1,
   storage,
+  blacklist: ["notification"],
 };
 
 const rootReducer = combineReducers({

@@ -1,7 +1,7 @@
 import { useLogoutUser } from "@/api/auth/auth";
 import { Button } from "@/components/ui/button";
 import { nanoid } from "@reduxjs/toolkit";
-import { Briefcase, LayoutDashboard, Lock, LogOut, User } from "lucide-react";
+import { Briefcase, LayoutDashboard, Lock, LogOut, MailCheck, User } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import logo from "@/assets/images/logo.svg";
 
@@ -12,9 +12,14 @@ const featureLinks = [
     icon: <LayoutDashboard className="h-4 w-4 mr-3" />,
   },
   {
-    label: "My Job Listings",
+    label: "Job Listings",
     path: "job-listings",
     icon: <Briefcase className="h-4 w-4 mr-3" />,
+  },
+  {
+    label: "Applications",
+    path: "applications",
+    icon: <MailCheck className="h-4 w-4 mr-3" />,
   },
 ];
 
@@ -62,7 +67,7 @@ const DashboardSidebar = () => {
                   <NavLink
                     to={path}
                     className={({ isActive }) =>
-                      `text-sm rounded-md px-4 py-2 h-10 flex items-center transition duration-150 hover:bg-accent hover:text-accent-foreground ${
+                      `text-sm rounded-md px-4 py-2 h-10 font-medium flex items-center transition duration-150 hover:bg-accent hover:text-accent-foreground ${
                         isActive ? "bg-accent text-accent-foreground" : "text-slate-500"
                       }`
                     }
@@ -83,7 +88,7 @@ const DashboardSidebar = () => {
                   <NavLink
                     to={path}
                     className={({ isActive }) =>
-                      `text-sm rounded-md px-4 py-2 h-10 flex items-center transition duration-150 hover:bg-accent hover:text-accent-foreground ${
+                      `text-sm rounded-md px-4 py-2 h-10 font-medium flex items-center transition duration-150 hover:bg-accent hover:text-accent-foreground ${
                         isActive ? "bg-accent text-accent-foreground" : "text-slate-500"
                       }`
                     }
