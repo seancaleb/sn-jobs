@@ -20,7 +20,6 @@ import {
 import { displayErrorNotification, displaySuccessNotification } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import useNotification from "@/features/notification/useNotification";
-import { selectNotification } from "@/features/notification/notificationSlice";
 import { useAppSelector } from "@/app/hooks";
 import { useNavigate } from "react-router-dom";
 import useAuth from "@/features/auth/useAuth";
@@ -94,15 +93,14 @@ export const updateUserProfile: MutationFunction<UpdateProfileResponse, UpdatePr
 
 export const useUpdateProfile = () => {
   const { toast, dismiss } = useToast();
-  const { id } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
 
   return useMutation<UpdateProfileResponse, APIResponseError, UpdateProfile>({
     mutationFn: updateUserProfile,
     onSuccess: () => {
       const message = "Profile Updated: Your profile has been successfully updated.";
 
-      if (id) dismiss(id);
+      if (notificationId) dismiss(notificationId);
 
       displaySuccessNotification(message, toast, initNotificationId);
     },
@@ -129,13 +127,12 @@ export const updatePassword: MutationFunction<APIResponseSuccess, UpdatePassword
 
 export const useUpdatePassword = () => {
   const { toast, dismiss } = useToast();
-  const { id } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
 
   return useMutation<APIResponseSuccess, APIResponseError, UpdatePassword>({
     mutationFn: updatePassword,
     onSuccess: ({ message }) => {
-      if (id) dismiss(id);
+      if (notificationId) dismiss(notificationId);
 
       displaySuccessNotification(message, toast, initNotificationId);
     },
@@ -162,8 +159,7 @@ export const deleteUserProfile: MutationFunction<unknown, DeleteProfile> = async
 
 export const useDeleteProfile = () => {
   const { toast, dismiss } = useToast();
-  const { id } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const { logoutUser } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -171,7 +167,7 @@ export const useDeleteProfile = () => {
   return useMutation<unknown, APIResponseError, DeleteProfile>({
     mutationFn: deleteUserProfile,
     onSuccess: () => {
-      if (id) dismiss(id);
+      if (notificationId) dismiss(notificationId);
 
       queryClient.removeQueries();
 

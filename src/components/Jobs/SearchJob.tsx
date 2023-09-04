@@ -11,8 +11,6 @@ import { useEffect } from "react";
 import { displayErrorNotification } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import useNotification from "@/features/notification/useNotification";
-import { useAppSelector } from "@/app/hooks";
-import { selectNotification } from "@/features/notification/notificationSlice";
 
 const locations = [
   { value: "manila", label: "Manila" },
@@ -48,13 +46,12 @@ const SearchJob = ({ keyword, location }: SearchJobProps) => {
   const { control, handleSubmit, setValue, getValues, reset } = form;
   const [, setSearchParams] = useSearchParams();
   const { toast, dismiss } = useToast();
-  const { initNotificationId } = useNotification();
-  const { id } = useAppSelector(selectNotification);
+  const { notificationId, initNotificationId } = useNotification();
   const navigate = useNavigate();
   const urlLocation = useLocation();
 
   const onSubmit = (values: QueryValues) => {
-    id && dismiss(id);
+    notificationId && dismiss(notificationId);
 
     const emptySearchOptions = !getValues("location") && !getValues("keyword");
     const containsSearchParams =

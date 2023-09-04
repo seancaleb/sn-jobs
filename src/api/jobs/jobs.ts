@@ -17,7 +17,6 @@ import {
 import useNotification from "@/features/notification/useNotification";
 import { useAppSelector } from "@/app/hooks";
 import { useToast } from "@/components/ui/use-toast";
-import { selectNotification } from "@/features/notification/notificationSlice";
 import {
   disableInteractions,
   displayErrorNotification,
@@ -104,8 +103,7 @@ export const useGetJobById = ({
   initialData?: JobDetails;
 }) => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const [searchParams] = useSearchParams();
 
   return useQuery<JobDetails, APIResponseError, JobDetails, ReturnType<(typeof jobKeys)["detail"]>>(
@@ -231,8 +229,7 @@ type ApplyJobVariables = {
 
 export const useApplyJob = () => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const auth = useAppSelector(selectAuthStatus);
@@ -290,8 +287,7 @@ export const fetchJobApplications = async ({
 
 export const useGetJobApplications = ({ initialData }: { initialData: JobApplications }) => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const auth = useAppSelector(selectAuthStatus);
 
   return useQuery<

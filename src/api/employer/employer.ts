@@ -19,7 +19,6 @@ import { selectAuthStatus } from "@/features/auth/authSlice";
 import { jobKeys } from "../jobs/jobs";
 import { useToast } from "@/components/ui/use-toast";
 import useNotification from "@/features/notification/useNotification";
-import { selectNotification } from "@/features/notification/notificationSlice";
 import {
   disableInteractions,
   displayErrorNotification,
@@ -100,8 +99,7 @@ export const useGetAllJobPostApplications = ({
 }) => {
   const auth = useAppSelector(selectAuthStatus);
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
 
   return useQuery<
     JobPostApplications,
@@ -142,8 +140,7 @@ type MutateJobVariables = {
 
 export const useCreateNewJobPost = () => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const auth = useAppSelector(selectAuthStatus);
@@ -195,8 +192,7 @@ export const deleteJobPostById: MutationFunction<
 
 export const useDeleteJobPostById = () => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const queryClient = useQueryClient();
   const auth = useAppSelector(selectAuthStatus);
 
@@ -250,8 +246,7 @@ type UpdateJobVariables = {
 
 export const useUpdateJobPost = () => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const auth = useAppSelector(selectAuthStatus);
@@ -310,8 +305,7 @@ type UpdateJobStatusVariables = {
 
 export const useUpdateJobApplicationStatus = () => {
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
   const queryClient = useQueryClient();
   const auth = useAppSelector(selectAuthStatus);
 
@@ -367,8 +361,7 @@ export const fetchAllApplications = async ({
 export const useGetAllApplications = ({ initialData }: { initialData?: Applications }) => {
   const auth = useAppSelector(selectAuthStatus);
   const { toast, dismiss } = useToast();
-  const { id: notificationId } = useAppSelector(selectNotification);
-  const { initNotificationId } = useNotification();
+  const { notificationId, initNotificationId } = useNotification();
 
   return useQuery<
     Applications,
