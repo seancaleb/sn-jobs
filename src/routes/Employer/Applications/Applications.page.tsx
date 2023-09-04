@@ -32,8 +32,6 @@ const ApplicationsPage = () => {
 
   useDocumentTitle("Applications - SNJOBS");
 
-  console.log(data, columns);
-
   return (
     <div className="space-y-5">
       <div className="flex justify-between gap-6">
