@@ -57,7 +57,7 @@ const ApplicationsTable = <TData, TValue>({ columns, data }: DataTableProps<TDat
   return (
     <>
       <div className="flex items-center">
-        <ApplicationsTableToolbar table={table} />
+        <ApplicationsTableToolbar table={table} dataLength={data.length} />
       </div>
       <DataTable columns={columns} table={table} title="applications" />
     </>

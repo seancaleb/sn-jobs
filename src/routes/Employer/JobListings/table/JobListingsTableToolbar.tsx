@@ -6,10 +6,11 @@ import { location } from "./data";
 import { Input } from "@/components/ui/input";
 
 interface DataTableToolbarProps<TData> {
+  dataLength: number;
   table: Table<TData>;
 }
 
-const JobListingsTableToolbar = <TData,>({ table }: DataTableToolbarProps<TData>) => {
+const JobListingsTableToolbar = <TData,>({ table, dataLength }: DataTableToolbarProps<TData>) => {
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
@@ -20,12 +21,14 @@ const JobListingsTableToolbar = <TData,>({ table }: DataTableToolbarProps<TData>
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) => table.getColumn("title")?.setFilterValue(event.target.value)}
           className="h-8 w-[150px] lg:w-[250px]"
+          disabled={dataLength === 0}
         />
         {table.getColumn("location") && (
           <DataTableFacetedFilter
             column={table.getColumn("location")}
             title="Location"
             options={location}
+            isDisabled={dataLength === 0}
           />
         )}
         {isFiltered && (

@@ -5,10 +5,11 @@ import { DataTableFacetedFilter } from "@/components/table/DataTableFacetedFilte
 import { statuses } from "./data";
 
 interface DataTableToolbarProps<TData> {
+  dataLength: number;
   table: Table<TData>;
 }
 
-const ApplicationsTableToolbar = <TData,>({ table }: DataTableToolbarProps<TData>) => {
+const ApplicationsTableToolbar = <TData,>({ table, dataLength }: DataTableToolbarProps<TData>) => {
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
@@ -19,6 +20,7 @@ const ApplicationsTableToolbar = <TData,>({ table }: DataTableToolbarProps<TData
             column={table.getColumn("status")}
             title="Status"
             options={statuses}
+            isDisabled={dataLength === 0}
           />
         )}
         {isFiltered && (

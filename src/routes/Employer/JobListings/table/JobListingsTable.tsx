@@ -57,7 +57,7 @@ const JobListingsTable = <TData, TValue>({ columns, data }: DataTableProps<TData
   return (
     <>
       <div className="flex items-center">
-        <JobListingsTableToolbar table={table} />
+        <JobListingsTableToolbar table={table} dataLength={data.length} />
       </div>
       <DataTable columns={columns} table={table} title="job listings" />
     </>
