@@ -100,15 +100,19 @@ const JobApplicationDetails = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex flex-col gap-1 items-start text-sm">
-              <Label>Resume link</Label>
-              <Link to={`${application.resume}`} className="hover:underline" target="_blank">
+              <Label className="underline">Resume link</Label>
+              <Link
+                to={`${application.resume}`}
+                className="text-light hover:underline"
+                target="_blank"
+              >
                 {application.resume}
               </Link>
             </div>
 
             <div className="flex flex-col gap-1 items-start text-sm">
-              <Label>Cover letter</Label>
-              <div className="whitespace-pre-line">{application.coverLetter}</div>
+              <Label className="underline">Cover letter</Label>
+              <div className="p-6 text-light whitespace-pre-line">{application.coverLetter}</div>
             </div>
           </CardContent>
         </Card>
