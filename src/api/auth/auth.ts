@@ -20,6 +20,7 @@ import {
   displayErrorNotification,
   displaySuccessNotification,
   removeDisableInteractions,
+  responseDelay,
 } from "@/lib/utils";
 import useNotification from "@/features/notification/useNotification";
 import { User } from "@/types/user";
@@ -28,7 +29,7 @@ import { User } from "@/types/user";
  * @desc  Login user
  */
 export const loginUserRequest = async (data: LoginCredentials): Promise<Token> => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
   return await apiClient({
     options: {
       url: "/auth/login",
@@ -105,7 +106,7 @@ export const useLogoutUser = () => {
 export const registerUserRequest = async (
   data: RegisterCredentials
 ): Promise<APIResponseSuccess> => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
   return await apiClient({
     options: {
       url: "/auth/register",

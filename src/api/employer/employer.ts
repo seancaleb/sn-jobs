@@ -24,6 +24,7 @@ import {
   displayErrorNotification,
   displaySuccessNotification,
   removeDisableInteractions,
+  responseDelay,
 } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { Applications, applicationsSchema } from "./employer.type";
@@ -46,7 +47,7 @@ export const employerKeys = {
  * @desc  Get all job postings
  */
 export const fetchAllJobPostings = async () => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {
@@ -78,7 +79,7 @@ export const fetchAllJobPostApplications = async ({
 
   if (!jobId) return Promise.reject("Job ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {
@@ -286,7 +287,7 @@ export const updateJobApplicationStatus: MutationFunction<
   APIResponseSuccess,
   UpdateJobStatusVariables
 > = async ({ data, jobId, applicationId }) => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   return await apiClient({
     options: {
@@ -346,7 +347,7 @@ export const fetchAllApplications = async ({
 
   if (!userId) return Promise.reject("Job ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {

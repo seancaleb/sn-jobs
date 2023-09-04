@@ -17,7 +17,7 @@ import {
   BookmarkedJobs,
   bookmarkedJobsSchema,
 } from "./users.type";
-import { displayErrorNotification, displaySuccessNotification } from "@/lib/utils";
+import { displayErrorNotification, displaySuccessNotification, responseDelay } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import useNotification from "@/features/notification/useNotification";
 import { useAppSelector } from "@/app/hooks";
@@ -45,7 +45,7 @@ export const fetchUserProfile = async ({
 
   if (userId === null) return Promise.reject("User ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {
@@ -78,7 +78,7 @@ export const useGetProfile = ({ initialData }: { initialData?: GetUserProfileRes
 export const updateUserProfile: MutationFunction<UpdateProfileResponse, UpdateProfile> = async (
   data
 ) => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const responseData = await apiClient({
     options: {
@@ -114,7 +114,7 @@ export const useUpdateProfile = () => {
 export const updatePassword: MutationFunction<APIResponseSuccess, UpdatePassword> = async (
   data
 ) => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   return await apiClient({
     options: {
@@ -146,7 +146,7 @@ export const useUpdatePassword = () => {
 export const deleteUserProfile: MutationFunction<unknown, DeleteProfile> = async (
   data
 ): Promise<unknown> => {
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   return await apiClient({
     options: {
@@ -189,7 +189,7 @@ export const fetchBookmarkedJobs = async ({
 
   if (userId === null) return Promise.reject("User ID needs to be provided.");
 
-  await new Promise((res) => setTimeout(res, 300));
+  await responseDelay();
 
   const data = await apiClient({
     options: {
