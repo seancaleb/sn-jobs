@@ -43,7 +43,7 @@ const ErrorRoute = () => {
           <Balancer>{errorMessage}</Balancer>
         </p>
 
-        <Button onClick={() => navigate(-1)}>Go Back</Button>
+        <Button onClick={() => navigate(-1)}>Go back</Button>
       </div>
     </div>
   );

@@ -50,7 +50,7 @@ const Home = () => {
             </Balancer>
           </p>
           <Button onClick={handleNavigate} size="lg">
-            Get Started
+            Get started
           </Button>
         </div>
       </section>

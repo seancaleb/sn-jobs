@@ -1,6 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useDocumentTitle } from "@mantine/hooks";
-import EditProfile from "@/components/Profile/EditProfile/EditProfile";
 import { Separator } from "@/components/ui/separator";
 import { QueryClient } from "@tanstack/react-query";
 import store from "@/app/store";
@@ -8,6 +7,7 @@ import { fetchUserProfile, useGetProfile, userKeys } from "@/api/users/users";
 import { redirect, useLoaderData } from "react-router-dom";
 import { LoaderReturnType } from "@/types";
 import { GetUserProfileResponse } from "@/api/users/users.type";
+import EditProfile from "./EditProfile/EditProfile";
 
 export const loader = (queryClient: QueryClient) => async () => {
   const auth = store.getState().auth;

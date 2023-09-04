@@ -33,7 +33,7 @@ const JobListings = () => {
     <div className="space-y-5">
       <div className="flex justify-between gap-6">
         <div className="space-y-1">
-          <div className="text-2xl font-semibold">Job listings</div>
+          <div className="text-2xl font-semibold">Job Listings</div>
           <p className="text-sm">Manage all the jobs you created.</p>
         </div>
 

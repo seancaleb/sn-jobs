@@ -15,7 +15,7 @@ import { Form } from "@/components/ui/form";
 import { useEffect, useState } from "react";
 import { getProfileSchemaResponse } from "@/api/users/users.type";
 import { useUpdateProfile, userKeys } from "@/api/users/users";
-import LoaderSpinner from "../../LoaderSpinner";
+import LoaderSpinner from "@/components/LoaderSpinner";
 import apiClient from "@/services/apiClient";
 import { EditProfileValues, editProfileSchema } from "./EditProfile.schema";
 import UnsavedChangesDialog from "@/components/UnsavedChangesDialog";
@@ -127,7 +127,7 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
           <DialogHeader>
             <DialogTitle>Edit profile</DialogTitle>
             <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
+              Personalize your profile by updating the information below.
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
@@ -172,10 +172,15 @@ const EditDialog = ({ isOpen, setIsOpen }: EditDialogProps) => {
                 }}
               />
 
-              <Button type="submit" disabled={updateProfileMutation.isLoading}>
-                {updateProfileMutation.isLoading && <LoaderSpinner />}
-                Save changes
-              </Button>
+              <div className="self-end space-x-2">
+                <Button type="button" variant="ghost" onClick={handleEditOnClose}>
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={updateProfileMutation.isLoading}>
+                  {updateProfileMutation.isLoading && <LoaderSpinner />}
+                  Save changes
+                </Button>
+              </div>
             </form>
           </Form>
         </DialogContent>

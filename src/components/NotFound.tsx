@@ -30,7 +30,7 @@ const NotFound = () => {
             </Balancer>
           </p>
 
-          <Button onClick={handleNavigateBack}>Go Back</Button>
+          <Button onClick={handleNavigateBack}>Go back</Button>
         </div>
       </div>
     </>

@@ -116,8 +116,7 @@ const UpdatePasswordDialog = ({ isOpen, setIsOpen }: UpdatePasswordProps) => {
           <DialogHeader>
             <DialogTitle>Change password</DialogTitle>
             <DialogDescription>
-              Enter your new password and confirm it to complete the change. Click save when you're
-              done.
+              Enter your new password and confirm to save your changes.
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>

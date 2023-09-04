@@ -27,7 +27,7 @@ const ApplicationStatusChart = ({ data }: ApplicationStatusChartProps) => {
         <Pie
           stroke="none"
           data={data}
-          innerRadius={70}
+          innerRadius={75}
           outerRadius={100}
           paddingAngle={7}
           dataKey="value"
