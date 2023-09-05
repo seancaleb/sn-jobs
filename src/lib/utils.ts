@@ -160,13 +160,3 @@ export const responseDelay = async () => {
     ? await new Promise((res) => setTimeout(res, 300))
     : null;
 };
-
-// Get client timezone
-export const getUserTimezone = () => {
-  if (typeof Intl === "object" && typeof Intl.DateTimeFormat === "function") {
-    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return userTimezone;
-  } else {
-    return "UTC";
-  }
-};

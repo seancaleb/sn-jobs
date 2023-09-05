@@ -23,7 +23,6 @@ import {
   disableInteractions,
   displayErrorNotification,
   displaySuccessNotification,
-  getUserTimezone,
   removeDisableInteractions,
   responseDelay,
 } from "@/lib/utils";
@@ -347,7 +346,6 @@ export const fetchAllApplications = async ({
   const [, userId] = queryKey;
 
   if (!userId) return Promise.reject("Job ID needs to be provided.");
-  const timeZone = getUserTimezone();
 
   await responseDelay();
 
@@ -355,9 +353,6 @@ export const fetchAllApplications = async ({
     options: {
       url: `/employers/jobs/applications`,
       method: "GET",
-      headers: {
-        "X-User-Timezone": timeZone,
-      },
     },
   });
 
