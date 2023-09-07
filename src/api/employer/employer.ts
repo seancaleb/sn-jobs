@@ -23,6 +23,7 @@ import {
   disableInteractions,
   displayErrorNotification,
   displaySuccessNotification,
+  getUserTimezone,
   removeDisableInteractions,
   responseDelay,
 } from "@/lib/utils";
@@ -349,10 +350,15 @@ export const fetchAllApplications = async ({
 
   await responseDelay();
 
+  const timezone = getUserTimezone();
+
   const data = await apiClient({
     options: {
       url: `/employers/jobs/applications`,
       method: "GET",
+      headers: {
+        "X-User-Timezone": timezone,
+      },
     },
   });
 
