@@ -37,7 +37,7 @@ describe("SignIn", () => {
   });
 
   it("renders a Sign In button", () => {
-    const signInBtn = screen.getByRole("button", { name: "Sign In" });
+    const signInBtn = screen.getByRole("button", { name: "Sign in" });
 
     expect(signInBtn).toBeInTheDocument();
     expect(signInBtn).toHaveAttribute("type", "submit");
@@ -66,7 +66,7 @@ describe("SignIn", () => {
       expect(el).toHaveFocus();
     }
 
-    const signInBtn = screen.getByRole("button", { name: "Sign In" });
+    const signInBtn = screen.getByRole("button", { name: "Sign in" });
 
     await user.type(emailField, "test@gmail.com");
     await user.type(passwordField, "testpassword");
@@ -88,7 +88,7 @@ describe("SignIn", () => {
     await user.type(emailField, "test@gmail.com");
     await user.type(passwordField, "testpassword");
 
-    const signInBtn = screen.getByRole("button", { name: "Sign In" });
+    const signInBtn = screen.getByRole("button", { name: "Sign in" });
 
     expect(signInBtn).not.toBeDisabled();
   });

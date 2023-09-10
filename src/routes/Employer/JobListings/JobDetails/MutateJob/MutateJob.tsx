@@ -13,7 +13,7 @@ import { useCreateNewJobPost, useUpdateJobPost } from "@/api/employer/employer";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import { JobDetails } from "@/api/jobs/jobs.type";
 import { z } from "zod";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import UnsavedChangesDialog from "@/components/UnsavedChangesDialog";
 import { useNavigate } from "react-router-dom";
 import { Save } from "lucide-react";
@@ -49,6 +49,7 @@ const MutateJob = ({ mode = "create", job }: MutateJobProps) => {
   const updateJobMutation = useUpdateJobPost();
   const [isOpenUnsavedChanges, setIsOpenUnsavedChanges] = useState(false);
   const navigate = useNavigate();
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const { fields, append, remove } = useFieldArray({
     name: "requirements",
@@ -82,6 +83,21 @@ const MutateJob = ({ mode = "create", job }: MutateJobProps) => {
     if (isDirty) setIsOpenUnsavedChanges(true);
     else navigateOutOfMutate();
   };
+
+  const scrollToLastElement = () => {
+    if (containerRef.current) {
+      const lastChild = containerRef.current.lastElementChild;
+      lastChild?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  };
+
+  useEffect(() => {
+    scrollToLastElement();
+  }, [fields]);
 
   return (
     <>
@@ -119,7 +135,7 @@ const MutateJob = ({ mode = "create", job }: MutateJobProps) => {
             />
           </div>
 
-          <div className="flex-1 space-y-5">
+          <div className="flex-1 space-y-5" ref={containerRef}>
             <FormItem>
               <FormLabel>List of requirements</FormLabel>
               <div className="space-y-8">

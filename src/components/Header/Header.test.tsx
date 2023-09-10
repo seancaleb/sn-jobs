@@ -43,8 +43,8 @@ describe("Header (Desktop)", () => {
     user.setup();
 
     const logoEl = screen.getByRole("link", { name: "logo" });
-    const signInBtn = screen.getByRole("link", { name: "Sign In" });
-    const signUpBtn = screen.getByRole("link", { name: "Sign Up" });
+    const signInBtn = screen.getByRole("link", { name: "Sign in" });
+    const signUpBtn = screen.getByRole("link", { name: "Sign up" });
 
     const tabOrder = [logoEl, signInBtn, signUpBtn];
 

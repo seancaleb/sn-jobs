@@ -139,7 +139,7 @@ describe("SignUp", () => {
       await user.type(emailField, "seancaleb@gmail.com");
       await user.type(passswordField, "testadmin");
 
-      const continueBtn = screen.getByRole("button", { name: "Sign Up" });
+      const continueBtn = screen.getByRole("button", { name: "Sign up" });
 
       expect(continueBtn).not.toBeDisabled();
     });

@@ -20,14 +20,14 @@ describe("Home (Isolated)", () => {
   });
 
   it("renders a Get Started button", () => {
-    const jobListingsBtn = screen.getByRole("button", { name: "Get Started" });
+    const jobListingsBtn = screen.getByRole("button", { name: "Get started" });
     expect(jobListingsBtn).toBeInTheDocument();
   });
 
   it("focuses Get Started button upon tab", async () => {
     user.setup();
 
-    const jobListingsBtn = screen.getByRole("button", { name: "Get Started" });
+    const jobListingsBtn = screen.getByRole("button", { name: "Get started" });
     await user.tab();
 
     expect(jobListingsBtn).toHaveFocus();
