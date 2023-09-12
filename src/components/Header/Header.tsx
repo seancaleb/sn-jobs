@@ -30,7 +30,7 @@ const Header = () => {
               <>
                 <li>
                   <Button asChild variant="ghost">
-                    <Link to="sign-in">Sign In</Link>
+                    <Link to="sign-in">Sign in</Link>
                   </Button>
                 </li>
 
