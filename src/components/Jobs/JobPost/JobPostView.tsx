@@ -8,7 +8,7 @@ import { cn, formatJobPostTime } from "@/lib/utils";
 import { JobDetails } from "@/api/jobs/jobs.type";
 import { useAppSelector } from "@/app/hooks";
 import { selectAuthStatus } from "@/features/auth/authSlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation,  } from "react-router-dom";
 import { User } from "lucide-react";
 import { GetUserProfileResponse } from "@/api/users/users.type";
 import { useMemo } from "react";
@@ -25,16 +25,11 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
   const formattedJobDate = formatJobPostTime(jobDatePosted);
   const applications = job.applications.length;
   const auth = useAppSelector(selectAuthStatus);
-  const navigate = useNavigate();
   const location = useLocation();
   const isBookmarked = useMemo(
     () => user.bookmark?.find((id) => id === job.jobId),
     [job.jobId, user.bookmark]
   );
-
-  const handleApplyNow = (jobId: string) => {
-    navigate(`/jobs/${jobId}/apply`);
-  };
 
   return (
     <Card
@@ -74,8 +69,11 @@ const JobPostView = ({ job, user, isApplicationPage = false }: JobPostViewProps)
                     <Send className="mr-2 h-4 w-4" /> Application submitted
                   </Button>
                 ) : (
-                  <Button onClick={() => handleApplyNow(job.jobId)}>
-                    <Briefcase className="mr-2 h-4 w-4" /> Apply now
+                  <Button asChild>
+                    <Link target="_blank" to={`/jobs/${job.jobId}/apply`}>
+                      <Briefcase className="mr-2 h-4 w-4" />
+                      Apply now
+                    </Link>
                   </Button>
                 ))}
               <BookmarkJobPost job={job} isBookmarked={isBookmarked} />
